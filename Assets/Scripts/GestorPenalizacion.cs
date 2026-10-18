@@ -15,8 +15,8 @@ public class GestorPenalizacion : MonoBehaviour
 
     [Header("Pantallas de Fin de Juego")]
     public GameObject panelGameOver; // Aquí arrastraremos el panel de derrota
-    public GameObject panelNivelServicio;
-    public GameObject panelNivelPhishing;
+    //public GameObject panelNivelServicio;         ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
+    //public GameObject panelNivelPhishing;
 
     void Start()
     {
@@ -67,8 +67,8 @@ public class GestorPenalizacion : MonoBehaviour
     // Método interno para mostrar la derrota
     private void MostrarGameOver()
     {
-        panelNivelServicio.SetActive(false);
-        panelNivelPhishing.SetActive(false);
+        //panelNivelServicio.SetActive(false);           ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
+        //panelNivelPhishing.SetActive(false);
 
         panelGameOver.SetActive(true);
     }
