@@ -11,6 +11,10 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GameObject panelSelectorModulos; // Aquí arrastraremos el panel donde se elige Servicio o Phishing.
     public GameObject panelInstrucciones;   // Aquí arrastraremos el panel del bloc de notas con las instrucciones.
 
+    [Header("Paneles de los Módulos")]
+    public GameObject panelNivelServicio;  // Arrastra aquí el panel del juego de Servicio al Cliente.
+    public GameObject panelNivelPhishing;  // Arrastra aquí el panel del juego de Phishing.
+
     // MÉTODO START
     // Todo lo que esté dentro de Start() se ejecuta una sola vez justo cuando arranca el juego.
     void Start()
@@ -22,8 +26,12 @@ public class GestorMenuPrincipal : MonoBehaviour
         // Apagamos los otros dos paneles por si se quedaron encendidos por accidente en el editor.
         panelSelectorModulos.SetActive(false);
         panelInstrucciones.SetActive(false);
+
+        panelNivelServicio.SetActive(false);
+        panelNivelPhishing.SetActive(false);
     }
 
+    // MÉTODOS DEL MENÚ PRINCIPAL
     // MÉTODOS PARA LOS BOTONES
     // Usamos 'public void' para que los botones de Unity puedan encontrar y ejecutar estas funciones.
 
@@ -65,5 +73,38 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Esta es la orden real que cierra el juego cuando ya está exportado como un programa final (.exe).
         Application.Quit();
+    }
+
+    // NUEVOS MÉTODOS: SELECTOR DE MÓDULOS
+
+    // 1. Esta función se conectará al botón "Servicio al Cliente" dentro del panel Selector
+    public void BotonModuloServicio()
+    {
+        // Apagamos el selector para despejar la pantalla
+        panelSelectorModulos.SetActive(false);
+
+        // Encendemos el nivel de Atención al Cliente (donde luego pondrás las 3 estrellas)
+        panelNivelServicio.SetActive(true);
+    }
+
+    // 2. Esta función se conectará al botón "Detector de Phishing" dentro del panel Selector
+    public void BotonModuloPhishing()
+    {
+        // Apagamos el selector
+        panelSelectorModulos.SetActive(false);
+
+        // Encendemos el nivel de Phishing (donde luego pondrás los 3 candados)
+        panelNivelPhishing.SetActive(true);
+    }
+
+    // 3. Esta función sirve para un botón de "Atrás" o "Volver" dentro de los propios niveles
+    public void BotonVolverASelector()
+    {
+        // Apagamos cualquier nivel en el que estemos
+        panelNivelServicio.SetActive(false);
+        panelNivelPhishing.SetActive(false);
+
+        // Y volvemos a encender la pantalla de selección de módulos
+        panelSelectorModulos.SetActive(true);
     }
 }
