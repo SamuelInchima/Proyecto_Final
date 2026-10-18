@@ -32,7 +32,6 @@ public class GestorServicioCliente : MonoBehaviour
 
     [Header("Conexión con otros sistemas")]
     public GestorPenalizacion scriptPenalizacion; // Referencia a tu script anterior para poder restar estrellas.
-    public GameObject panelVictoria;              // Panel que se encenderá al superar los 5 niveles.
 
     // ==========================================
     // DATOS DE LOS 5 NIVELES
@@ -43,12 +42,6 @@ public class GestorServicioCliente : MonoBehaviour
 
     void Start()
     {
-        // Nos aseguramos de que el panel de victoria esté apagado al empezar.
-        if (panelVictoria != null)
-        {
-            panelVictoria.SetActive(false);
-        }
-
         // Cargamos el primer nivel (posición 0 de la lista) al iniciar.
         CargarNivel(0);
     }
@@ -105,10 +98,9 @@ public class GestorServicioCliente : MonoBehaviour
         {
             // Si ya no hay más niveles en la lista, significa que superó los 5 casos con éxito
             Debug.Log("¡Módulo de Atención al Cliente completado!");
-            if (panelVictoria != null)
-            {
-                panelVictoria.SetActive(true);
-            }
+
+            // Llamamos al GestorPenalizacion para detener el reloj y mostrar estadísticas de estrellas
+            scriptPenalizacion.VictoriaServicio();
         }
     }
 }

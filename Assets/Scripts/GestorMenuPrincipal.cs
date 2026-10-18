@@ -15,6 +15,11 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GameObject panelNivelServicio;  // Arrastra aquí el panel del juego de Servicio al Cliente.
     public GameObject panelNivelPhishing;  // Arrastra aquí el panel del juego de Phishing.
 
+    [Header("Conexión con los otros Scripts")]
+    public GestorPenalizacion scriptPenalizacion;
+    public GestorServicioCliente scriptServicio;
+    public GestorPhishing scriptPhishing;
+
     // MÉTODO START
     // Todo lo que esté dentro de Start() se ejecuta una sola vez justo cuando arranca el juego.
     void Start()
@@ -75,9 +80,9 @@ public class GestorMenuPrincipal : MonoBehaviour
         Application.Quit();
     }
 
-    // NUEVOS MÉTODOS: SELECTOR DE MÓDULOS
+    // MÉTODOS: SELECTOR DE MÓDULOS
 
-    // 1. Esta función se conectará al botón "Servicio al Cliente" dentro del panel Selector
+    // 1. Esta función se conectará al botón "Servicio al Cliente" dentro del panel Selector - Al presionar el botón "Servicio al Cliente" en el Selector
     public void BotonModuloServicio()
     {
         // Apagamos el selector para despejar la pantalla
@@ -85,9 +90,13 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Encendemos el nivel de Atención al Cliente (donde luego pondrás las 3 estrellas)
         panelNivelServicio.SetActive(true);
+
+        // Reiniciamos el módulo al nivel 0, restauramos las 3 estrellas y arrancamos el reloj
+        scriptServicio.CargarNivel(0);
+        scriptPenalizacion.PrepararModuloServicio();
     }
 
-    // 2. Esta función se conectará al botón "Detector de Phishing" dentro del panel Selector
+    // 2. Esta función se conectará al botón "Detector de Phishing" dentro del panel Selector - Al presionar el botón "Detector de Phishing" en el Selector
     public void BotonModuloPhishing()
     {
         // Apagamos el selector
@@ -95,14 +104,23 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Encendemos el nivel de Phishing (donde luego pondrás los 3 candados)
         panelNivelPhishing.SetActive(true);
+
+        // Reiniciamos el módulo a la imagen 0, restauramos los 3 candados y arrancamos el reloj
+        scriptPhishing.CargarImagenNivel(0);
+        scriptPenalizacion.PrepararModuloPhishing();
     }
 
-    // 3. Esta función sirve para un botón de "Atrás" o "Volver" dentro de los propios niveles
+    // 3. Esta función sirve para un botón de "Atrás" o "Volver" dentro de los propios niveles - Al volver al selector (desde el nivel, desde Game Over o desde Victoria)
     public void BotonVolverASelector()
     {
+        scriptPenalizacion.DetenerReloj(); // Apagamos el reloj por si salió a mitad de partida
+
         // Apagamos cualquier nivel en el que estemos
         panelNivelServicio.SetActive(false);
         panelNivelPhishing.SetActive(false);
+
+        scriptPenalizacion.panelGameOver.SetActive(false);
+        scriptPenalizacion.panelVictoria.SetActive(false);
 
         // Y volvemos a encender la pantalla de selección de módulos
         panelSelectorModulos.SetActive(true);
