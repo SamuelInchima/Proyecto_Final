@@ -1,52 +1,45 @@
-using TMPro; // Librería necesaria para modificar los textos de la interfaz (reloj y mensajes finales).
+using TMPro; // Librería necesaria para modificar los textos de la interfaz (reloj, mensajes finales).
 using UnityEngine;
 
 public class GestorPenalizacion : MonoBehaviour
 {
-    // ==========================================
     // 1. VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
-    // ==========================================
     // Usamos corchetes [] para indicar que esto es un "Array" (una lista de varios objetos, no solo uno).
-
     [Header("Vidas del Módulo de Servicio")]
     public GameObject[] estrellas; // Las 3 estrellas que se ven mientras juegas Servicio al Cliente.
-    private int erroresServicio = 0; // Esta variable interna cuenta cuántas veces se ha equivocado el jugador - Cuenta los fallos en Servicio (0, 1, 2 o 3).
+    private int erroresServicio = 0; // Esta variable interna (privada) cuenta cuántas veces se ha equivocado el jugador en los niveles de Servicio al Cliente.
 
     [Header("Vidas del Módulo de Phishing")]
     public GameObject[] candados; // Los 3 candados que se ven mientras juegas Phishing.
-    private int erroresPhishing = 0; // Cuenta los fallos en Phishing(0, 1, 2 o 3).
+    private int erroresPhishing = 0; // Cuenta los fallos en Phishing.
 
-    // ==========================================
-    // 2. NUEVO: VARIABLES DEL CONTADOR DE TIEMPO
-    // ==========================================
+
+    // 2. VARIABLES DEL CONTADOR DE TIEMPO
     [Header("Configuración del Cronómetro")]
     public float tiempoPorModulo = 60f; // Tiempo máximo en segundos para completar un módulo (ej. 60 segundos).
-    private float tiempoRestante;       // Variable interna que irá bajando segundo a segundo.
-    private bool relojActivo = false;   // Interruptor: true = el reloj corre, false = el reloj se detiene.
-    public TextMeshProUGUI textoReloj;  // El texto en pantalla donde se verán los segundos.
+    private float tiempoRestante; // Variable interna que irá bajando segundo a segundo.
+    private bool relojActivo = false; // Interruptor: true = el reloj corre, false = el reloj se detiene.
+    public TextMeshProUGUI textoReloj; // El texto en pantalla donde se verán los segundos.
 
-    // ==========================================
-    // 3. NUEVO: VARIABLES DE VICTORIA Y ESTADÍSTICAS
-    // ==========================================
+
+    // 3. VARIABLES DE VICTORIA Y ESTADÍSTICAS
     [Header("Pantallas de Fin de Juego")]
     public GameObject panelGameOver; // Panel que se activa si llegas a 3 errores o se acaba el tiempo.
-    public GameObject panelVictoria; // Panel único de victoria donde mostraremos las estadísticas.
+    public GameObject panelVictoria; // Panel de victoria donde mostraremos las estadísticas.
 
     //public GameObject panelNivelServicio;         ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
     //public GameObject panelNivelPhishing;         ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
 
     [Header("Elementos de Estadísticas (Dentro del Panel Victoria)")]
     public TextMeshProUGUI textoMensajeVictoria; // Texto que cambiará según las vidas con las que termines.
-    public GameObject[] iconosVictoria;          // 3 iconos (estrellas o trofeos) dentro del panel de victoria.
+    public GameObject[] iconosVictoria; // 3 iconos (estrellas) dentro del panel de victoria.
 
-    // ==========================================
-    // 4. NUEVO: SÍMBOLOS DE MÓDULO COMPLETADO (ESTÉTICO)
-    // ==========================================
+
+    // 4. SÍMBOLOS DE MÓDULO COMPLETADO (ESTÉTICO)
     [Header("Insignias en el Selector de Módulos")]
     public GameObject simboloCompletadoServicio; // Imagen de "Chulito/Completado" junto al botón de Servicio.
-    public GameObject simboloCompletadoPhishing; // Imagen de "Chulito/Completado" junto al botón de Phishing.
+    public GameObject simboloCompletadoPhishing; //Misma imagen junto al botón de Phishing.
 
-    // MÉTODO START: Se ejecuta una sola vez al arrancar el juego.
     void Start()
     {
         // Por seguridad, nos aseguramos de apagar las pantallas de fin de juego al iniciar.
@@ -61,8 +54,7 @@ public class GestorPenalizacion : MonoBehaviour
         textoReloj.gameObject.SetActive(false);
     }
 
-    // MÉTODO UPDATE: Se ejecuta automáticamente en cada fotograma del juego (muchas veces por segundo).
-    // Es el lugar ideal para manejar cronómetros.
+    // MÉTODO UPDATE: Se ejecuta automáticamente en cada fotograma del juego (muchas veces por segundo). - Es el lugar ideal para manejar cronómetros.
     void Update()
     {
         // Solo descontamos tiempo si el interruptor 'relojActivo' está encendido (true).
@@ -84,25 +76,22 @@ public class GestorPenalizacion : MonoBehaviour
         }
     }
 
-    // ==========================================
-    // MÉTODOS PARA INICIAR Y REINICIAR MÓDULOS Y OCULTAR EL RELOJ
-    // ==========================================
-
+    // MÉTODOS PARA INICIAR, REINICIAR MÓDULOS Y OCULTAR EL RELOJ
     // Se llama al entrar al módulo de Servicio para preparar las vidas y arrancar el reloj.
     public void PrepararModuloServicio()
     {
-        erroresServicio = 0; // Reiniciamos los errores a cero para poder volver a jugar normalmente.
+        erroresServicio = 0; // Reiniciamos los errores a cero para poder jugar y volver a jugar normalmente.
 
         // Encendemos de nuevo las 3 estrellas por si se habían apagado en una partida anterior.
         estrellas[0].SetActive(true);
         estrellas[1].SetActive(true);
         estrellas[2].SetActive(true);
 
-        // Reiniciamos las pantallas de victoria/derrota y arrancamos el reloj.
+        // Reiniciamos las pantallas de victoria/derrota.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás.
+        // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás (el cronómetro).
         textoReloj.gameObject.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
@@ -118,7 +107,7 @@ public class GestorPenalizacion : MonoBehaviour
         candados[1].SetActive(true);
         candados[2].SetActive(true);
 
-        // Reiniciamos pantallas y arrancamos el reloj.
+        // Reiniciamos pantallas.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
@@ -128,7 +117,7 @@ public class GestorPenalizacion : MonoBehaviour
         relojActivo = true;
     }
 
-    // Método para detener y esconder el reloj si el jugador sale al menú antes de terminar. - (al ganar, perder o volver al selector).
+    // Método para detener y esconder el reloj si el jugador sale al menú antes de terminar (o al ganar, perder o volver al selector).
     public void DetenerReloj()
     {
         relojActivo = false; // Detiene el conteo matemático.
@@ -137,11 +126,8 @@ public class GestorPenalizacion : MonoBehaviour
         textoReloj.gameObject.SetActive(false);
     }
 
-    // ==========================================
     // MÉTODOS PARA RESTAR VIDAS
-    // ==========================================
-
-    // Esta función se conectará a los botones de "Respuesta Incorrecta" en Servicio al Cliente
+    // Esta función se conecta a los botones de "Respuesta Incorrecta" en Servicio al Cliente
     public void RestarEstrella()
     {
         // Verificamos si el jugador aún tiene estrellas (es decir, menos de 3 errores)
@@ -162,7 +148,7 @@ public class GestorPenalizacion : MonoBehaviour
         }
     }
 
-    // Esta función se conectará a los botones de "Respuesta Incorrecta" (Aprobar un correo falso)
+    // Esta función se conecta a los botones de "Respuesta Incorrecta" (marcar como seguro un correo falso)
     public void RestarCandado()
     {
         if (erroresPhishing < 3)
@@ -177,10 +163,8 @@ public class GestorPenalizacion : MonoBehaviour
         }
     }
 
-    // ==========================================
     // MÉTODOS DE VICTORIA Y ESTADÍSTICAS
-    // ==========================================
-    // Esta función la llamará el módulo de Servicio al superar sus 5 niveles.
+    // Esta función la llamará el módulo de Servicio al Cliente al superar sus 5 niveles.
     public void VictoriaServicio()
     {
         //Llamamos a DetenerReloj() para que frene el tiempo y además oculte el texto.
@@ -199,7 +183,7 @@ public class GestorPenalizacion : MonoBehaviour
         // Mostramos un mensaje diferente según las estrellas conservadas.
         if (estrellasFinales == 3)
         {
-            textoMensajeVictoria.text = "¡Desempeño Perfecto (3/3 Estrellas)!\nAtendiste a todos los clientes de NexoBank con total empatía.";
+            textoMensajeVictoria.text = "¡Desempeño Perfecto (3/3 Estrellas)!\nAtendiste a todos los clientes con total profesionalidad.";
         }
         else if (estrellasFinales == 2)
         {
@@ -207,7 +191,7 @@ public class GestorPenalizacion : MonoBehaviour
         }
         else if (estrellasFinales == 1)
         {
-            textoMensajeVictoria.text = "¡Pasaste al límite (1/3 Estrellas)!\nEstuviste a punto de ser despedido. Repasa el manual de servicio.";
+            textoMensajeVictoria.text = "¡Al límite (1/3 Estrellas)!\nEstuviste a punto de ser despedido.";
         }
     }
 
@@ -230,11 +214,11 @@ public class GestorPenalizacion : MonoBehaviour
         // Mostramos un mensaje diferente según los candados conservados.
         if (candadosFinales == 3)
         {
-            textoMensajeVictoria.text = "¡Seguridad Impecable (3/3 Candados)!\nBloqueaste todas las amenazas contra NexoBank sin fallar.";
+            textoMensajeVictoria.text = "¡Seguridad Impecable (3/3 Candados)!\nDescartaste todas las amenazas sin fallar.";
         }
         else if (candadosFinales == 2)
         {
-            textoMensajeVictoria.text = "¡Buen Trabajo (2/3 Candados)!\nProtegiste el banco, pero tuviste un descuido. Revisa bien los remitentes.";
+            textoMensajeVictoria.text = "¡Buen Trabajo (2/3 Candados)!\nProtegiste la seguridad de NexoBank, pero tuviste un descuido. Revisa bien los remitentes y detalles.";
         }
         else if (candadosFinales == 1)
         {

@@ -7,23 +7,20 @@ using TMPro; // Librería necesaria para modificar textos TextMeshPro en Unity 2
 public class CasoCliente
 {
     // AGREGAR QUE DESAPAREZCA EL PANEL DE NIVEL AL COMPLETAR EL MODULO
-
-    [TextArea(2, 4)] // Hace que la cajita de texto en el Inspector sea más grande y cómoda de escribir.
-    public string mensajeCliente; // La queja o pregunta que hace el cliente de NexoBank.
+    [TextArea(2, 4)] // Hace que la caja de texto en el Inspector sea más grande y cómoda de escribir.
+    public string mensajeCliente; // La queja o pregunta que hace el cliente.
 
     public string textoBoton1;    // Texto para la primera opción de respuesta.
     public string textoBoton2;    // Texto para la segunda opción de respuesta.
     public string textoBoton3;    // Texto para la tercera opción de respuesta.
 
-    [Tooltip("Escribe 1, 2 o 3 según cuál sea el botón con la respuesta empática/correcta")]
+    [Tooltip("Escribe 1, 2 o 3 según cuál sea el botón con la respuesta correcta")]
     public int respuestaCorrecta; // Guardará el número (1, 2 o 3) del botón correcto en este nivel.
 }
 
 public class GestorServicioCliente : MonoBehaviour
 {
-    // ==========================================
     // VARIABLES DE INTERFAZ (TEXTOS Y PANELES)
-    // ==========================================
     [Header("Elementos de Texto en Pantalla")]
     public TextMeshProUGUI textoPantallaCliente; // El texto donde se lee el mensaje del cliente.
     public TextMeshProUGUI textoEnBoton1;        // El texto dentro del Botón 1.
@@ -33,9 +30,7 @@ public class GestorServicioCliente : MonoBehaviour
     [Header("Conexión con otros sistemas")]
     public GestorPenalizacion scriptPenalizacion; // Referencia a tu script anterior para poder restar estrellas.
 
-    // ==========================================
     // DATOS DE LOS 5 NIVELES
-    // ==========================================
     [Header("Configuración de los 5 Niveles")]
     public CasoCliente[] niveles; // Lista (Array) donde escribiremos los 5 casos desde el Inspector.
     private int nivelActual = 0;  // Lleva la cuenta de en qué nivel vamos (en programación se empieza en 0).
@@ -46,10 +41,7 @@ public class GestorServicioCliente : MonoBehaviour
         CargarNivel(0);
     }
 
-    // ==========================================
     // MÉTODOS DE LÓGICA DEL JUEGO
-    // ==========================================
-
     // Esta función actualiza los textos de la pantalla según el nivel en el que estemos.
     // Es 'public' por si deseas llamarla también desde un menú selector de niveles (1 al 5).
     public void CargarNivel(int indiceNivel)

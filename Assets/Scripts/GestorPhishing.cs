@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI; // Librería OBLIGATORIA para poder controlar componentes 'Image' de la interfaz (UI) de Unity.
 
-// [System.Serializable] permite que esta "cajita de datos" sea visible en el Inspector de Unity.
+// [System.Serializable] permite que esta "caja de datos" sea visible en el Inspector de Unity.
 [System.Serializable]
 public class CasoPhishing
 {
@@ -17,9 +17,7 @@ public class CasoPhishing
 
 public class GestorPhishing : MonoBehaviour
 {
-    // ==========================================
     // VARIABLES DE LA INTERFAZ (UI)
-    // ==========================================
     [Header("Elementos en Pantalla")]
     // 'Image' es el componente en el Canvas (como un portarretratos vacío) donde pondremos nuestros 'Sprites' (las fotos).
     public Image contenedorImagenPantalla;
@@ -27,9 +25,7 @@ public class GestorPhishing : MonoBehaviour
     [Header("Conexión con otros sistemas")]
     public GestorPenalizacion scriptPenalizacion; // Referencia a tu script que apaga los 3 candados.
 
-    // ==========================================
     // DATOS DE LOS 5 NIVELES
-    // ==========================================
     [Header("Lista de los 5 Casos (Correos, SMS, etc.)")]
     public CasoPhishing[] nivelesPhishing; // Array (lista) que guardará las 5 imágenes y sus respuestas.
     private int nivelActual = 0;           // Lleva la cuenta de en qué imagen vamos (empieza en 0).
@@ -41,10 +37,7 @@ public class GestorPhishing : MonoBehaviour
         CargarImagenNivel(0);
     }
 
-    // ==========================================
     // MÉTODO PARA CAMBIAR LA IMAGEN
-    // ==========================================
-
     // Esta función busca la imagen en nuestra lista y la coloca en el contenedor de la pantalla.
     public void CargarImagenNivel(int indice)
     {
@@ -55,10 +48,7 @@ public class GestorPhishing : MonoBehaviour
         contenedorImagenPantalla.sprite = nivelesPhishing[nivelActual].imagenDelMensaje;
     }
 
-    // ==========================================
     // MÉTODOS PARA LOS BOTONES (VERDE Y ROJO)
-    // ==========================================
-
     // 1. Esta función se conectará al BOTÓN VERDE ("Seguro")
     public void BotonVerdeSeguro()
     {
@@ -95,10 +85,7 @@ public class GestorPhishing : MonoBehaviour
         }
     }
 
-    // ==========================================
     // MÉTODO INTERNO PARA AVANZAR DE NIVEL
-    // ==========================================
-
     private void AvanzarSiguienteCaso()
     {
         // Sumamos 1 para pasar a la siguiente imagen de la lista.
