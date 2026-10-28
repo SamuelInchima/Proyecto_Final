@@ -30,6 +30,9 @@ public class GestorPhishing : MonoBehaviour
     public CasoPhishing[] nivelesPhishing; // Array (lista) que guardará las 5 imágenes y sus respuestas.
     private int nivelActual = 0;           // Lleva la cuenta de en qué imagen vamos (empieza en 0).
 
+    //AUDIO
+    public GestorAudio scriptAudio;
+
     // MÉTODO START: Se ejecuta una sola vez al iniciar el juego.
     void Start()
     {
@@ -57,6 +60,9 @@ public class GestorPhishing : MonoBehaviour
         {
             // ¡Acertó! El mensaje o correo era legítimo de NexoBank.
             Debug.Log("¡Correcto! El mensaje era seguro. Pasando al siguiente caso...");
+
+            scriptAudio.ReproducirAcierto();
+
             AvanzarSiguienteCaso();
         }
         else
@@ -75,6 +81,9 @@ public class GestorPhishing : MonoBehaviour
         {
             // ¡Acertó! Detectó las pistas sospechosas en la imagen (mala ortografía, link falso, etc.).
             Debug.Log("¡Excelente! Detectaste el intento de Phishing. Pasando al siguiente caso...");
+
+            scriptAudio.ReproducirAcierto();
+
             AvanzarSiguienteCaso();
         }
         else

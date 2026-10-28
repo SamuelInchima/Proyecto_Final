@@ -6,7 +6,6 @@ using TMPro; // Librería necesaria para modificar textos TextMeshPro en Unity 2
 [System.Serializable]
 public class CasoCliente
 {
-    // AGREGAR QUE DESAPAREZCA EL PANEL DE NIVEL AL COMPLETAR EL MODULO
     [TextArea(2, 4)] // Hace que la caja de texto en el Inspector sea más grande y cómoda de escribir.
     public string mensajeCliente; // La queja o pregunta que hace el cliente.
 
@@ -34,6 +33,9 @@ public class GestorServicioCliente : MonoBehaviour
     [Header("Configuración de los 5 Niveles")]
     public CasoCliente[] niveles; // Lista (Array) donde escribiremos los 5 casos desde el Inspector.
     private int nivelActual = 0;  // Lleva la cuenta de en qué nivel vamos (en programación se empieza en 0).
+
+    // AUIDIO
+    public GestorAudio scriptAudio;
 
     void Start()
     {
@@ -64,7 +66,11 @@ public class GestorServicioCliente : MonoBehaviour
         if (botonPresionado == niveles[nivelActual].respuestaCorrecta)
         {
             Debug.Log("¡Respuesta profesional! Pasando al siguiente caso...");
+
+            scriptAudio.ReproducirAcierto();
+
             AvanzarSiguienteNivel();
+
         }
         else
         {

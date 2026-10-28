@@ -27,8 +27,6 @@ public class GestorPenalizacion : MonoBehaviour
     public GameObject panelGameOver; // Panel que se activa si llegas a 3 errores o se acaba el tiempo.
     public GameObject panelVictoria; // Panel de victoria donde mostraremos las estadísticas.
 
-    //public GameObject panelNivelServicio;         ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
-    //public GameObject panelNivelPhishing;         ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
 
     [Header("Elementos de Estadísticas (Dentro del Panel Victoria)")]
     public TextMeshProUGUI textoMensajeVictoria; // Texto que cambiará según las vidas con las que termines.
@@ -40,6 +38,9 @@ public class GestorPenalizacion : MonoBehaviour
     public GameObject simboloCompletadoServicio; // Imagen de "Chulito/Completado" junto al botón de Servicio.
     public GameObject simboloCompletadoPhishing; //Misma imagen junto al botón de Phishing.
 
+    // 5. AUDIO
+    [Header("Conexión con el Audio")]
+    public GestorAudio scriptAudio; // Referencia para disparar sonidos de error, victoria y derrota.
     void Start()
     {
         // Por seguridad, nos aseguramos de apagar las pantallas de fin de juego al iniciar.
@@ -136,9 +137,10 @@ public class GestorPenalizacion : MonoBehaviour
             // Los Arrays en programación empiezan a contar desde el 0.
             // Si erroresServicio es 0, apagará la estrella en la posición 0.
             estrellas[erroresServicio].SetActive(false);
-
             // Sumamos 1 al contador de errores
             erroresServicio++;
+
+            scriptAudio.ReproducirError(); // Suena la alerta de fallo al perder una vida
 
             // Si después de sumar, llegamos a 3 errores, perdimos.
             if (erroresServicio >= 3)
@@ -155,6 +157,8 @@ public class GestorPenalizacion : MonoBehaviour
         {
             candados[erroresPhishing].SetActive(false);
             erroresPhishing++;
+
+            scriptAudio.ReproducirError(); // Suena la alerta de fallo al perder una vida
 
             if (erroresPhishing >= 3)
             {
@@ -176,6 +180,9 @@ public class GestorPenalizacion : MonoBehaviour
         // Encendemos el símbolo estético de "Completado" en el selector de módulos.
         simboloCompletadoServicio.SetActive(true);
 
+        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
+        scriptAudio.ReproducirVictoria(); // (O ReproducirGameOver en MostrarGameOver) // Suena la tonada de triunfo
+        
         // Calculamos con cuántas estrellas terminó (3 menos los errores cometidos).
         int estrellasFinales = 3 - erroresServicio;
         ActualizarIconosVictoria(estrellasFinales);
@@ -206,6 +213,9 @@ public class GestorPenalizacion : MonoBehaviour
 
         // Encendemos el símbolo estético de "Completado" en el selector de módulos.
         simboloCompletadoPhishing.SetActive(true);
+
+        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
+        scriptAudio.ReproducirVictoria(); // (O ReproducirGameOver en MostrarGameOver)
 
         // Calculamos con cuántos candados terminó.
         int candadosFinales = 3 - erroresPhishing;
@@ -254,12 +264,12 @@ public class GestorPenalizacion : MonoBehaviour
     // Método interno para mostrar la derrota (por 3 errores o por tiempo agotado).
     private void MostrarGameOver()
     {
-        //panelNivelServicio.SetActive(false);           ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
-        //panelNivelPhishing.SetActive(false);           ESTO ES PARA QUE DESAPAREZCA EL PANEL DEL NIVEL AL SALIR EL PANEL GAME OVER
-
         // También ocultamos el reloj si el jugador pierde la partida.
         DetenerReloj();
         relojActivo = false; // Detenemos el reloj inmediatamente.
         panelGameOver.SetActive(true); // Mostramos la pantalla de Game Over.
+
+        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
+        scriptAudio.ReproducirGameOver(); // (O ReproducirGameOver en MostrarGameOver) // Suena la tonada de derrota
     }
 }

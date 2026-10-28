@@ -20,6 +20,9 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GestorServicioCliente scriptServicio;
     public GestorPhishing scriptPhishing;
 
+    [Header("Audio")]
+    public GestorAudio scriptAudio;
+
     // MÉTODO START
     // Todo lo que esté dentro de Start() se ejecuta una sola vez justo cuando arranca el juego.
     void Start()
@@ -93,6 +96,9 @@ public class GestorMenuPrincipal : MonoBehaviour
         // Reiniciamos el módulo al nivel 0, restauramos las 3 estrellas y arrancamos el reloj
         scriptServicio.CargarNivel(0);
         scriptPenalizacion.PrepararModuloServicio();
+
+        // Cambiamos la canción por la de Servicio al Cliente
+        scriptAudio.CambiarMusica(scriptAudio.musicaServicio);
     }
 
     // 2. Esta función se conectará al botón "Detector de Phishing" dentro del panel Selector -
@@ -107,6 +113,9 @@ public class GestorMenuPrincipal : MonoBehaviour
         // Reiniciamos el módulo a la imagen 0, restauramos los 3 candados y arrancamos el reloj
         scriptPhishing.CargarImagenNivel(0);
         scriptPenalizacion.PrepararModuloPhishing();
+
+        // Cambiamos la canción por la de Phishing
+        scriptAudio.CambiarMusica(scriptAudio.musicaPhishing);
     }
 
     // 3. Esta función sirve para un botón de "Atrás" o "Volver" dentro de los propios niveles - Se puede volver al selector desde el nivel, desde Game Over o desde Victoria
@@ -123,5 +132,8 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Y volvemos a encender la pantalla de selección de módulos
         panelSelectorModulos.SetActive(true);
+
+        // Volvemos a poner la música tranquila del Menú/Selector
+        scriptAudio.CambiarMusica(scriptAudio.musicaMenu);
     }
 }
