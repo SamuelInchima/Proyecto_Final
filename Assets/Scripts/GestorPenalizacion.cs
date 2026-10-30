@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GestorPenalizacion : MonoBehaviour
 {
-    // 1. VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
+    // VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
     // Usamos corchetes [] para indicar que esto es un "Array" (una lista de varios objetos, no solo uno).
     [Header("Vidas del Módulo de Servicio")]
     public GameObject[] estrellas; // Las 3 estrellas que se ven mientras juegas Servicio al Cliente.
@@ -14,15 +14,16 @@ public class GestorPenalizacion : MonoBehaviour
     private int erroresPhishing = 0; // Cuenta los fallos en Phishing.
 
 
-    // 2. VARIABLES DEL CONTADOR DE TIEMPO
+    // VARIABLES DEL CONTADOR DE TIEMPO
     [Header("Configuración del Cronómetro")]
     public float tiempoPorModulo = 60f; // Tiempo máximo en segundos para completar un módulo (ej. 60 segundos).
     private float tiempoRestante; // Variable interna que irá bajando segundo a segundo.
-    private bool relojActivo = false; // Interruptor: true = el reloj corre, false = el reloj se detiene.
-    public TextMeshProUGUI textoReloj; // El texto en pantalla donde se verán los segundos.
+    private bool relojActivo = false; // Interruptor: true = el reloj corre, false = el reloj se detiene. 
+    public TextMeshProUGUI textoReloj; // El texto en pantalla donde se verán los segundos. - Es el texto hijo que cambia los segundos
+    public GameObject contenedorReloj;  // La imagen Padre que contiene al texto adentro
 
 
-    // 3. VARIABLES DE VICTORIA Y ESTADÍSTICAS
+    // VARIABLES DE VICTORIA Y ESTADÍSTICAS
     [Header("Pantallas de Fin de Juego")]
     public GameObject panelGameOver; // Panel que se activa si llegas a 3 errores o se acaba el tiempo.
     public GameObject panelVictoria; // Panel de victoria donde mostraremos las estadísticas.
@@ -33,12 +34,12 @@ public class GestorPenalizacion : MonoBehaviour
     public GameObject[] iconosVictoria; // 3 iconos (estrellas) dentro del panel de victoria.
 
 
-    // 4. SÍMBOLOS DE MÓDULO COMPLETADO (ESTÉTICO)
+    // SÍMBOLOS DE MÓDULO COMPLETADO (ESTÉTICO)
     [Header("Insignias en el Selector de Módulos")]
     public GameObject simboloCompletadoServicio; // Imagen de "Chulito/Completado" junto al botón de Servicio.
     public GameObject simboloCompletadoPhishing; //Misma imagen junto al botón de Phishing.
 
-    // 5. AUDIO
+    // AUDIO
     [Header("Conexión con el Audio")]
     public GestorAudio scriptAudio; // Referencia para disparar sonidos de error, victoria y derrota.
     void Start()
@@ -52,7 +53,8 @@ public class GestorPenalizacion : MonoBehaviour
         simboloCompletadoPhishing.SetActive(false);
 
         // Escondemos el objeto de texto del reloj para que no se vea en el Menú Principal.
-        textoReloj.gameObject.SetActive(false);
+        // Apaga el recuadro padre (y su texto hijo desaparece automáticamente con él)
+        contenedorReloj.SetActive(false);
     }
 
     // MÉTODO UPDATE: Se ejecuta automáticamente en cada fotograma del juego (muchas veces por segundo). - Es el lugar ideal para manejar cronómetros.
@@ -66,7 +68,7 @@ public class GestorPenalizacion : MonoBehaviour
 
             // Convertimos el tiempo con decimales a un número entero (int) para que se vea limpio en pantalla.
             int segundosEnteros = Mathf.CeilToInt(tiempoRestante);
-            textoReloj.text = "Tiempo: " + segundosEnteros.ToString() + "s";
+            textoReloj.text = segundosEnteros.ToString() + "s";
 
             // Si el tiempo llega a cero o menos, el jugador pierde por tiempo agotado.
             if (tiempoRestante <= 0)
@@ -93,7 +95,7 @@ public class GestorPenalizacion : MonoBehaviour
         panelVictoria.SetActive(false);
 
         // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás (el cronómetro).
-        textoReloj.gameObject.SetActive(true);
+        contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
     }
@@ -113,7 +115,7 @@ public class GestorPenalizacion : MonoBehaviour
         panelVictoria.SetActive(false);
 
         // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás.
-        textoReloj.gameObject.SetActive(true);
+        contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
     }
@@ -124,7 +126,7 @@ public class GestorPenalizacion : MonoBehaviour
         relojActivo = false; // Detiene el conteo matemático.
 
         //Apaga el objeto de texto en la interfaz para que desaparezca de la pantalla.
-        textoReloj.gameObject.SetActive(false);
+        contenedorReloj.SetActive(false);
     }
 
     // MÉTODOS PARA RESTAR VIDAS
