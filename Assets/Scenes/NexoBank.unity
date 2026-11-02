@@ -885,6 +885,18 @@ MonoBehaviour:
     esPhishing: 1
   - nombreDelCaso: Caso2
     imagenDelMensaje: {fileID: 21300000, guid: 0ee569114b2e55a4b875d39ac71f95b6, type: 3}
+    esPhishing: 0
+  - nombreDelCaso: Caso3
+    imagenDelMensaje: {fileID: 21300000, guid: 666a382ee5c7df04eb010578f0b9cdcd, type: 3}
+    esPhishing: 1
+  - nombreDelCaso: Caso4
+    imagenDelMensaje: {fileID: 21300000, guid: 27107a591d2ad9540910cb485f0b9788, type: 3}
+    esPhishing: 1
+  - nombreDelCaso: Caso5
+    imagenDelMensaje: {fileID: 21300000, guid: cc1112113bb57224c82d1717c492db6e, type: 3}
+    esPhishing: 1
+  - nombreDelCaso: Caso6
+    imagenDelMensaje: {fileID: 21300000, guid: b0f4bb9bab3a5c2429a3fb5c8d3c4bad, type: 3}
     esPhishing: 1
   scriptAudio: {fileID: 215876893}
 --- !u!114 &215876895
@@ -906,7 +918,7 @@ MonoBehaviour:
   textoEnBoton3: {fileID: 2017960636}
   scriptPenalizacion: {fileID: 215876896}
   niveles:
-  - fotoCliente: {fileID: 21300000, guid: 875ea67d5fb32c14381815f9e8ebb7da, type: 3}
+  - fotoCliente: {fileID: 21300000, guid: 5126a9de5e70ff942b6440844f6e1561, type: 3}
     mensajeCliente: Buenas tardes, Intento pagar en el supermercado y mi tarjeta
       es rechazada. Necesito que me la activen inmediatamente sin hacerme tantas
       preguntas porque tengo prisa
@@ -916,6 +928,44 @@ MonoBehaviour:
       pueda pagar r\xE1pido"
     textoBoton3: "No puedo ayudarle si est\xE1 de af\xE1n. Llame m\xE1s tarde a la
       l\xEDnea nacional"
+    respuestaCorrecta: 1
+  - fotoCliente: {fileID: 21300000, guid: 0b6b3dc0318440c449b37f50410f865c, type: 3}
+    mensajeCliente: "Veo un descuento de $150.000 COP en mi cuenta que yo no autoric\xE9.
+      \xA1Exijo que me devuelvan el dinero ya mismo o los voy a demandar!"
+    textoBoton1: Tranquilo, le devuelvo el dinero a su saldo inmediatamente desde
+      mi sistema
+    textoBoton2: "Comprendo su preocupaci\xF3n. Proceder\xE9 a registrar la novedad
+      de reclamo e iniciar la investigaci\xF3n del cobro"
+    textoBoton3: "Ese no es problema del banco. Seguro usted compr\xF3 algo y no
+      se acuerda"
+    respuestaCorrecta: 2
+  - fotoCliente: {fileID: 21300000, guid: 1335f3178f00e7f4db33d86ca3fe0c7c, type: 3}
+    mensajeCliente: "Hola, olvid\xE9 mi clave din\xE1mica. \xBFMe la puede cambiar
+      usted directamente desde ah\xED para no tener que ir al cajero?"
+    textoBoton1: "No se puede. Le toca ir obligatoriamente a una oficina f\xEDsica"
+    textoBoton2: "Por motivos de seguridad, los asesores no gestionamos claves personales.
+      Le indicar\xE9 el paso a paso seguro en la App"
+    textoBoton3: "Claro que s\xED, deme su n\xFAmero de c\xE9dula y le asigno una
+      clave temporal desde mi terminal"
+    respuestaCorrecta: 2
+  - fotoCliente: {fileID: 21300000, guid: 875ea67d5fb32c14381815f9e8ebb7da, type: 3}
+    mensajeCliente: "Le transfer\xED $500.000 COP a mi hijo hace una hora y a \xE9l
+      no le llega nada, pero a m\xED ya me descontaron el dinero"
+    textoBoton1: "Seguramente el sistema fall\xF3 y se perdi\xF3 el dinero, vuelva
+      a hacer la transferencia"
+    textoBoton2: "Toca esperar a que el sistema procese el env\xEDo. Si no le llega
+      en 24 horas vuelve a comunicarse. Hasta luego"
+    textoBoton3: "Perm\xEDtame verificar el n\xFAmero de convenio e ID de transacci\xF3n
+      para rastrear el estado del env\xEDo en el sistema"
+    respuestaCorrecta: 3
+  - fotoCliente: {fileID: 21300000, guid: dfc395ed2e9634f4a904bf13da1f45f8, type: 3}
+    mensajeCliente: "Necesito que me aumenten el cupo de la tarjeta de cr\xE9dito
+      a $10.000.000 COP hoy mismo para comprar un pasaje de avi\xF3n"
+    textoBoton1: "Con gusto verifico en el sistema si su perfil tiene un estudio
+      de cr\xE9dito preaprobado para realizar la solicitud"
+    textoBoton2: Listo, le acabo de subir el cupo a $10 millones, ya puede comprar
+      el pasaje
+    textoBoton3: Usted no cumple los requisitos para eso, no insistamos
     respuestaCorrecta: 1
   scriptAudio: {fileID: 215876893}
 --- !u!114 &215876896
@@ -938,7 +988,7 @@ MonoBehaviour:
   - {fileID: 61141323}
   - {fileID: 2099666856}
   - {fileID: 651639108}
-  tiempoPorModulo: 60
+  tiempoPorModulo: 150
   textoReloj: {fileID: 1266160822}
   contenedorReloj: {fileID: 773784536}
   panelGameOver: {fileID: 1234910676}
@@ -2178,8 +2228,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -401.625, y: 61.75}
-  m_SizeDelta: {x: 150.75, y: 149}
+  m_AnchoredPosition: {x: -400, y: 53.5}
+  m_SizeDelta: {x: 140, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &492714247
 MonoBehaviour:
@@ -2310,7 +2360,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -4969,7 +5019,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -7034,7 +7084,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
