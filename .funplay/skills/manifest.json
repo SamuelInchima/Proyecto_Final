@@ -1,0 +1,16 @@
+{
+    "platforms": [
+        "antigravity"
+    ],
+    "optionalSkills": [],
+    "skillVersions": [
+        {
+            "id": "unity-mcp-workflow",
+            "version": "1.0.9"
+        },
+        {
+            "id": "unity-ui-composition",
+            "version": "1.0.11"
+        }
+    ]
+}

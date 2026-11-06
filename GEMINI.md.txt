@@ -1,0 +1,12 @@
+# Contexto del Proyecto: NexoBank
+- Motor: Unity 2022.3.62f3 LTS - 2D (Built-In Render Pipeline).
+- Naturaleza: Juego 100% basado en UI (Canvas, Paneles, Botones, Image, TextMeshProUGUI).
+- Arquitectura en Assets/Scripts/:
+  1. GestorMenuPrincipal.cs (Navegación de paneles y mediador principal).
+  2. GestorMecanicas.cs (Estrellas, candados, cronómetro, pantallas de victoria/derrota e insignias).
+  3. GestorServicioCliente.cs (5 niveles de servicio al cliente con NPC 2D y 3 botones).
+  4. GestorPhishing.cs (5 niveles de detección de phishing con botón verde y rojo).
+  5. GestorAudio.cs (Música por módulo y efectos PlayOneShot).
+- REGLAS ESTRICTAS PARA LA IA:
+  1. NUNCA modifiques la escena 'NexoBank_Main.unity' a menos que se te pida explícitamente. Realiza las pruebas en 'Pruebas_Logica.unity'.
+  2. Mantén el código sencillo (nivel junior/principiante) y conserva siempre comentarios detallados línea por línea para la sustentación del proyecto.
