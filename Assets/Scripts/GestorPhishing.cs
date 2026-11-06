@@ -1,7 +1,10 @@
 using UnityEngine;
-using UnityEngine.UI; // Librería OBLIGATORIA para poder controlar componentes 'Image' de la interfaz (UI) de Unity.
+using UnityEngine.UI;
 
-// [System.Serializable] permite que esta "caja de datos" sea visible en el Inspector de Unity.
+// PLANTILLA DE DATOS SERIALIZABLE: CasoPhishing
+// Por defecto, Unity solo muestra en el Inspector scripts que tienen ': MonoBehaviour'.
+// Al escribir '[System.Serializable]' encima de una clase normal, le ordenamos a Unity que convierta esta clase en un "formulario desplegable"
+// dentro del Inspector para poder rellenar los 5 casos (su nombre, su imagen y si es trampa o no) sin tener que programar un script por cada nivel.
 [System.Serializable]
 public class CasoPhishing
 {
@@ -15,39 +18,44 @@ public class CasoPhishing
     public bool esPhishing; // Guarda Verdadero (true) si es una trampa, o Falso (false) si es real.
 }
 
+// CLASE PRINCIPAL DEL MÓDULO: GestorPhishing
 public class GestorPhishing : MonoBehaviour
 {
     // VARIABLES DE LA INTERFAZ (UI)
     [Header("Elementos en Pantalla")]
-    // 'Image' es el componente en el Canvas (como un portarretratos vacío) donde pondremos nuestros 'Sprites' (las fotos).
+    // - 'Image' (contenedorImagenPantalla) es el "portarretratos" fijo que está puesto en el Canvas de tu escena.
+    // - 'Sprite' (imagenDelMensaje) es la "fotografía" que metemos y cambiamos dentro de ese portarretratos en cada nivel.
     public Image contenedorImagenPantalla;
 
     [Header("Conexión con otros sistemas")]
-    public GestorPenalizacion scriptPenalizacion; // Referencia a tu script que apaga los 3 candados.
+    public GestorMecanicas scriptMecanicas; // Referencia a tu script que apaga los 3 candados.
 
     // DATOS DE LOS 5 NIVELES
     [Header("Lista de los 5 Casos (Correos, SMS, etc.)")]
+    // Creamos un arreglo/lista ('[]') de nuestra plantilla 'CasoPhishing'. En el Inspector le ponemos tamaño 5 para cargar las 5 imágenes del módulo.
     public CasoPhishing[] nivelesPhishing; // Array (lista) que guardará las 5 imágenes y sus respuestas.
+
+    // Variable privada entera que recuerda en cuál caso de la lista estamos jugando actualmente (empieza en el caso 0).
     private int nivelActual = 0;           // Lleva la cuenta de en qué imagen vamos (empieza en 0).
 
     //AUDIO
     public GestorAudio scriptAudio;
 
-    // MÉTODO START: Se ejecuta una sola vez al iniciar el juego.
     void Start()
     {
         // Cargamos la primera imagen de nuestra lista (posición 0).
         CargarImagenNivel(0);
     }
 
-    // MÉTODO PARA CAMBIAR LA IMAGEN
-    // Esta función busca la imagen en nuestra lista y la coloca en el contenedor de la pantalla.
+    // MÉTODO PARA ACTUALIZAR LA IMAGEN EN PANTALLA
+    // Esta función recibe entre paréntesis el número de caso ('indice') que queremos mostrar en pantalla (0, 1, 2, 3 o 4).
     public void CargarImagenNivel(int indice)
     {
-        // Actualizamos nuestro contador con el nivel actual.
+        // Guardamos en 'nivelActual' el número de nivel que nos pidieron cargar.
         nivelActual = indice;
 
-        // '.sprite' es la propiedad del componente Image que nos permite cambiar el dibujo que se ve en pantalla.
+        // Buscamos en la lista 'nivelesPhishing' el cajón 'nivelActual', sacamos su foto ('.imagenDelMensaje')
+        // y la colocamos dentro de la propiedad '.sprite' de nuestro portarretratos ('contenedorImagenPantalla').
         contenedorImagenPantalla.sprite = nivelesPhishing[nivelActual].imagenDelMensaje;
     }
 
@@ -69,7 +77,7 @@ public class GestorPhishing : MonoBehaviour
         {
             // ¡Falló! Era un ataque (correo falso, SMS con virus, etc.) y el jugador confió en él.
             Debug.Log("¡Error! Era una trampa de Phishing. Pierdes un candado de seguridad.");
-            scriptPenalizacion.RestarCandado();
+            scriptMecanicas.RestarCandado();
         }
     }
 
@@ -90,7 +98,7 @@ public class GestorPhishing : MonoBehaviour
         {
             // ¡Falló! Reportó un mensaje o correo real de la empresa por equivocación.
             Debug.Log("¡Error! Reportaste un mensaje oficial de NexoBank. Pierdes un candado.");
-            scriptPenalizacion.RestarCandado();
+            scriptMecanicas.RestarCandado();
         }
     }
 
@@ -112,7 +120,7 @@ public class GestorPhishing : MonoBehaviour
             Debug.Log("¡Felicidades! Superaste los 5 niveles del Detector de Phishing.");
 
             // Llamamos al GestorPenalizacion para detener el reloj y mostrar estadísticas de candados
-            scriptPenalizacion.VictoriaPhishing();
+            scriptMecanicas.VictoriaPhishing();
         }
     }
 }

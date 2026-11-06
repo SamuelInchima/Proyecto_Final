@@ -1296,7 +1296,7 @@ MonoBehaviour:
   panelInstrucciones: {fileID: 1887836009}
   panelNivelServicio: {fileID: 1843150798}
   panelNivelPhishing: {fileID: 1776916933}
-  scriptPenalizacion: {fileID: 402020201}
+  scriptMecanicas: {fileID: 402020201}
   scriptServicio: {fileID: 402020202}
   scriptPhishing: {fileID: 402020203}
   scriptAudio: {fileID: 402020206}
@@ -1350,7 +1350,7 @@ MonoBehaviour:
   textoEnBoton1: {fileID: 355553082}
   textoEnBoton2: {fileID: 1210242712}
   textoEnBoton3: {fileID: 620505685}
-  scriptPenalizacion: {fileID: 402020201}
+  scriptMecanicas: {fileID: 402020201}
   niveles:
   - fotoCliente: {fileID: 21300000, guid: 1dccfb912cfafd146a97974adcee0be5, type: 3}
     mensajeCliente: 'Caso 1: Mi tarjeta no pasa'
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contenedorImagenPantalla: {fileID: 1763889330}
-  scriptPenalizacion: {fileID: 402020201}
+  scriptMecanicas: {fileID: 402020201}
   nivelesPhishing:
   - nombreDelCaso: Caso 1
     imagenDelMensaje: {fileID: 0}
@@ -3679,7 +3679,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1015426625
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6719,7 +6719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1776916934
 RectTransform:
   m_ObjectHideFlags: 0

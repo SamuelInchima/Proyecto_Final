@@ -16,7 +16,7 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GameObject panelNivelPhishing;  // Aquí va panel del juego de Phishing.
 
     [Header("Conexión con los otros Scripts")]
-    public GestorPenalizacion scriptPenalizacion;
+    public GestorMecanicas scriptMecanicas;
     public GestorServicioCliente scriptServicio;
     public GestorPhishing scriptPhishing;
 
@@ -95,7 +95,7 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Reiniciamos el módulo al nivel 0, restauramos las 3 estrellas y arrancamos el reloj
         scriptServicio.CargarNivel(0);
-        scriptPenalizacion.PrepararModuloServicio();
+        scriptMecanicas.PrepararModuloServicio();
 
         // Cambiamos la canción por la de Servicio al Cliente
         scriptAudio.CambiarMusica(scriptAudio.musicaServicio);
@@ -112,7 +112,7 @@ public class GestorMenuPrincipal : MonoBehaviour
 
         // Reiniciamos el módulo a la imagen 0, restauramos los 3 candados y arrancamos el reloj
         scriptPhishing.CargarImagenNivel(0);
-        scriptPenalizacion.PrepararModuloPhishing();
+        scriptMecanicas.PrepararModuloPhishing();
 
         // Cambiamos la canción por la de Phishing
         scriptAudio.CambiarMusica(scriptAudio.musicaPhishing);
@@ -121,14 +121,14 @@ public class GestorMenuPrincipal : MonoBehaviour
     // 3. Esta función sirve para un botón de "Atrás" o "Volver" dentro de los propios niveles - Se puede volver al selector desde el nivel, desde Game Over o desde Victoria
     public void BotonVolverASelector()
     {
-        scriptPenalizacion.DetenerReloj(); // Apagamos el reloj por si salió a mitad de partida
+        scriptMecanicas.DetenerReloj(); // Apagamos el reloj por si salió a mitad de partida
 
         // Apagamos cualquier nivel en el que estemos
         panelNivelServicio.SetActive(false);
         panelNivelPhishing.SetActive(false);
 
-        scriptPenalizacion.panelGameOver.SetActive(false);
-        scriptPenalizacion.panelVictoria.SetActive(false);
+        scriptMecanicas.panelGameOver.SetActive(false);
+        scriptMecanicas.panelVictoria.SetActive(false);
 
         // Y volvemos a encender la pantalla de selección de módulos
         panelSelectorModulos.SetActive(true);

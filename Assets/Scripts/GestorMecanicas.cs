@@ -1,7 +1,7 @@
 using TMPro; // Librería necesaria para modificar los textos de la interfaz (reloj, mensajes finales).
 using UnityEngine;
 
-public class GestorPenalizacion : MonoBehaviour
+public class GestorMecanicas : MonoBehaviour
 {
     // VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
     // Usamos corchetes [] para indicar que esto es un "Array" (una lista de varios objetos, no solo uno).
@@ -44,42 +44,48 @@ public class GestorPenalizacion : MonoBehaviour
     public GestorAudio scriptAudio; // Referencia para disparar sonidos de error, victoria y derrota.
     void Start()
     {
-        // Por seguridad, nos aseguramos de apagar las pantallas de fin de juego al iniciar.
+        // Por seguridad, ocultamos las pantallas de Game Over y Victoria al arrancar el programa.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // Apagamos los símbolos de completado al iniciar el juego por primera vez.
+        // Ocultamos los dos símbolos de "Módulo Completado" porque el jugador apenas acaba de abrir el juego y no ha ganado ninguno todavía.
         simboloCompletadoServicio.SetActive(false);
         simboloCompletadoPhishing.SetActive(false);
 
-        // Escondemos el objeto de texto del reloj para que no se vea en el Menú Principal.
-        // Apaga el recuadro padre (y su texto hijo desaparece automáticamente con él)
+        // Escondemos el recuadro padre del reloj (y su texto hijo desaparece automáticamente con él) para que no se vea en el Menú Principal.
         contenedorReloj.SetActive(false);
     }
 
-    // MÉTODO UPDATE: Se ejecuta automáticamente en cada fotograma del juego (muchas veces por segundo). - Es el lugar ideal para manejar cronómetros.
+    // todo lo que está dentro de Update() se repite sin parar en cada fotograma del juego (60 o más veces por segundo).
     void Update()
     {
-        // Solo descontamos tiempo si el interruptor 'relojActivo' está encendido (true).
+        // Primero preguntamos: "¿El interruptor del reloj está encendido (relojActivo == true)?".
+        // Si estamos en el menú principal, 'relojActivo' es 'false', así que Update no hace absolutamente nada.
         if (relojActivo == true)
         {
-            // Time.deltaTime es el tiempo exacto en segundos que pasó desde el último fotograma.
+            // 'Time.deltaTime' mide exactamente cuántos milisegundos reales pasaron desde el fotograma anterior.
+            // Restarle 'Time.deltaTime' a 'tiempoRestante' garantiza que el reloj baje exactamente 1 segundo por cada segundo de la vida real,
+            // sin importar si el computador donde se juega es muy rápido o muy lento.
             tiempoRestante = tiempoRestante - Time.deltaTime;
 
-            // Convertimos el tiempo con decimales a un número entero (int) para que se vea limpio en pantalla.
+            // Como 'tiempoRestante' tiene muchos decimales (ej. 58.4392), usamos 'Mathf.CeilToInt(tiempoRestante)' para redondearlo hacia arriba
+            // al número entero más cercano (ej. 58.4 se muestra como 59, y 0.2 se muestra como 1) y guardarlo en la variable entera 'segundosEnteros'.
             int segundosEnteros = Mathf.CeilToInt(tiempoRestante);
+
+            // '.ToString()' convierte ese número matemático en texto para poder unirlo con la letra "s" (segundos) y mostrarlo en pantalla (ej. "59s").
             textoReloj.text = segundosEnteros.ToString() + "s";
 
-            // Si el tiempo llega a cero o menos, el jugador pierde por tiempo agotado.
+            // Preguntamos: "¿El tiempo restante ya llegó a cero o bajó de cero?".
             if (tiempoRestante <= 0)
             {
+                // Forzamos a que el texto muestre "Tiempo: 0s" y ejecutamos inmediatamente la función de derrota 'MostrarGameOver()'.
                 textoReloj.text = "Tiempo: 0s";
                 MostrarGameOver();
             }
         }
     }
 
-    // MÉTODOS PARA INICIAR, REINICIAR MÓDULOS Y OCULTAR EL RELOJ
+    // SECCIÓN 4: MÉTODOS PARA INICIAR MÓDULOS Y CONTROLAR EL RELOJ
     // Se llama al entrar al módulo de Servicio para preparar las vidas y arrancar el reloj.
     public void PrepararModuloServicio()
     {
@@ -169,7 +175,7 @@ public class GestorPenalizacion : MonoBehaviour
         }
     }
 
-    // MÉTODOS DE VICTORIA Y ESTADÍSTICAS
+    // SECCIÓN 6: MÉTODOS DE VICTORIA, ESTADÍSTICAS Y DERROTA
     // Esta función la llamará el módulo de Servicio al Cliente al superar sus 5 niveles.
     public void VictoriaServicio()
     {
