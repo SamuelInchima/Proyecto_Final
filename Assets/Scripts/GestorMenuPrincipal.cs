@@ -10,12 +10,15 @@ public class GestorMenuPrincipal : MonoBehaviour
     // =========================================================================
     [Header("Paneles de la Interfaz")]
     public GameObject panelMenuPrincipal;    // Panel del menú inicial de NexoBank.
-    public GameObject panelSelectorModulos;  // Panel donde se elige Servicio al Cliente o Phishing.
+    public GameObject panelSelectorModulos;  // Panel donde se elige el módulo a evaluar.
     public GameObject panelInstrucciones;    // Panel con las reglas generales del simulador.
 
-    [Header("Paneles de los Módulos y Tutorial")]
+    [Header("Paneles de Tutoriales Previos")]
+    public GameObject panelTutorialServicio; // NUEVO: Panel educativo con las 5 normas bancarias (Habeas Data, SARLAFT, etc.).
+    public GameObject panelTutorialPhishing; // Panel educativo previo que explica qué es el Phishing.
+
+    [Header("Paneles de los Módulos de Juego")]
     public GameObject panelNivelServicio;    // Panel del juego de Servicio al Cliente.
-    public GameObject panelTutorialPhishing; // NUEVO: Panel educativo previo que explica qué es el Phishing.
     public GameObject panelNivelPhishing;    // Panel del juego de Detector de Phishing.
 
     // =========================================================================
@@ -47,11 +50,9 @@ public class GestorMenuPrincipal : MonoBehaviour
         panelNivelServicio.SetActive(false);
         panelNivelPhishing.SetActive(false);
 
-        // NUEVO: Nos aseguramos de que el tutorial de Phishing también inicie apagado.
-        if (panelTutorialPhishing != null)
-        {
-            panelTutorialPhishing.SetActive(false);
-        }
+        // Nos aseguramos de que ambos tutoriales inicien apagados.
+        if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
+        if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
 
         // Mostramos el Menú Principal con animación suave.
         AbrirPanelAnimado(panelMenuPrincipal);
@@ -87,22 +88,30 @@ public class GestorMenuPrincipal : MonoBehaviour
     }
 
     // =========================================================================
-    // SECCIÓN 5: MÉTODOS DEL SELECTOR DE MÓDULOS Y TUTORIAL DE PHISHING
+    // SECCIÓN 5: MÉTODOS DEL SELECTOR Y TUTORIALES DE LOS MÓDULOS
     // =========================================================================
 
-    // 1. Se ejecuta al presionar el botón "Servicio al Cliente" en el Selector.
+    // 1. MODIFICADO: Al presionar "Servicio al Cliente" en el Selector, primero abrimos su Tutorial Normativo.
+    // El reloj todavía NO se activa para que el jugador estudie las normas con tranquilidad.
     public void BotonModuloServicio()
     {
         panelSelectorModulos.SetActive(false);
+        AbrirPanelAnimado(panelTutorialServicio);
+        scriptAudio.CambiarMusica(scriptAudio.musicaServicio);
+    }
+
+    // 2. NUEVO: Se conecta al botón "Comenzar Turno" dentro de 'panelTutorialServicio'.
+    // Cierra el tutorial, abre el módulo de Servicio al Cliente y arranca el cronómetro.
+    public void BotonIniciarServicioDesdeTutorial()
+    {
+        panelTutorialServicio.SetActive(false);
         AbrirPanelAnimado(panelNivelServicio);
 
         scriptServicio.CargarNivel(0);
         scriptMecanicas.PrepararModuloServicio();
-        scriptAudio.CambiarMusica(scriptAudio.musicaServicio);
     }
 
-    // 2. MODIFICADO: Al presionar "Detector de Phishing" en el Selector, primero abrimos el Tutorial.
-    // Todavía NO arrancamos el reloj para que el jugador lea la explicación sin perder tiempo.
+    // 3. Al presionar "Detector de Phishing" en el Selector, primero abrimos el Tutorial de Ciberseguridad.
     public void BotonModuloPhishing()
     {
         panelSelectorModulos.SetActive(false);
@@ -110,8 +119,7 @@ public class GestorMenuPrincipal : MonoBehaviour
         scriptAudio.CambiarMusica(scriptAudio.musicaPhishing);
     }
 
-    // 3. NUEVO: Se conecta al botón "Comenzar Evaluación" dentro del panelTutorialPhishing.
-    // Cierra el tutorial, abre el módulo de Phishing y arranca el cronómetro.
+    // 4. Se conecta al botón "Comenzar Evaluación" dentro de 'panelTutorialPhishing'.
     public void BotonIniciarPhishingDesdeTutorial()
     {
         panelTutorialPhishing.SetActive(false);
@@ -121,17 +129,16 @@ public class GestorMenuPrincipal : MonoBehaviour
         scriptMecanicas.PrepararModuloPhishing();
     }
 
-    // 4. Se ejecuta al presionar "Volver al Selector" desde cualquier módulo o pantalla final.
+    // 5. Se ejecuta al presionar "Volver al Selector" desde cualquier módulo, tutorial o pantalla final.
     public void BotonVolverASelector()
     {
         scriptMecanicas.DetenerReloj();
 
         panelNivelServicio.SetActive(false);
         panelNivelPhishing.SetActive(false);
-        if (panelTutorialPhishing != null)
-        {
-            panelTutorialPhishing.SetActive(false);
-        }
+        if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
+        if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
+
         scriptMecanicas.panelGameOver.SetActive(false);
         scriptMecanicas.panelVictoria.SetActive(false);
 

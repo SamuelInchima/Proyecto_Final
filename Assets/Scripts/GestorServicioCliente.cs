@@ -11,20 +11,23 @@ using TMPro;
 [System.Serializable]
 public class CasoCliente
 {
+    // NUEVO: Nombre corto de la norma evaluada para mostrarlo en la tabla de resultados finales.
+    [Tooltip("Ejemplo: 'Caso 1: Línea Ética y Cero Tolerancia'")]
+    public string nombrePolitica;
+
     [Tooltip("Arrastra aquí el dibujo 2D (Sprite) del cliente de este caso")]
-    public Sprite fotoCliente; // Ilustración del personaje (NPC) para este nivel.
+    public Sprite fotoCliente;
 
     [TextArea(2, 4)]
-    public string mensajeCliente; // El diálogo directo que plantea el cliente o compañero.
+    public string mensajeCliente;
 
-    public string textoBoton1;    // Texto para la Opción A.
-    public string textoBoton2;    // Texto para la Opción B.
-    public string textoBoton3;    // Texto para la Opción C.
+    public string textoBoton1;
+    public string textoBoton2;
+    public string textoBoton3;
 
     [Tooltip("Escribe 1, 2 o 3 según cuál sea el botón con la respuesta correcta")]
-    public int respuestaCorrecta; // Número (1, 2 o 3) del botón correcto en este nivel.
+    public int respuestaCorrecta;
 
-    // Caja de texto en el Inspector para escribir la explicación normativa que saldrá en el Pop-up.
     [TextArea(2, 4)]
     [Tooltip("Explica por qué la respuesta es correcta y qué política del banco se aplica en este caso")]
     public string retroalimentacionCaso;
@@ -36,27 +39,37 @@ public class CasoCliente
 public class GestorServicioCliente : MonoBehaviour
 {
     [Header("Elementos de Texto en Pantalla")]
-    public Image contenedorFotoCliente;          // Recuadro UI Image donde aparece el NPC.
-    public TextMeshProUGUI textoPantallaCliente; // Texto donde se lee el mensaje del cliente.
-    public TextMeshProUGUI textoEnBoton1;        // Texto dentro del Botón 1 (A).
-    public TextMeshProUGUI textoEnBoton2;        // Texto dentro del Botón 2 (B).
-    public TextMeshProUGUI textoEnBoton3;        // Texto dentro del Botón 3 (C).
+    public Image contenedorFotoCliente;
+    public TextMeshProUGUI textoPantallaCliente;
+    public TextMeshProUGUI textoEnBoton1;
+    public TextMeshProUGUI textoEnBoton2;
+    public TextMeshProUGUI textoEnBoton3;
 
     [Header("Ventana Emergente de Retroalimentación")]
-    public GameObject panelPopUpFeedback;               // El objeto Panel de la ventana emergente.
-    public TextMeshProUGUI textoTituloFeedback;         // Título del Pop-up (ej. "¡DECISIÓN CORRECTA!").
-    public TextMeshProUGUI textoExplicacionFeedback;    // Texto donde se mostrará 'retroalimentacionCaso'.
+    public GameObject panelPopUpFeedback;
+    public TextMeshProUGUI textoTituloFeedback;
+    public TextMeshProUGUI textoExplicacionFeedback;
 
     [Header("Conexión con otros sistemas")]
-    public GestorMecanicas scriptMecanicas;      // Conexión con el script que resta estrellas y maneja el reloj.
-    public GestorAudio scriptAudio;              // Conexión con el script de sonidos.
+    public GestorMecanicas scriptMecanicas;
+    public GestorAudio scriptAudio;
+    public GestorSupervisor scriptSupervisor; // NUEVO: Conexión para guardar los datos al terminar el test.
 
     [Header("Configuración de los 5 Niveles")]
-    public CasoCliente[] niveles;                // Lista (Array) de los 5 casos en el Inspector.
-    private int nivelActual = 0;                 // Lleva la cuenta de en qué nivel vamos (empieza en 0).
-
-    // Interruptor de seguridad para saber si este módulo abrió el Pop-up.
+    public CasoCliente[] niveles;
+    private int nivelActual = 0;
     private bool popUpActivoEnServicio = false;
+
+    // =========================================================================
+    // NUEVO: VARIABLES PARA CALCULAR EL PROMEDIO Y EL DIAGNÓSTICO DETALLADO
+    // =========================================================================
+    private int erroresEnCasoActual = 0; // Cuenta cuántas veces falló el jugador en la pregunta actual.
+    private int casosSinErrores = 0;     // Cuenta cuántos de los 5 casos respondió bien al primer intento.
+
+    // Variables públicas que guardan el resultado final (nos servirán también en el Paso 7 para el Supervisor).
+    [HideInInspector] public int ultimoPromedioServicio = 0;
+    [HideInInspector] public string ultimoDiagnosticoServicio = "";
+    [HideInInspector] public string ultimoReporteDetallado = "";
 
     void Start()
     {
@@ -69,12 +82,24 @@ public class GestorServicioCliente : MonoBehaviour
     }
 
     // =========================================================================
-    // MÉTODOS DE LÓGICA DEL JUEGO
+    // MÉTODOS DE LÓGICA DEL JUEGO Y REGISTRO DE DESEMPEÑO
     // =========================================================================
 
     public void CargarNivel(int indiceNivel)
     {
         nivelActual = indiceNivel;
+
+        // NUEVO: Si estamos empezando desde el primer caso (nivel 0), limpiamos las estadísticas anteriores.
+        if (indiceNivel == 0)
+        {
+            casosSinErrores = 0;
+            ultimoPromedioServicio = 0;
+            ultimoDiagnosticoServicio = "";
+            ultimoReporteDetallado = "";
+        }
+
+        // Reiniciamos a 0 los errores de esta pregunta específica al cargarla en pantalla.
+        erroresEnCasoActual = 0;
 
         if (panelPopUpFeedback != null)
         {
@@ -93,27 +118,48 @@ public class GestorServicioCliente : MonoBehaviour
         textoEnBoton3.text = niveles[nivelActual].textoBoton3;
     }
 
-    // Se ejecuta al presionar cualquiera de los 3 botones de respuesta (1, 2 o 3).
     public void SeleccionarRespuesta(int botonPresionado)
     {
-        // Evaluamos si el botón presionado coincide con la respuesta correcta.
+        // Obtenemos el nombre de la norma de este caso (o ponemos un nombre por defecto si se dejó vacío en el Inspector).
+        string nombreDeLaNorma = string.IsNullOrEmpty(niveles[nivelActual].nombrePolitica)
+            ? "Caso " + (nivelActual + 1)
+            : niveles[nivelActual].nombrePolitica;
+
+        // Evaluamos si el jugador presionó el botón correcto.
         if (botonPresionado == niveles[nivelActual].respuestaCorrecta)
         {
-            // ¡ACERTÓ! Pausamos el reloj, sonamos el acierto y abrimos el Pop-up de retroalimentación.
             scriptMecanicas.PausarReloj();
             scriptAudio.ReproducirAcierto();
+
+            // NUEVO: Verificamos si acertó al primer intento (0 errores en este caso) o si había fallado antes.
+            if (erroresEnCasoActual == 0)
+            {
+                casosSinErrores++; // Suma 1 al contador de casos limpios para el promedio.
+                ultimoReporteDetallado += "• " + nombreDeLaNorma + ": APROBADO (1er intento)\n";
+            }
+            else
+            {
+                ultimoReporteDetallado += "• " + nombreDeLaNorma + ": SUPERADO CON FALLO (" + erroresEnCasoActual + " error/es)\n";
+            }
+
             MostrarPopUp("¡DECISIÓN CORRECTA!", niveles[nivelActual].retroalimentacionCaso);
         }
         else
         {
-            // ¡SE EQUIVOCÓ! Solo restamos una estrella (y suena el error).
-            // NO abrimos el Pop-up ni avanzamos de caso, permitiendo que el jugador vuelva a intentarlo.
-            Debug.Log("Respuesta incorrecta. Pierdes una estrella, intenta con otra opción.");
+            // ¡SE EQUIVOCÓ! Sumamos 1 error en este caso y restamos una estrella.
+            erroresEnCasoActual++;
             scriptMecanicas.RestarEstrella();
+
+            // NUEVO: Si al restar la estrella se activó el Game Over (perdió las 3 vidas),
+            // registramos que reprobó en este caso y calculamos su diagnóstico de derrota.
+            if (scriptMecanicas.panelGameOver.activeSelf == true)
+            {
+                ultimoReporteDetallado += "• " + nombreDeLaNorma + ": REPROBADO (Agotó vidas)\n";
+                CalcularDiagnosticoFinal(false);
+            }
         }
     }
 
-    // Método interno que enciende la ventana emergente y rellena sus textos.
     private void MostrarPopUp(string titulo, string explicacion)
     {
         popUpActivoEnServicio = true;
@@ -122,7 +168,6 @@ public class GestorServicioCliente : MonoBehaviour
         textoExplicacionFeedback.text = explicacion;
     }
 
-    // Este método se conecta al botón "Continuar / Entendido" dentro de la ventana emergente.
     public void BotonCerrarPopUpServicio()
     {
         if (popUpActivoEnServicio == false)
@@ -133,7 +178,6 @@ public class GestorServicioCliente : MonoBehaviour
         panelPopUpFeedback.SetActive(false);
         popUpActivoEnServicio = false;
 
-        // Reanudamos el reloj y pasamos al siguiente caso tras haber acertado.
         scriptMecanicas.ReanudarReloj();
         AvanzarSiguienteNivel();
     }
@@ -148,8 +192,46 @@ public class GestorServicioCliente : MonoBehaviour
         }
         else
         {
-            Debug.Log("¡Módulo de Atención al Cliente completado!");
-            scriptMecanicas.VictoriaServicio();
+            // ¡Completó los 5 casos! Calculamos el promedio y el diagnóstico antes de abrir la pantalla final.
+            CalcularDiagnosticoFinal(true);
+
+            // Le enviamos a GestorMecanicas el promedio, el diagnóstico y el desglose de los 5 casos.
+            scriptMecanicas.VictoriaServicioDetallada(ultimoPromedioServicio, ultimoDiagnosticoServicio, ultimoReporteDetallado);
+        }
+    }
+
+    // =========================================================================
+    // NUEVO: MÉTODO QUE CALCULA EL PROMEDIO (%) Y EL DIAGNÓSTICO PSICOLÓGICO
+    // =========================================================================
+    public void CalcularDiagnosticoFinal(bool superoTodosLosCasos)
+    {
+        // Calculamos el porcentaje de casos resueltos sin errores (ej. 5 de 5 = 100%, 4 de 5 = 80%, 3 de 5 = 60%).
+        ultimoPromedioServicio = (casosSinErrores * 100) / niveles.Length;
+
+        if (superoTodosLosCasos == false)
+        {
+            ultimoDiagnosticoServicio = "NO APTO - RIESGO NORMATIVO CRÍTICO (Módulo Reprobado)";
+            return;
+        }
+
+        // Asignamos el diagnóstico según el promedio obtenido.
+        if (ultimoPromedioServicio == 100)
+        {
+            ultimoDiagnosticoServicio = "APTO SOBRESALIENTE (Cumplimiento Normativo Total)\nDominas el Código de Ética, Reserva Bancaria y SARLAFT sin ceder a la presión.";
+        }
+        else if (ultimoPromedioServicio >= 80)
+        {
+            ultimoDiagnosticoServicio = "APTO CON OBSERVACIÓN (Riesgo Operativo Bajo)\nConoces las normas de NexoBank, pero dudaste en un caso. Repasa la política señalada.";
+        }
+        else
+        {
+            ultimoDiagnosticoServicio = "REQUIERE CAPACITACIÓN (Riesgo Operativo Moderado)\nPasaste al límite. Cedes ante trampas de empatía o urgencia que exponen al banco.";
+        }
+
+        // NUEVO: Apenas termina de calcular el diagnóstico (gane o pierda), lo guarda en el archivo del Supervisor.
+        if (scriptSupervisor != null)
+        {
+            scriptSupervisor.GuardarEvaluacionJugador(ultimoPromedioServicio, ultimoDiagnosticoServicio, ultimoReporteDetallado);
         }
     }
 }

@@ -222,6 +222,28 @@ public class GestorMecanicas : MonoBehaviour
         }
     }
 
+    // NUEVO: Recibe los datos calculados por GestorServicioCliente y los escribe en el Panel de Victoria.
+    public void VictoriaServicioDetallada(int promedio, string diagnostico, string detalleCasos)
+    {
+        DetenerReloj();
+        relojActivo = false;
+        panelVictoria.SetActive(true);
+        simboloCompletadoServicio.SetActive(true);
+
+        scriptAudio.DetenerMusica();
+        scriptAudio.ReproducirVictoria();
+
+        int estrellasFinales = 3 - erroresServicio;
+        ActualizarIconosVictoria(estrellasFinales);
+
+        // Armamos el boletín completo en el cuadro de texto del Panel de Victoria.
+        textoMensajeVictoria.text =
+            "RESULTADOS DE EVALUACIÓN BANCARIA\n" +
+            "Promedio de Cumplimiento: " + promedio + "% (" + estrellasFinales + "/3 Estrellas)\n\n" +
+            "DIAGNÓSTICO DEL PERFIL:\n" + diagnostico + "\n\n" +
+            "DESGLOSE POR NORMATIVA:\n" + detalleCasos;
+    }
+
     // Esta función la llamará el módulo de Phishing al superar sus 5 niveles.
     public void VictoriaPhishing()
     {
