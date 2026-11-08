@@ -135,6 +135,18 @@ public class GestorMecanicas : MonoBehaviour
         contenedorReloj.SetActive(false);
     }
 
+    // NUEVO: Pausa el conteo del reloj temporalmente mientras el jugador lee la ventana emergente de feedback.
+    public void PausarReloj()
+    {
+        relojActivo = false; // Detiene la resta de segundos sin ocultar el reloj de la pantalla.
+    }
+
+    // NUEVO: Reanuda el conteo del reloj cuando el jugador cierra la ventana emergente y pasa al siguiente caso.
+    public void ReanudarReloj()
+    {
+        relojActivo = true; // Vuelve a activar el descuento de segundos en Update().
+    }
+
     // MÉTODOS PARA RESTAR VIDAS
     // Esta función se conecta a los botones de "Respuesta Incorrecta" en Servicio al Cliente
     public void RestarEstrella()

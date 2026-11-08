@@ -1,125 +1,153 @@
+// Importamos las herramientas base de Unity.
 using UnityEngine;
+// Librería obligatoria para controlar componentes 'Image' del Canvas.
 using UnityEngine.UI;
+// Librería obligatoria para controlar los textos TextMeshPro de la ventana emergente.
+using TMPro;
 
+// =========================================================================
 // PLANTILLA DE DATOS SERIALIZABLE: CasoPhishing
-// Por defecto, Unity solo muestra en el Inspector scripts que tienen ': MonoBehaviour'.
-// Al escribir '[System.Serializable]' encima de una clase normal, le ordenamos a Unity que convierta esta clase en un "formulario desplegable"
-// dentro del Inspector para poder rellenar los 5 casos (su nombre, su imagen y si es trampa o no) sin tener que programar un script por cada nivel.
+// =========================================================================
 [System.Serializable]
 public class CasoPhishing
 {
-    [Tooltip("Solo sirve para que te guíes en el Inspector (ej. 'Nivel 1: SMS Falso' o 'Nivel 2: Correo RRHH')")]
-    public string nombreDelCaso; // Un texto opcional de guía para organizarte en el editor.
+    [Tooltip("Solo sirve para que te guíes en el Inspector (ej. 'Nivel 1: SMS Falso')")]
+    public string nombreDelCaso;
 
     [Tooltip("Arrastra aquí la imagen del correo, SMS o pantalla creada por el diseñador")]
-    public Sprite imagenDelMensaje; // 'Sprite' es el archivo de imagen 2D que vamos a mostrar.
+    public Sprite imagenDelMensaje;
 
     [Tooltip("Marca la casilla (True) si es Phishing/Peligroso. Déjala vacía (False) si es Seguro/Legítimo.")]
-    public bool esPhishing; // Guarda Verdadero (true) si es una trampa, o Falso (false) si es real.
+    public bool esPhishing;
+
+    // Caja de texto en el Inspector para explicar la pista clave de este mensaje en el Pop-up.
+    [TextArea(2, 4)]
+    [Tooltip("Explica qué pista delata el ataque de Phishing o por qué el mensaje es legítimo")]
+    public string retroalimentacionPhishing;
 }
 
+// =========================================================================
 // CLASE PRINCIPAL DEL MÓDULO: GestorPhishing
+// =========================================================================
 public class GestorPhishing : MonoBehaviour
 {
-    // VARIABLES DE LA INTERFAZ (UI)
     [Header("Elementos en Pantalla")]
-    // - 'Image' (contenedorImagenPantalla) es el "portarretratos" fijo que está puesto en el Canvas de tu escena.
-    // - 'Sprite' (imagenDelMensaje) es la "fotografía" que metemos y cambiamos dentro de ese portarretratos en cada nivel.
     public Image contenedorImagenPantalla;
 
+    [Header("Ventana Emergente de Retroalimentación")]
+    public GameObject panelPopUpFeedback;               // El objeto Panel de la ventana emergente.
+    public TextMeshProUGUI textoTituloFeedback;         // Título del Pop-up (ej. "¡AMENAZA BLOQUEADA!").
+    public TextMeshProUGUI textoExplicacionFeedback;    // Texto donde se mostrará 'retroalimentacionPhishing'.
+
     [Header("Conexión con otros sistemas")]
-    public GestorMecanicas scriptMecanicas; // Referencia a tu script que apaga los 3 candados.
+    public GestorMecanicas scriptMecanicas;             // Referencia al script que apaga los 3 candados y controla el reloj.
+    public GestorAudio scriptAudio;                     // Referencia al script de audio.
 
-    // DATOS DE LOS 5 NIVELES
     [Header("Lista de los 5 Casos (Correos, SMS, etc.)")]
-    // Creamos un arreglo/lista ('[]') de nuestra plantilla 'CasoPhishing'. En el Inspector le ponemos tamaño 5 para cargar las 5 imágenes del módulo.
-    public CasoPhishing[] nivelesPhishing; // Array (lista) que guardará las 5 imágenes y sus respuestas.
+    public CasoPhishing[] nivelesPhishing;              // Array que guarda las 5 imágenes y sus respuestas.
+    private int nivelActual = 0;                        // Lleva la cuenta de en qué imagen vamos (empieza en 0).
 
-    // Variable privada entera que recuerda en cuál caso de la lista estamos jugando actualmente (empieza en el caso 0).
-    private int nivelActual = 0;           // Lleva la cuenta de en qué imagen vamos (empieza en 0).
-
-    //AUDIO
-    public GestorAudio scriptAudio;
+    // Interruptor de seguridad para saber si Phishing abrió el Pop-up.
+    private bool popUpActivoEnPhishing = false;
 
     void Start()
     {
-        // Cargamos la primera imagen de nuestra lista (posición 0).
+        if (panelPopUpFeedback != null)
+        {
+            panelPopUpFeedback.SetActive(false);
+        }
+
         CargarImagenNivel(0);
     }
 
-    // MÉTODO PARA ACTUALIZAR LA IMAGEN EN PANTALLA
-    // Esta función recibe entre paréntesis el número de caso ('indice') que queremos mostrar en pantalla (0, 1, 2, 3 o 4).
     public void CargarImagenNivel(int indice)
     {
-        // Guardamos en 'nivelActual' el número de nivel que nos pidieron cargar.
         nivelActual = indice;
 
-        // Buscamos en la lista 'nivelesPhishing' el cajón 'nivelActual', sacamos su foto ('.imagenDelMensaje')
-        // y la colocamos dentro de la propiedad '.sprite' de nuestro portarretratos ('contenedorImagenPantalla').
+        if (panelPopUpFeedback != null)
+        {
+            panelPopUpFeedback.SetActive(false);
+        }
+        popUpActivoEnPhishing = false;
+
         contenedorImagenPantalla.sprite = nivelesPhishing[nivelActual].imagenDelMensaje;
     }
 
-    // MÉTODOS PARA LOS BOTONES (VERDE Y ROJO)
-    // 1. Esta función se conectará al BOTÓN VERDE ("Seguro")
+    // =========================================================================
+    // MÉTODOS PARA LOS BOTONES DE DECISIÓN (VERDE Y ROJO)
+    // =========================================================================
+
+    // 1. Conectado al BOTÓN VERDE ("Seguro")
     public void BotonVerdeSeguro()
     {
-        // Si el jugador presiona "Seguro", revisamos si en este nivel 'esPhishing' es Falso (false).
         if (nivelesPhishing[nivelActual].esPhishing == false)
         {
-            // ¡Acertó! El mensaje o correo era legítimo de NexoBank.
-            Debug.Log("¡Correcto! El mensaje era seguro. Pasando al siguiente caso...");
-
+            // ¡ACERTÓ! Pausamos el reloj y abrimos la ventana emergente.
+            scriptMecanicas.PausarReloj();
             scriptAudio.ReproducirAcierto();
-
-            AvanzarSiguienteCaso();
+            MostrarPopUp("¡ANÁLISIS CORRECTO!", nivelesPhishing[nivelActual].retroalimentacionPhishing);
         }
         else
         {
-            // ¡Falló! Era un ataque (correo falso, SMS con virus, etc.) y el jugador confió en él.
+            // ¡SE EQUIVOCÓ! Solo restamos un candado sin abrir el Pop-up ni cambiar de caso.
             Debug.Log("¡Error! Era una trampa de Phishing. Pierdes un candado de seguridad.");
             scriptMecanicas.RestarCandado();
         }
     }
 
-    // 2. Esta función se conectará al BOTÓN ROJO ("Peligroso / Reportar")
+    // 2. Conectado al BOTÓN ROJO ("Peligroso / Reportar")
     public void BotonRojoPeligroso()
     {
-        // Si el jugador presiona "Peligroso", revisamos si en este nivel 'esPhishing' es Verdadero (true).
         if (nivelesPhishing[nivelActual].esPhishing == true)
         {
-            // ¡Acertó! Detectó las pistas sospechosas en la imagen (mala ortografía, link falso, etc.).
-            Debug.Log("¡Excelente! Detectaste el intento de Phishing. Pasando al siguiente caso...");
-
+            // ¡ACERTÓ! Pausamos el reloj y abrimos la ventana emergente.
+            scriptMecanicas.PausarReloj();
             scriptAudio.ReproducirAcierto();
-
-            AvanzarSiguienteCaso();
+            MostrarPopUp("¡AMENAZA BLOQUEADA!", nivelesPhishing[nivelActual].retroalimentacionPhishing);
         }
         else
         {
-            // ¡Falló! Reportó un mensaje o correo real de la empresa por equivocación.
+            // ¡SE EQUIVOCÓ! Solo restamos un candado sin abrir el Pop-up ni cambiar de caso.
             Debug.Log("¡Error! Reportaste un mensaje oficial de NexoBank. Pierdes un candado.");
             scriptMecanicas.RestarCandado();
         }
     }
 
-    // MÉTODO INTERNO PARA AVANZAR DE NIVEL
+    // Método interno para encender el Pop-up con los textos del caso actual.
+    private void MostrarPopUp(string titulo, string explicacion)
+    {
+        popUpActivoEnPhishing = true;
+        panelPopUpFeedback.SetActive(true);
+        textoTituloFeedback.text = titulo;
+        textoExplicacionFeedback.text = explicacion;
+    }
+
+    // Se conecta al botón "Continuar / Entendido" dentro de la ventana emergente.
+    public void BotonCerrarPopUpPhishing()
+    {
+        if (popUpActivoEnPhishing == false)
+        {
+            return;
+        }
+
+        panelPopUpFeedback.SetActive(false);
+        popUpActivoEnPhishing = false;
+
+        scriptMecanicas.ReanudarReloj();
+        AvanzarSiguienteCaso();
+    }
+
     private void AvanzarSiguienteCaso()
     {
-        // Sumamos 1 para pasar a la siguiente imagen de la lista.
         nivelActual++;
 
-        // Verificamos si todavía quedan imágenes por revisar en la lista (menos de 5).
         if (nivelActual < nivelesPhishing.Length)
         {
-            // Mostramos la nueva imagen en pantalla.
             CargarImagenNivel(nivelActual);
         }
         else
         {
-            // Si ya superó las 5 imágenes, encendemos la pantalla de victoria.
             Debug.Log("¡Felicidades! Superaste los 5 niveles del Detector de Phishing.");
-
-            // Llamamos al GestorPenalizacion para detener el reloj y mostrar estadísticas de candados
             scriptMecanicas.VictoriaPhishing();
         }
     }

@@ -1176,6 +1176,7 @@ MonoBehaviour:
   panelInstrucciones: {fileID: 1767384894}
   panelNivelServicio: {fileID: 2075810418}
   panelNivelPhishing: {fileID: 1991155103}
+  velocidadAnimacion: 4
   scriptMecanicas: {fileID: 215876896}
   scriptServicio: {fileID: 215876895}
   scriptPhishing: {fileID: 215876894}
@@ -5391,6 +5392,18 @@ MonoBehaviour:
       - m_Target: {fileID: 215876893}
         m_TargetAssemblyTypeName: GestorAudio, Assembly-CSharp
         m_MethodName: ReproducirClic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 215876897}
+        m_TargetAssemblyTypeName: GestorMenuPrincipal, Assembly-CSharp
+        m_MethodName: BotonSalir
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
