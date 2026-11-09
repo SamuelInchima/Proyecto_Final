@@ -16,10 +16,12 @@ public class GestorMenuPrincipal : MonoBehaviour
     [Header("Paneles de Tutoriales Previos")]
     public GameObject panelTutorialServicio; // NUEVO: Panel educativo con las 5 normas bancarias (Habeas Data, SARLAFT, etc.).
     public GameObject panelTutorialPhishing; // Panel educativo previo que explica qué es el Phishing.
+    public GameObject panelTutorialPsicologico; // Panel que explica responder con calma y sinceridad.
 
     [Header("Paneles de los Módulos de Juego")]
     public GameObject panelNivelServicio;    // Panel del juego de Servicio al Cliente.
     public GameObject panelNivelPhishing;    // Panel del juego de Detector de Phishing.
+    public GameObject panelNivelPsicologico;    // Panel donde se responden las 15 preguntas.
 
     // =========================================================================
     // SECCIÓN 2: CONFIGURACIÓN DE LA ANIMACIÓN
@@ -35,6 +37,7 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GestorMecanicas scriptMecanicas;         // Maneja vidas, reloj y pantallas de victoria/derrota.
     public GestorServicioCliente scriptServicio;    // Carga los casos de Servicio al Cliente.
     public GestorPhishing scriptPhishing;           // Carga las imágenes de Phishing.
+    public GestorTestPsicologico scriptPsicologico; // Conexión con el nuevo script.
 
     [Header("Audio")]
     public GestorAudio scriptAudio;                 // Cambia la música de fondo según la pantalla.
@@ -53,6 +56,8 @@ public class GestorMenuPrincipal : MonoBehaviour
         // Nos aseguramos de que ambos tutoriales inicien apagados.
         if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
         if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
+        if (panelTutorialPsicologico != null) panelTutorialPsicologico.SetActive(false);
+        if (panelNivelPsicologico != null) panelNivelPsicologico.SetActive(false);
 
         // Mostramos el Menú Principal con animación suave.
         AbrirPanelAnimado(panelMenuPrincipal);
@@ -129,6 +134,22 @@ public class GestorMenuPrincipal : MonoBehaviour
         scriptMecanicas.PrepararModuloPhishing();
     }
 
+    public void BotonModuloPsicologico()
+    {
+        panelSelectorModulos.SetActive(false);
+        AbrirPanelAnimado(panelTutorialPsicologico);
+    }
+
+    // Se conecta al botón "Comenzar Evaluación" dentro de 'panelTutorialPsicologico'.
+    public void BotonIniciarPsicologicoDesdeTutorial()
+    {
+        panelTutorialPsicologico.SetActive(false);
+        AbrirPanelAnimado(panelNivelPsicologico);
+
+        // Iniciamos en la pregunta 1 sin encender ningún reloj.
+        scriptPsicologico.IniciarTestPsicologico();
+    }
+
     // 5. Se ejecuta al presionar "Volver al Selector" desde cualquier módulo, tutorial o pantalla final.
     public void BotonVolverASelector()
     {
@@ -138,6 +159,12 @@ public class GestorMenuPrincipal : MonoBehaviour
         panelNivelPhishing.SetActive(false);
         if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
         if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
+        if (panelTutorialPsicologico != null) panelTutorialPsicologico.SetActive(false);
+        if (panelNivelPsicologico != null) panelNivelPsicologico.SetActive(false);
+        if (scriptPsicologico != null && scriptPsicologico.panelAgradecimientoFinal != null)
+        {
+            scriptPsicologico.panelAgradecimientoFinal.SetActive(false);
+        }
 
         scriptMecanicas.panelGameOver.SetActive(false);
         scriptMecanicas.panelVictoria.SetActive(false);

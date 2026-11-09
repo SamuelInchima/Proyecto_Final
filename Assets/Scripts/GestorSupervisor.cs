@@ -2,8 +2,7 @@
 using UnityEngine;
 // Importamos TextMeshPro para leer las cajas de texto interactivas (TMP_InputField) y mostrar el historial.
 using TMPro;
-// NUEVO PARA TU SUSTENTACIÓN: 'System.IO' (Input/Output) es la librería oficial de C# que permite
-// crear, escribir y leer archivos reales en el disco duro del computador.
+// 'System.IO' permite crear, escribir y leer archivos en el disco duro del computador.
 using System.IO;
 
 public class GestorSupervisor : MonoBehaviour
@@ -13,104 +12,92 @@ public class GestorSupervisor : MonoBehaviour
     // =========================================================================
     [Header("Registro del Aspirante / Empleado")]
     [Tooltip("Caja de texto (InputField) en el Selector donde el jugador escribe su nombre antes de jugar")]
-    public TMP_InputField inputNombreJugador; // Guarda lo que el empleado escriba en su caja de nombre.
+    public TMP_InputField inputNombreJugador;
 
     // =========================================================================
     // SECCIÓN 2: VENTANAS Y CLAVE DEL SUPERVISOR
     // =========================================================================
     [Header("Panel de Contraseña (Login Supervisor)")]
-    public GameObject panelLoginSupervisor;      // Ventana que pide la contraseña de administrador.
-    public TMP_InputField inputClaveSupervisor;  // Caja donde el supervisor escribe la contraseña.
-    public TextMeshProUGUI textoErrorClave;      // Texto rojo que avisa si la contraseña es incorrecta.
+    public GameObject panelLoginSupervisor;
+    public TMP_InputField inputClaveSupervisor;
+    public TextMeshProUGUI textoErrorClave;
 
     [Tooltip("Contraseña que deberá escribir el supervisor para ver los resultados")]
-    public string claveSecreta = "Nexo2026";     // Puedes cambiar esta clave desde el Inspector de Unity.
+    public string claveSecreta = "Nexo2026";
 
     [Header("Panel de Resultados del Supervisor")]
-    public GameObject panelHistorialSupervisor;       // Ventana exclusiva donde se ven todos los resultados.
-    public TextMeshProUGUI textoPantallaHistorial;    // Texto grande donde se cargan todas las evaluaciones.
+    public GameObject panelHistorialSupervisor;
+    public TextMeshProUGUI textoPantallaHistorial;
 
     [Header("Conexión con Sonidos")]
-    public GestorAudio scriptAudio;                   // Para sonar clic, acierto o error al validar la clave.
+    public GestorAudio scriptAudio;
 
-    // Variable privada que guardará la dirección exacta en el disco duro donde vivirá el archivo de texto.
     private string rutaArchivoHistorial;
 
-    // =========================================================================
-    // MÉTODO START: PREPARACIÓN DE LA RUTA EN EL DISCO DURO
-    // =========================================================================
     void Start()
     {
-        // 'Application.persistentDataPath' es una carpeta segura que Unity crea automáticamente en cualquier
-        // computador (Windows, Mac, etc.) y que NUNCA se borra aunque cierres el juego o reinicies el PC.
         rutaArchivoHistorial = Application.persistentDataPath + "/Historial_Evaluaciones_NexoBank.txt";
 
-        // Nos aseguramos de que las ventanas del supervisor inicien apagadas al abrir el juego.
         if (panelLoginSupervisor != null) panelLoginSupervisor.SetActive(false);
         if (panelHistorialSupervisor != null) panelHistorialSupervisor.SetActive(false);
         if (textoErrorClave != null) textoErrorClave.text = "";
     }
 
     // =========================================================================
-    // SECCIÓN 3: MÉTODO QUE GUARDA AUTOMÁTICAMENTE A CADA JUGADOR
+    // SECCIÓN 3: GUARDADO AUTOMÁTICO PARA CUALQUIERA DE LOS 3 MÓDULOS
     // =========================================================================
-    // Esta función es llamada automáticamente por 'GestorServicioCliente' apenas un jugador termina (gane o pierda).
-    public void GuardarEvaluacionJugador(int promedio, string diagnostico, string detalleCasos)
+    // NUEVO (PUNTO 6): Ahora recibe 'string nombreModulo' para identificar si el reporte viene de
+    // Servicio al Cliente, Detector de Phishing o Test Psicológico.
+    public void GuardarEvaluacionJugador(string nombreModulo, int promedio, string diagnostico, string detalleCasos)
     {
-        // 1. Verificamos qué nombre escribió el jugador. Si dejó la casilla vacía, le ponemos "Aspirante Sin Nombre".
+        // 1. Leemos el nombre que el jugador escribió en el Selector de Módulos.
         string nombreEmpleado = "Aspirante Sin Nombre";
         if (inputNombreJugador != null && !string.IsNullOrEmpty(inputNombreJugador.text))
         {
             nombreEmpleado = inputNombreJugador.text;
         }
 
-        // 2. Obtenemos la fecha y hora exacta del computador en este momento (ej. "2026-11-08 14:30").
+        // 2. Capturamos la fecha y hora exacta en que terminó este módulo.
         string fechaActual = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        // 3. Armamos el bloque de texto ordenado con todos los datos de este jugador.
+        // 3. Armamos la ficha completa indicando el nombre del empleado y cuál de los 3 módulos completó.
         string bloqueRegistro =
             "========================================================\n" +
-            "FECHA: " + fechaActual + " | EMPLEADO: " + nombreEmpleado + "\n" +
-            "PROMEDIO OBTENIDO: " + promedio + "%\n" +
-            "DIAGNÓSTICO: " + diagnostico + "\n" +
-            "DETALLE POR CASO:\n" + detalleCasos +
+            "EMPLEADO / ASPIRANTE: " + nombreEmpleado.ToUpper() + "\n" +
+            "FECHA: " + fechaActual + " | MÓDULO: " + nombreModulo + "\n" +
+            "PROMEDIO / PUNTAJE: " + promedio + "%\n" +
+            "DIAGNÓSTICO:\n" + diagnostico + "\n\n" +
+            "DESGLOSE DETALLADO:\n" + detalleCasos +
             "========================================================\n\n";
 
-        // 4. 'File.AppendAllText' busca el archivo en 'rutaArchivoHistorial' (si no existe, lo crea solo)
-        // y pega este nuevo bloque al final sin borrar a los jugadores que hicieron el test antes.
+        // 4. Guardamos inmediatamente en el archivo sin borrar los módulos anteriores.
         File.AppendAllText(rutaArchivoHistorial, bloqueRegistro);
 
-        Debug.Log("Evaluación guardada exitosamente en: " + rutaArchivoHistorial);
+        Debug.Log("Módulo [" + nombreModulo + "] guardado para: " + nombreEmpleado);
     }
 
     // =========================================================================
-    // SECCIÓN 4: MÉTODOS PARA LOS BOTONES DE ACCESO DEL SUPERVISOR
+    // SECCIÓN 4: MÉTODOS DE ACCESO DEL SUPERVISOR Y EXPORTACIÓN A PDF
     // =========================================================================
-
-    // 1. Se conecta al botón "Acceso Supervisor" en el Menú Principal.
     public void BotonAbrirLoginSupervisor()
     {
-        inputClaveSupervisor.text = ""; // Limpiamos la caja de contraseña.
+        inputClaveSupervisor.text = "";
         if (textoErrorClave != null) textoErrorClave.text = "";
         panelLoginSupervisor.SetActive(true);
     }
 
-    // 2. Se conecta al botón "Ingresar / Verificar" dentro del panelLoginSupervisor.
     public void BotonVerificarContraseña()
     {
-        // Comparamos si lo que escribió en la caja es exactamente igual a nuestra 'claveSecreta'.
         if (inputClaveSupervisor.text == claveSecreta)
         {
             if (scriptAudio != null) scriptAudio.ReproducirAcierto();
 
-            // Cerramos el Login, abrimos la ventana del Historial y cargamos los datos del archivo.
             panelLoginSupervisor.SetActive(false);
             panelHistorialSupervisor.SetActive(true);
             MostrarHistorialEnPantalla();
         }
         else
         {
-            // Si se equivocó de contraseña, suena alerta de error y mostramos aviso.
             if (scriptAudio != null) scriptAudio.ReproducirError();
             if (textoErrorClave != null)
             {
@@ -119,13 +106,10 @@ public class GestorSupervisor : MonoBehaviour
         }
     }
 
-    // 3. Lee el archivo del disco duro y lo escribe en la pantalla del Supervisor.
     private void MostrarHistorialEnPantalla()
     {
-        // 'File.Exists' verifica si ya se creó el archivo (es decir, si al menos 1 jugador ya hizo el test).
         if (File.Exists(rutaArchivoHistorial))
         {
-            // 'File.ReadAllText' saca todo el texto guardado en el archivo y lo pone en la pantalla.
             textoPantallaHistorial.text = File.ReadAllText(rutaArchivoHistorial);
         }
         else
@@ -134,44 +118,28 @@ public class GestorSupervisor : MonoBehaviour
         }
     }
 
-    // 4. Opcional: Se conecta a un botón "Borrar Historial" dentro del panel del Supervisor.
     public void BotonBorrarHistorial()
     {
         if (File.Exists(rutaArchivoHistorial))
         {
-            File.Delete(rutaArchivoHistorial); // Elimina el archivo para empezar desde cero con otro grupo.
+            File.Delete(rutaArchivoHistorial);
         }
         textoPantallaHistorial.text = "Historial eliminado correctamente.";
     }
 
-    // 5. Se conecta al botón "Cerrar / Volver" tanto en el Login como en el Historial del Supervisor.
     public void BotonCerrarPanelesSupervisor()
     {
         panelLoginSupervisor.SetActive(false);
         panelHistorialSupervisor.SetActive(false);
     }
 
-    // =========================================================================
-    // SECCIÓN 5 (OPCIONAL): EXPORTAR INFORME CORPORATIVO PARA GUARDAR EN PDF
-    // =========================================================================
-    // Se conecta a un botón "Exportar Informe / PDF" dentro del panel del Supervisor.
     public void BotonExportarInformePDF()
     {
-        // 1. Verificamos primero si ya existen datos guardados.
-        if (!File.Exists(rutaArchivoHistorial))
-        {
-            Debug.Log("No hay datos todavía para exportar el informe.");
-            return;
-        }
+        if (!File.Exists(rutaArchivoHistorial)) return;
 
-        // 2. Leemos todos los resultados guardados hasta hoy.
         string contenidoHistorial = File.ReadAllText(rutaArchivoHistorial);
-
-        // 3. Definimos la ruta donde se creará el documento de informe oficial.
         string rutaInformeHTML = Application.persistentDataPath + "/Informe_Oficial_NexoBank.html";
 
-        // 4. Armamos una plantilla limpia con los colores corporativos de NexoBank (#0A2540 y #0096D6)
-        // y un botón integrado que abre directamente la ventana de "Guardar como PDF".
         string plantillaInforme =
             "<html><head><meta charset='UTF-8'><title>Informe de Resultados - NexoBank</title>" +
             "<style>" +
@@ -185,17 +153,13 @@ public class GestorSupervisor : MonoBehaviour
             "</style></head><body>" +
             "<div class='contenedor'>" +
             "<button onclick='window.print()'>Descargar / Guardar como PDF</button>" +
-            "<h1>NEXOBANK - DEPARTAMENTO DE CUMPLIMIENTO Y AUDITORÍA</h1>" +
-            "<h3>Informe Oficial de Evaluaciones de Servicio al Cliente y Normativa</h3>" +
+            "<h1>NEXOBANK - DEPARTAMENTO DE AUDITORÍA Y SELECCIÓN</h1>" +
+            "<h3>Informe Consolidado de Evaluaciones (Servicio, Phishing y Psicotécnico)</h3>" +
             "<p>Fecha de generación del reporte: " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "</p>" +
             "<pre>" + contenidoHistorial + "</pre>" +
             "</div></body></html>";
 
-        // 5. Guardamos el informe en el computador.
         File.WriteAllText(rutaInformeHTML, plantillaInforme);
-
-        // 6. 'Application.OpenURL' abre el informe automáticamente frente al supervisor en su navegador
-        // listo para presionar el botón "Descargar / Guardar como PDF".
         Application.OpenURL(rutaInformeHTML);
     }
 }

@@ -259,7 +259,7 @@ public class GestorServicioCliente : MonoBehaviour
 
         if (scriptSupervisor != null)
         {
-            scriptSupervisor.GuardarEvaluacionJugador(ultimoPromedioServicio, ultimoDiagnosticoServicio, ultimoReporteDetallado);
+            scriptSupervisor.GuardarEvaluacionJugador("MÓDULO 1: SERVICIO AL CLIENTE", ultimoPromedioServicio, ultimoDiagnosticoServicio, ultimoReporteDetallado);
         }
     }
 }

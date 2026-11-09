@@ -1,10 +1,10 @@
-// Importamos TextMeshPro para modificar los textos de la interfaz (reloj y mensajes finales).
+// Importamos TextMeshPro para modificar los textos de la interfaz (reloj, aviso de fallo y mensajes finales).
 using TMPro;
 // Importamos las funciones principales de Unity.
 using UnityEngine;
-// NUEVO: Importamos UnityEngine.UI para poder crear los pequeños cuadritos (Image) de la explosión.
+// Importamos UnityEngine.UI para crear los pequeños cuadritos (Image) de la explosión.
 using UnityEngine.UI;
-// NUEVO: Importamos System.Collections para animar los cuadritos con una Corrutina (IEnumerator).
+// Importamos System.Collections para usar Corrutinas (IEnumerator) tanto en la explosión como en el aviso temporal.
 using System.Collections;
 
 public class GestorMecanicas : MonoBehaviour
@@ -31,6 +31,23 @@ public class GestorMecanicas : MonoBehaviour
     public GameObject contenedorReloj;
 
     // =========================================================================
+    // NUEVO (PUNTO 4): VENTANA EMERGENTE RÁPIDA AL FALLAR
+    // =========================================================================
+    [Header("Aviso Emergente Temporal al Fallar")]
+    [Tooltip("Arrastra aquí el pequeño panel o recuadro que avisa que la respuesta es incorrecta")]
+    public GameObject panelAvisoFallo;
+
+    [Tooltip("Arrastra aquí el texto (TMP) que está dentro del panelAvisoFallo")]
+    public TextMeshProUGUI textoAvisoFallo;
+
+    [Tooltip("Cuántos segundos durará visible el mensaje antes de desaparecer solo")]
+    public float segundosDuracionAviso = 2.5f;
+
+    // Variable interna para guardar únicamente la corrutina del aviso y poder reiniciarla si falla dos veces rápido,
+    // sin detener por error la corrutina de los cuadritos que explotan.
+    private Coroutine corrutinaAvisoActual;
+
+    // =========================================================================
     // SECCIÓN 3: VARIABLES DE FIN DE JUEGO, ESTADÍSTICAS E INSIGNIAS
     // =========================================================================
     [Header("Pantallas de Fin de Juego")]
@@ -52,6 +69,12 @@ public class GestorMecanicas : MonoBehaviour
     {
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
+
+        // NUEVO: Nos aseguramos de que el pequeño aviso de fallo inicie apagado al arrancar el juego.
+        if (panelAvisoFallo != null)
+        {
+            panelAvisoFallo.SetActive(false);
+        }
 
         simboloCompletadoServicio.SetActive(false);
         simboloCompletadoPhishing.SetActive(false);
@@ -87,6 +110,7 @@ public class GestorMecanicas : MonoBehaviour
 
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
+        if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
 
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
@@ -102,6 +126,7 @@ public class GestorMecanicas : MonoBehaviour
 
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
+        if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
 
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
@@ -112,11 +137,14 @@ public class GestorMecanicas : MonoBehaviour
     {
         relojActivo = false;
         contenedorReloj.SetActive(false);
+        if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
     }
 
     public void PausarReloj()
     {
         relojActivo = false;
+        // Si el jugador acierta mientras el aviso de un error anterior seguía en pantalla, lo ocultamos de inmediato.
+        if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
     }
 
     public void ReanudarReloj()
@@ -125,13 +153,13 @@ public class GestorMecanicas : MonoBehaviour
     }
 
     // =========================================================================
-    // SECCIÓN 5: MÉTODOS PARA RESTAR VIDAS Y LANZAR EXPLOSIÓN DE CUADRITOS
+    // SECCIÓN 5: MÉTODOS PARA RESTAR VIDAS, EXPLOSIÓN Y AVISO DE FALLO
     // =========================================================================
     public void RestarEstrella()
     {
         if (erroresServicio < 3)
         {
-            // NUEVO: Antes de apagar la estrella, lanzamos los cuadritos desde la posición de esa estrella.
+            // Lanzamos los cuadritos de explosión desde la estrella que se apaga.
             StartCoroutine(EfectoExplosionCuadritos(estrellas[erroresServicio].transform));
 
             estrellas[erroresServicio].SetActive(false);
@@ -139,9 +167,15 @@ public class GestorMecanicas : MonoBehaviour
 
             scriptAudio.ReproducirError();
 
+            // Verificamos si ya perdió las 3 vidas o si todavía puede seguir intentando.
             if (erroresServicio >= 3)
             {
                 MostrarGameOver();
+            }
+            else
+            {
+                // NUEVO (PUNTO 4): Si aún le quedan vidas, mostramos el mensaje emergente que desaparece solo.
+                MostrarAvisoTemporal("¡Respuesta incorrecta! Incumples la normativa bancaria (-1 Estrella). Intenta de nuevo.");
             }
         }
     }
@@ -150,7 +184,7 @@ public class GestorMecanicas : MonoBehaviour
     {
         if (erroresPhishing < 3)
         {
-            // NUEVO: Antes de apagar el candado, lanzamos los cuadritos desde la posición de ese candado.
+            // Lanzamos los cuadritos de explosión desde el candado que se apaga.
             StartCoroutine(EfectoExplosionCuadritos(candados[erroresPhishing].transform));
 
             candados[erroresPhishing].SetActive(false);
@@ -158,43 +192,80 @@ public class GestorMecanicas : MonoBehaviour
 
             scriptAudio.ReproducirError();
 
+            // Verificamos si ya perdió los 3 candados o si aún le quedan intentos.
             if (erroresPhishing >= 3)
             {
                 MostrarGameOver();
+            }
+            else
+            {
+                // NUEVO (PUNTO 4): Si aún le quedan vidas, mostramos el mensaje emergente que desaparece solo.
+                MostrarAvisoTemporal("¡Fallo de análisis! Clasificación equivocada (-1 Candado). Revisa bien las pistas.");
             }
         }
     }
 
     // =========================================================================
-    // NUEVA CORRUTINA: EXPLOSIÓN SUTIL DE CUADRITOS DESDE EL CENTRO DEL ICONO
+    // NUEVO (PUNTO 4): SISTEMA DE MENSAJE EMERGENTE AUTOMÁTICO
+    // =========================================================================
+    public void MostrarAvisoTemporal(string mensajeError)
+    {
+        // Verificamos que hayas conectado el panel y el texto en el Inspector para evitar errores.
+        if (panelAvisoFallo == null || textoAvisoFallo == null)
+        {
+            return;
+        }
+
+        // Si ya había un aviso mostrándose en pantalla porque el jugador falló hace 1 segundo,
+        // detenemos ese conteo anterior para reiniciar los 2.5 segundos completos con el nuevo error.
+        if (corrutinaAvisoActual != null)
+        {
+            StopCoroutine(corrutinaAvisoActual);
+        }
+
+        // Iniciamos la corrutina que mostrará el mensaje y lo apagará solo.
+        corrutinaAvisoActual = StartCoroutine(CorrutinaMostrarYDesaparecer(mensajeError));
+    }
+
+    private IEnumerator CorrutinaMostrarYDesaparecer(string mensaje)
+    {
+        // 1. Escribimos el texto del fallo y encendemos el pequeño panel emergente.
+        textoAvisoFallo.text = mensaje;
+        panelAvisoFallo.SetActive(true);
+
+        // 2. 'WaitForSeconds' detiene esta función durante la cantidad de segundos indicada en 'segundosDuracionAviso' (ej. 2.5s)
+        // mientras el resto del juego y el cronómetro siguen funcionando normalmente.
+        yield return new WaitForSeconds(segundosDuracionAviso);
+
+        // 3. Pasados los 2.5 segundos, apagamos el panel automáticamente.
+        panelAvisoFallo.SetActive(false);
+    }
+
+    // =========================================================================
+    // CORRUTINA DE EXPLOSIÓN SUTIL DE CUADRITOS (PUNTO 3)
     // =========================================================================
     private IEnumerator EfectoExplosionCuadritos(Transform iconoVida)
     {
-        int cantidadCuadritos = 8; // Cantidad de fragmentos que saldrán disparados en círculo.
+        int cantidadCuadritos = 8;
         GameObject[] cuadritos = new GameObject[cantidadCuadritos];
         Vector2[] direcciones = new Vector2[cantidadCuadritos];
 
-        // 1. Creamos los 8 cuadritos en el centro exacto de la estrella o candado que se acaba de romper.
         for (int i = 0; i < cantidadCuadritos; i++)
         {
             GameObject c = new GameObject("CuadritoExplosion");
-            // Lo ponemos dentro del mismo contenedor padre de las vidas para que se vea en el Canvas.
             c.transform.SetParent(iconoVida.parent, false);
             c.transform.position = iconoVida.position;
 
-            // Le agregamos un componente 'Image' de 10x10 píxeles con color cian brillante.
             Image img = c.AddComponent<Image>();
             img.color = new Color(0f, 0.66f, 0.9f, 1f);
-            img.raycastTarget = false; // Desactivamos Raycast para que los cuadritos no estorben a los clics.
+            img.raycastTarget = false;
             c.GetComponent<RectTransform>().sizeDelta = new Vector2(10f, 10f);
 
-            // Calculamos el ángulo para que cada uno de los 8 cuadritos salga hacia un lado distinto (360° / 8 = cada 45°).
             float angulo = i * (360f / cantidadCuadritos) * Mathf.Deg2Rad;
             direcciones[i] = new Vector2(Mathf.Cos(angulo), Mathf.Sin(angulo));
             cuadritos[i] = c;
         }
 
-        // 2. Durante 0.45 segundos, movemos los cuadritos hacia afuera y los vamos volviendo transparentes.
         float tiempo = 0f;
         float duracion = 0.45f;
 
@@ -207,10 +278,7 @@ public class GestorMecanicas : MonoBehaviour
             {
                 if (cuadritos[i] != null)
                 {
-                    // Se alejan del centro suavemente a una velocidad de 85 píxeles por segundo.
                     cuadritos[i].transform.localPosition += (Vector3)(direcciones[i] * 85f * Time.deltaTime);
-
-                    // Se van haciendo más pequeñitos y transparentes a medida que se alejan.
                     cuadritos[i].transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, progreso);
                     Image img = cuadritos[i].GetComponent<Image>();
                     img.color = new Color(img.color.r, img.color.g, img.color.b, 1f - progreso);
@@ -219,7 +287,6 @@ public class GestorMecanicas : MonoBehaviour
             yield return null;
         }
 
-        // 3. Al terminar la animación, borramos los 8 cuadritos para dejar la memoria limpia.
         for (int i = 0; i < cantidadCuadritos; i++)
         {
             if (cuadritos[i] != null)
@@ -321,6 +388,7 @@ public class GestorMecanicas : MonoBehaviour
     {
         DetenerReloj();
         relojActivo = false;
+        if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
         panelGameOver.SetActive(true);
 
         scriptAudio.DetenerMusica();
