@@ -138,6 +138,9 @@ public class GestorMenuPrincipal : MonoBehaviour
     {
         panelSelectorModulos.SetActive(false);
         AbrirPanelAnimado(panelTutorialPsicologico);
+
+        //Le ordenamos a GestorAudio que ponga a sonar la canción del Test Psicológico.
+        scriptAudio.CambiarMusica(scriptAudio.musicaPsicologico);
     }
 
     // Se conecta al botón "Comenzar Evaluación" dentro de 'panelTutorialPsicologico'.

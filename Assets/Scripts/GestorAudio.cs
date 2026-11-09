@@ -13,6 +13,7 @@ public class GestorAudio : MonoBehaviour
     public AudioClip musicaMenu;     // Canción para el Menú Inicial, Instrucciones y Selector.
     public AudioClip musicaServicio; // Canción exclusiva para el módulo de Servicio al Cliente.
     public AudioClip musicaPhishing; // Canción exclusiva para el módulo de Detector de Phishing.
+    public AudioClip musicaPsicologico; // Canción exclusiva para el módulo de Test Psicológico y Skills.
 
     // LOS EFECTOS DE SONIDO CORTOS
     [Header("Archivos de Audio (Arrastrar MP3 o WAV)")]
