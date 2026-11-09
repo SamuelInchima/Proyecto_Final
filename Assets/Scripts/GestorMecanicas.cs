@@ -1,168 +1,144 @@
-using TMPro; // Librería necesaria para modificar los textos de la interfaz (reloj, mensajes finales).
+// Importamos TextMeshPro para modificar los textos de la interfaz (reloj y mensajes finales).
+using TMPro;
+// Importamos las funciones principales de Unity.
 using UnityEngine;
+// NUEVO: Importamos UnityEngine.UI para poder crear los pequeños cuadritos (Image) de la explosión.
+using UnityEngine.UI;
+// NUEVO: Importamos System.Collections para animar los cuadritos con una Corrutina (IEnumerator).
+using System.Collections;
 
 public class GestorMecanicas : MonoBehaviour
 {
-    // VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
-    // Usamos corchetes [] para indicar que esto es un "Array" (una lista de varios objetos, no solo uno).
+    // =========================================================================
+    // SECCIÓN 1: VARIABLES DE VIDAS (ESTRELLAS Y CANDADOS)
+    // =========================================================================
     [Header("Vidas del Módulo de Servicio")]
-    public GameObject[] estrellas; // Las 3 estrellas que se ven mientras juegas Servicio al Cliente.
-    private int erroresServicio = 0; // Esta variable interna (privada) cuenta cuántas veces se ha equivocado el jugador en los niveles de Servicio al Cliente.
+    public GameObject[] estrellas;
+    private int erroresServicio = 0;
 
     [Header("Vidas del Módulo de Phishing")]
-    public GameObject[] candados; // Los 3 candados que se ven mientras juegas Phishing.
-    private int erroresPhishing = 0; // Cuenta los fallos en Phishing.
+    public GameObject[] candados;
+    private int erroresPhishing = 0;
 
-
-    // VARIABLES DEL CONTADOR DE TIEMPO
+    // =========================================================================
+    // SECCIÓN 2: VARIABLES DEL CONTADOR DE TIEMPO (CRONÓMETRO)
+    // =========================================================================
     [Header("Configuración del Cronómetro")]
-    public float tiempoPorModulo = 60f; // Tiempo máximo en segundos para completar un módulo (ej. 60 segundos).
-    private float tiempoRestante; // Variable interna que irá bajando segundo a segundo.
-    private bool relojActivo = false; // Interruptor: true = el reloj corre, false = el reloj se detiene. 
-    public TextMeshProUGUI textoReloj; // El texto en pantalla donde se verán los segundos. - Es el texto hijo que cambia los segundos
-    public GameObject contenedorReloj;  // La imagen Padre que contiene al texto adentro
+    public float tiempoPorModulo = 60f;
+    private float tiempoRestante;
+    private bool relojActivo = false;
+    public TextMeshProUGUI textoReloj;
+    public GameObject contenedorReloj;
 
-
-    // VARIABLES DE VICTORIA Y ESTADÍSTICAS
+    // =========================================================================
+    // SECCIÓN 3: VARIABLES DE FIN DE JUEGO, ESTADÍSTICAS E INSIGNIAS
+    // =========================================================================
     [Header("Pantallas de Fin de Juego")]
-    public GameObject panelGameOver; // Panel que se activa si llegas a 3 errores o se acaba el tiempo.
-    public GameObject panelVictoria; // Panel de victoria donde mostraremos las estadísticas.
-
+    public GameObject panelGameOver;
+    public GameObject panelVictoria;
 
     [Header("Elementos de Estadísticas (Dentro del Panel Victoria)")]
-    public TextMeshProUGUI textoMensajeVictoria; // Texto que cambiará según las vidas con las que termines.
-    public GameObject[] iconosVictoria; // 3 iconos (estrellas) dentro del panel de victoria.
+    public TextMeshProUGUI textoMensajeVictoria;
+    public GameObject[] iconosVictoria;
 
-
-    // SÍMBOLOS DE MÓDULO COMPLETADO (ESTÉTICO)
     [Header("Insignias en el Selector de Módulos")]
-    public GameObject simboloCompletadoServicio; // Imagen de "Chulito/Completado" junto al botón de Servicio.
-    public GameObject simboloCompletadoPhishing; //Misma imagen junto al botón de Phishing.
+    public GameObject simboloCompletadoServicio;
+    public GameObject simboloCompletadoPhishing;
 
-    // AUDIO
     [Header("Conexión con el Audio")]
-    public GestorAudio scriptAudio; // Referencia para disparar sonidos de error, victoria y derrota.
+    public GestorAudio scriptAudio;
+
     void Start()
     {
-        // Por seguridad, ocultamos las pantallas de Game Over y Victoria al arrancar el programa.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // Ocultamos los dos símbolos de "Módulo Completado" porque el jugador apenas acaba de abrir el juego y no ha ganado ninguno todavía.
         simboloCompletadoServicio.SetActive(false);
         simboloCompletadoPhishing.SetActive(false);
 
-        // Escondemos el recuadro padre del reloj (y su texto hijo desaparece automáticamente con él) para que no se vea en el Menú Principal.
         contenedorReloj.SetActive(false);
     }
 
-    // todo lo que está dentro de Update() se repite sin parar en cada fotograma del juego (60 o más veces por segundo).
     void Update()
     {
-        // Primero preguntamos: "¿El interruptor del reloj está encendido (relojActivo == true)?".
-        // Si estamos en el menú principal, 'relojActivo' es 'false', así que Update no hace absolutamente nada.
         if (relojActivo == true)
         {
-            // 'Time.deltaTime' mide exactamente cuántos milisegundos reales pasaron desde el fotograma anterior.
-            // Restarle 'Time.deltaTime' a 'tiempoRestante' garantiza que el reloj baje exactamente 1 segundo por cada segundo de la vida real,
-            // sin importar si el computador donde se juega es muy rápido o muy lento.
             tiempoRestante = tiempoRestante - Time.deltaTime;
-
-            // Como 'tiempoRestante' tiene muchos decimales (ej. 58.4392), usamos 'Mathf.CeilToInt(tiempoRestante)' para redondearlo hacia arriba
-            // al número entero más cercano (ej. 58.4 se muestra como 59, y 0.2 se muestra como 1) y guardarlo en la variable entera 'segundosEnteros'.
             int segundosEnteros = Mathf.CeilToInt(tiempoRestante);
-
-            // '.ToString()' convierte ese número matemático en texto para poder unirlo con la letra "s" (segundos) y mostrarlo en pantalla (ej. "59s").
             textoReloj.text = segundosEnteros.ToString() + "s";
 
-            // Preguntamos: "¿El tiempo restante ya llegó a cero o bajó de cero?".
             if (tiempoRestante <= 0)
             {
-                // Forzamos a que el texto muestre "Tiempo: 0s" y ejecutamos inmediatamente la función de derrota 'MostrarGameOver()'.
                 textoReloj.text = "Tiempo: 0s";
                 MostrarGameOver();
             }
         }
     }
 
+    // =========================================================================
     // SECCIÓN 4: MÉTODOS PARA INICIAR MÓDULOS Y CONTROLAR EL RELOJ
-    // Se llama al entrar al módulo de Servicio para preparar las vidas y arrancar el reloj.
+    // =========================================================================
     public void PrepararModuloServicio()
     {
-        erroresServicio = 0; // Reiniciamos los errores a cero para poder jugar y volver a jugar normalmente.
-
-        // Encendemos de nuevo las 3 estrellas por si se habían apagado en una partida anterior.
+        erroresServicio = 0;
         estrellas[0].SetActive(true);
         estrellas[1].SetActive(true);
         estrellas[2].SetActive(true);
 
-        // Reiniciamos las pantallas de victoria/derrota.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás (el cronómetro).
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
     }
 
-    // Se llama al entrar al módulo de Phishing para preparar los candados y arrancar el reloj.
     public void PrepararModuloPhishing()
     {
-        erroresPhishing = 0; // Reiniciamos los errores a cero.
-
-        // Encendemos de nuevo los 3 candados.
+        erroresPhishing = 0;
         candados[0].SetActive(true);
         candados[1].SetActive(true);
         candados[2].SetActive(true);
 
-        // Reiniciamos pantallas.
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // Hacemos visible el texto del reloj en pantalla y arrancamos la cuenta atrás.
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
     }
 
-    // Método para detener y esconder el reloj si el jugador sale al menú antes de terminar (o al ganar, perder o volver al selector).
     public void DetenerReloj()
     {
-        relojActivo = false; // Detiene el conteo matemático.
-
-        //Apaga el objeto de texto en la interfaz para que desaparezca de la pantalla.
+        relojActivo = false;
         contenedorReloj.SetActive(false);
     }
 
-    // NUEVO: Pausa el conteo del reloj temporalmente mientras el jugador lee la ventana emergente de feedback.
     public void PausarReloj()
     {
-        relojActivo = false; // Detiene la resta de segundos sin ocultar el reloj de la pantalla.
+        relojActivo = false;
     }
 
-    // NUEVO: Reanuda el conteo del reloj cuando el jugador cierra la ventana emergente y pasa al siguiente caso.
     public void ReanudarReloj()
     {
-        relojActivo = true; // Vuelve a activar el descuento de segundos en Update().
+        relojActivo = true;
     }
 
-    // MÉTODOS PARA RESTAR VIDAS
-    // Esta función se conecta a los botones de "Respuesta Incorrecta" en Servicio al Cliente
+    // =========================================================================
+    // SECCIÓN 5: MÉTODOS PARA RESTAR VIDAS Y LANZAR EXPLOSIÓN DE CUADRITOS
+    // =========================================================================
     public void RestarEstrella()
     {
-        // Verificamos si el jugador aún tiene estrellas (es decir, menos de 3 errores)
         if (erroresServicio < 3)
         {
-            // Los Arrays en programación empiezan a contar desde el 0.
-            // Si erroresServicio es 0, apagará la estrella en la posición 0.
+            // NUEVO: Antes de apagar la estrella, lanzamos los cuadritos desde la posición de esa estrella.
+            StartCoroutine(EfectoExplosionCuadritos(estrellas[erroresServicio].transform));
+
             estrellas[erroresServicio].SetActive(false);
-            // Sumamos 1 al contador de errores
             erroresServicio++;
 
-            scriptAudio.ReproducirError(); // Suena la alerta de fallo al perder una vida
+            scriptAudio.ReproducirError();
 
-            // Si después de sumar, llegamos a 3 errores, perdimos.
             if (erroresServicio >= 3)
             {
                 MostrarGameOver();
@@ -170,15 +146,17 @@ public class GestorMecanicas : MonoBehaviour
         }
     }
 
-    // Esta función se conecta a los botones de "Respuesta Incorrecta" (marcar como seguro un correo falso)
     public void RestarCandado()
     {
         if (erroresPhishing < 3)
         {
+            // NUEVO: Antes de apagar el candado, lanzamos los cuadritos desde la posición de ese candado.
+            StartCoroutine(EfectoExplosionCuadritos(candados[erroresPhishing].transform));
+
             candados[erroresPhishing].SetActive(false);
             erroresPhishing++;
 
-            scriptAudio.ReproducirError(); // Suena la alerta de fallo al perder una vida
+            scriptAudio.ReproducirError();
 
             if (erroresPhishing >= 3)
             {
@@ -187,27 +165,86 @@ public class GestorMecanicas : MonoBehaviour
         }
     }
 
+    // =========================================================================
+    // NUEVA CORRUTINA: EXPLOSIÓN SUTIL DE CUADRITOS DESDE EL CENTRO DEL ICONO
+    // =========================================================================
+    private IEnumerator EfectoExplosionCuadritos(Transform iconoVida)
+    {
+        int cantidadCuadritos = 8; // Cantidad de fragmentos que saldrán disparados en círculo.
+        GameObject[] cuadritos = new GameObject[cantidadCuadritos];
+        Vector2[] direcciones = new Vector2[cantidadCuadritos];
+
+        // 1. Creamos los 8 cuadritos en el centro exacto de la estrella o candado que se acaba de romper.
+        for (int i = 0; i < cantidadCuadritos; i++)
+        {
+            GameObject c = new GameObject("CuadritoExplosion");
+            // Lo ponemos dentro del mismo contenedor padre de las vidas para que se vea en el Canvas.
+            c.transform.SetParent(iconoVida.parent, false);
+            c.transform.position = iconoVida.position;
+
+            // Le agregamos un componente 'Image' de 10x10 píxeles con color cian brillante.
+            Image img = c.AddComponent<Image>();
+            img.color = new Color(0f, 0.66f, 0.9f, 1f);
+            img.raycastTarget = false; // Desactivamos Raycast para que los cuadritos no estorben a los clics.
+            c.GetComponent<RectTransform>().sizeDelta = new Vector2(10f, 10f);
+
+            // Calculamos el ángulo para que cada uno de los 8 cuadritos salga hacia un lado distinto (360° / 8 = cada 45°).
+            float angulo = i * (360f / cantidadCuadritos) * Mathf.Deg2Rad;
+            direcciones[i] = new Vector2(Mathf.Cos(angulo), Mathf.Sin(angulo));
+            cuadritos[i] = c;
+        }
+
+        // 2. Durante 0.45 segundos, movemos los cuadritos hacia afuera y los vamos volviendo transparentes.
+        float tiempo = 0f;
+        float duracion = 0.45f;
+
+        while (tiempo < duracion)
+        {
+            tiempo += Time.deltaTime;
+            float progreso = tiempo / duracion;
+
+            for (int i = 0; i < cantidadCuadritos; i++)
+            {
+                if (cuadritos[i] != null)
+                {
+                    // Se alejan del centro suavemente a una velocidad de 85 píxeles por segundo.
+                    cuadritos[i].transform.localPosition += (Vector3)(direcciones[i] * 85f * Time.deltaTime);
+
+                    // Se van haciendo más pequeñitos y transparentes a medida que se alejan.
+                    cuadritos[i].transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, progreso);
+                    Image img = cuadritos[i].GetComponent<Image>();
+                    img.color = new Color(img.color.r, img.color.g, img.color.b, 1f - progreso);
+                }
+            }
+            yield return null;
+        }
+
+        // 3. Al terminar la animación, borramos los 8 cuadritos para dejar la memoria limpia.
+        for (int i = 0; i < cantidadCuadritos; i++)
+        {
+            if (cuadritos[i] != null)
+            {
+                Destroy(cuadritos[i]);
+            }
+        }
+    }
+
+    // =========================================================================
     // SECCIÓN 6: MÉTODOS DE VICTORIA, ESTADÍSTICAS Y DERROTA
-    // Esta función la llamará el módulo de Servicio al Cliente al superar sus 5 niveles.
+    // =========================================================================
     public void VictoriaServicio()
     {
-        //Llamamos a DetenerReloj() para que frene el tiempo y además oculte el texto.
         DetenerReloj();
-
-        relojActivo = false; // Detenemos el cronómetro porque ya ganó.
-        panelVictoria.SetActive(true); // Mostramos la pantalla de victoria.
-
-        // Encendemos el símbolo estético de "Completado" en el selector de módulos.
+        relojActivo = false;
+        panelVictoria.SetActive(true);
         simboloCompletadoServicio.SetActive(true);
 
-        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
-        scriptAudio.ReproducirVictoria(); // (O ReproducirGameOver en MostrarGameOver) // Suena la tonada de triunfo
-        
-        // Calculamos con cuántas estrellas terminó (3 menos los errores cometidos).
+        scriptAudio.DetenerMusica();
+        scriptAudio.ReproducirVictoria();
+
         int estrellasFinales = 3 - erroresServicio;
         ActualizarIconosVictoria(estrellasFinales);
 
-        // Mostramos un mensaje diferente según las estrellas conservadas.
         if (estrellasFinales == 3)
         {
             textoMensajeVictoria.text = "¡Desempeño Perfecto (3/3 Estrellas)!\nAtendiste a todos los clientes con total profesionalidad.";
@@ -222,7 +259,6 @@ public class GestorMecanicas : MonoBehaviour
         }
     }
 
-    // NUEVO: Recibe los datos calculados por GestorServicioCliente y los escribe en el Panel de Victoria.
     public void VictoriaServicioDetallada(int promedio, string diagnostico, string detalleCasos)
     {
         DetenerReloj();
@@ -236,7 +272,6 @@ public class GestorMecanicas : MonoBehaviour
         int estrellasFinales = 3 - erroresServicio;
         ActualizarIconosVictoria(estrellasFinales);
 
-        // Armamos el boletín completo en el cuadro de texto del Panel de Victoria.
         textoMensajeVictoria.text =
             "RESULTADOS DE EVALUACIÓN BANCARIA\n" +
             "Promedio de Cumplimiento: " + promedio + "% (" + estrellasFinales + "/3 Estrellas)\n\n" +
@@ -244,26 +279,19 @@ public class GestorMecanicas : MonoBehaviour
             "DESGLOSE POR NORMATIVA:\n" + detalleCasos;
     }
 
-    // Esta función la llamará el módulo de Phishing al superar sus 5 niveles.
     public void VictoriaPhishing()
     {
-        // Llamamos a DetenerReloj() para que frene el tiempo y además oculte el texto.
         DetenerReloj();
-
-        relojActivo = false; // Detenemos el cronómetro.
-        panelVictoria.SetActive(true); // Mostramos la pantalla de victoria.
-
-        // Encendemos el símbolo estético de "Completado" en el selector de módulos.
+        relojActivo = false;
+        panelVictoria.SetActive(true);
         simboloCompletadoPhishing.SetActive(true);
 
-        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
-        scriptAudio.ReproducirVictoria(); // (O ReproducirGameOver en MostrarGameOver)
+        scriptAudio.DetenerMusica();
+        scriptAudio.ReproducirVictoria();
 
-        // Calculamos con cuántos candados terminó.
         int candadosFinales = 3 - erroresPhishing;
         ActualizarIconosVictoria(candadosFinales);
 
-        // Mostramos un mensaje diferente según los candados conservados.
         if (candadosFinales == 3)
         {
             textoMensajeVictoria.text = "¡Seguridad Impecable (3/3 Candados)!\nDescartaste todas las amenazas sin fallar.";
@@ -278,40 +306,24 @@ public class GestorMecanicas : MonoBehaviour
         }
     }
 
-    // Método auxiliar sencillo para encender 1, 2 o 3 iconos en la pantalla de victoria.
     private void ActualizarIconosVictoria(int cantidadVidas)
     {
-        // Primero apagamos los 3 iconos de la pantalla de victoria.
         iconosVictoria[0].SetActive(false);
         iconosVictoria[1].SetActive(false);
         iconosVictoria[2].SetActive(false);
 
-        // Encendemos el primero si terminó con al menos 1 vida.
-        if (cantidadVidas >= 1)
-        {
-            iconosVictoria[0].SetActive(true);
-        }
-        // Encendemos el segundo si terminó con al menos 2 vidas.
-        if (cantidadVidas >= 2)
-        {
-            iconosVictoria[1].SetActive(true);
-        }
-        // Encendemos el tercero si terminó con las 3 vidas intactas.
-        if (cantidadVidas == 3)
-        {
-            iconosVictoria[2].SetActive(true);
-        }
+        if (cantidadVidas >= 1) iconosVictoria[0].SetActive(true);
+        if (cantidadVidas >= 2) iconosVictoria[1].SetActive(true);
+        if (cantidadVidas == 3) iconosVictoria[2].SetActive(true);
     }
 
-    // Método interno para mostrar la derrota (por 3 errores o por tiempo agotado).
     private void MostrarGameOver()
     {
-        // También ocultamos el reloj si el jugador pierde la partida.
         DetenerReloj();
-        relojActivo = false; // Detenemos el reloj inmediatamente.
-        panelGameOver.SetActive(true); // Mostramos la pantalla de Game Over.
+        relojActivo = false;
+        panelGameOver.SetActive(true);
 
-        scriptAudio.DetenerMusica();      // Silencia la canción del nivel
-        scriptAudio.ReproducirGameOver(); // (O ReproducirGameOver en MostrarGameOver) // Suena la tonada de derrota
+        scriptAudio.DetenerMusica();
+        scriptAudio.ReproducirGameOver();
     }
 }
