@@ -12,6 +12,7 @@ public class GestorMenuPrincipal : MonoBehaviour
     public GameObject panelMenuPrincipal;    // Panel del menú inicial de NexoBank.
     public GameObject panelSelectorModulos;  // Panel donde se elige el módulo a evaluar.
     public GameObject panelInstrucciones;    // Panel con las reglas generales del simulador.
+    public GameObject panelOpciones;
 
     [Header("Paneles de Tutoriales Previos")]
     public GameObject panelTutorialServicio; // NUEVO: Panel educativo con las 5 normas bancarias (Habeas Data, SARLAFT, etc.).
@@ -83,6 +84,7 @@ public class GestorMenuPrincipal : MonoBehaviour
     {
         panelInstrucciones.SetActive(false);
         panelSelectorModulos.SetActive(false);
+        panelOpciones.SetActive(false);
         AbrirPanelAnimado(panelMenuPrincipal);
     }
 

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 // Importamos UnityEngine.UI para crear los pequeños cuadritos (Image) de la explosión.
 using UnityEngine.UI;
-// Importamos System.Collections para usar Corrutinas (IEnumerator) tanto en la explosión como en el aviso temporal.
+// Importamos System.Collections para usar Corrutinas (IEnumerator) en la explosión y en el aviso temporal.
 using System.Collections;
 
 public class GestorMecanicas : MonoBehaviour
@@ -21,7 +21,7 @@ public class GestorMecanicas : MonoBehaviour
     private int erroresPhishing = 0;
 
     // =========================================================================
-    // SECCIÓN 2: VARIABLES DEL CONTADOR DE TIEMPO (CRONÓMETRO)
+    // SECCIÓN 2: VARIABLES DEL CRONÓMETRO Y SUS POSICIONES (PUNTO 9)
     // =========================================================================
     [Header("Configuración del Cronómetro")]
     public float tiempoPorModulo = 60f;
@@ -30,25 +30,25 @@ public class GestorMecanicas : MonoBehaviour
     public TextMeshProUGUI textoReloj;
     public GameObject contenedorReloj;
 
+    // NUEVO (PUNTO 9): Dos marcadores de posición (RectTransform) que tú acomodas manualmente en la escena.
+    [Header("Ubicación Manual del Reloj por Módulo")]
+    [Tooltip("Arrastra aquí el objeto vacío ubicado donde quieres que salga el reloj en Servicio al Cliente")]
+    public RectTransform ubicacionRelojServicio;
+
+    [Tooltip("Arrastra aquí el objeto vacío ubicado donde quieres que salga el reloj en Detector de Phishing")]
+    public RectTransform ubicacionRelojPhishing;
+
     // =========================================================================
-    // NUEVO (PUNTO 4): VENTANA EMERGENTE RÁPIDA AL FALLAR
+    // SECCIÓN 3: VENTANA EMERGENTE RÁPIDA AL FALLAR (PUNTO 4)
     // =========================================================================
     [Header("Aviso Emergente Temporal al Fallar")]
-    [Tooltip("Arrastra aquí el pequeño panel o recuadro que avisa que la respuesta es incorrecta")]
     public GameObject panelAvisoFallo;
-
-    [Tooltip("Arrastra aquí el texto (TMP) que está dentro del panelAvisoFallo")]
     public TextMeshProUGUI textoAvisoFallo;
-
-    [Tooltip("Cuántos segundos durará visible el mensaje antes de desaparecer solo")]
     public float segundosDuracionAviso = 2.5f;
-
-    // Variable interna para guardar únicamente la corrutina del aviso y poder reiniciarla si falla dos veces rápido,
-    // sin detener por error la corrutina de los cuadritos que explotan.
     private Coroutine corrutinaAvisoActual;
 
     // =========================================================================
-    // SECCIÓN 3: VARIABLES DE FIN DE JUEGO, ESTADÍSTICAS E INSIGNIAS
+    // SECCIÓN 4: VARIABLES DE FIN DE JUEGO, ESTADÍSTICAS E INSIGNIAS
     // =========================================================================
     [Header("Pantallas de Fin de Juego")]
     public GameObject panelGameOver;
@@ -70,7 +70,6 @@ public class GestorMecanicas : MonoBehaviour
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
 
-        // NUEVO: Nos aseguramos de que el pequeño aviso de fallo inicie apagado al arrancar el juego.
         if (panelAvisoFallo != null)
         {
             panelAvisoFallo.SetActive(false);
@@ -99,7 +98,7 @@ public class GestorMecanicas : MonoBehaviour
     }
 
     // =========================================================================
-    // SECCIÓN 4: MÉTODOS PARA INICIAR MÓDULOS Y CONTROLAR EL RELOJ
+    // SECCIÓN 5: MÉTODOS PARA INICIAR MÓDULOS Y MOVER EL RELOJ DE LUGAR
     // =========================================================================
     public void PrepararModuloServicio()
     {
@@ -111,6 +110,12 @@ public class GestorMecanicas : MonoBehaviour
         panelGameOver.SetActive(false);
         panelVictoria.SetActive(false);
         if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
+
+        // NUEVO (PUNTO 9): Antes de encender el reloj, lo movemos a la ubicación que elegiste para Servicio al Cliente.
+        if (ubicacionRelojServicio != null)
+        {
+            contenedorReloj.transform.position = ubicacionRelojServicio.position;
+        }
 
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
@@ -128,6 +133,12 @@ public class GestorMecanicas : MonoBehaviour
         panelVictoria.SetActive(false);
         if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
 
+        // NUEVO (PUNTO 9): Antes de encender el reloj, lo movemos a la ubicación que elegiste para Detector de Phishing.
+        if (ubicacionRelojPhishing != null)
+        {
+            contenedorReloj.transform.position = ubicacionRelojPhishing.position;
+        }
+
         contenedorReloj.SetActive(true);
         tiempoRestante = tiempoPorModulo;
         relojActivo = true;
@@ -143,7 +154,6 @@ public class GestorMecanicas : MonoBehaviour
     public void PausarReloj()
     {
         relojActivo = false;
-        // Si el jugador acierta mientras el aviso de un error anterior seguía en pantalla, lo ocultamos de inmediato.
         if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
     }
 
@@ -153,13 +163,12 @@ public class GestorMecanicas : MonoBehaviour
     }
 
     // =========================================================================
-    // SECCIÓN 5: MÉTODOS PARA RESTAR VIDAS, EXPLOSIÓN Y AVISO DE FALLO
+    // SECCIÓN 6: MÉTODOS PARA RESTAR VIDAS, EXPLOSIÓN Y AVISO DE FALLO
     // =========================================================================
     public void RestarEstrella()
     {
         if (erroresServicio < 3)
         {
-            // Lanzamos los cuadritos de explosión desde la estrella que se apaga.
             StartCoroutine(EfectoExplosionCuadritos(estrellas[erroresServicio].transform));
 
             estrellas[erroresServicio].SetActive(false);
@@ -167,14 +176,12 @@ public class GestorMecanicas : MonoBehaviour
 
             scriptAudio.ReproducirError();
 
-            // Verificamos si ya perdió las 3 vidas o si todavía puede seguir intentando.
             if (erroresServicio >= 3)
             {
                 MostrarGameOver();
             }
             else
             {
-                // NUEVO (PUNTO 4): Si aún le quedan vidas, mostramos el mensaje emergente que desaparece solo.
                 MostrarAvisoTemporal("¡Respuesta incorrecta! Incumples la normativa bancaria (-1 Estrella). Intenta de nuevo.");
             }
         }
@@ -184,7 +191,6 @@ public class GestorMecanicas : MonoBehaviour
     {
         if (erroresPhishing < 3)
         {
-            // Lanzamos los cuadritos de explosión desde el candado que se apaga.
             StartCoroutine(EfectoExplosionCuadritos(candados[erroresPhishing].transform));
 
             candados[erroresPhishing].SetActive(false);
@@ -192,58 +198,40 @@ public class GestorMecanicas : MonoBehaviour
 
             scriptAudio.ReproducirError();
 
-            // Verificamos si ya perdió los 3 candados o si aún le quedan intentos.
             if (erroresPhishing >= 3)
             {
                 MostrarGameOver();
             }
             else
             {
-                // NUEVO (PUNTO 4): Si aún le quedan vidas, mostramos el mensaje emergente que desaparece solo.
                 MostrarAvisoTemporal("¡Fallo de análisis! Clasificación equivocada (-1 Candado). Revisa bien las pistas.");
             }
         }
     }
 
-    // =========================================================================
-    // NUEVO (PUNTO 4): SISTEMA DE MENSAJE EMERGENTE AUTOMÁTICO
-    // =========================================================================
     public void MostrarAvisoTemporal(string mensajeError)
     {
-        // Verificamos que hayas conectado el panel y el texto en el Inspector para evitar errores.
         if (panelAvisoFallo == null || textoAvisoFallo == null)
         {
             return;
         }
 
-        // Si ya había un aviso mostrándose en pantalla porque el jugador falló hace 1 segundo,
-        // detenemos ese conteo anterior para reiniciar los 2.5 segundos completos con el nuevo error.
         if (corrutinaAvisoActual != null)
         {
             StopCoroutine(corrutinaAvisoActual);
         }
 
-        // Iniciamos la corrutina que mostrará el mensaje y lo apagará solo.
         corrutinaAvisoActual = StartCoroutine(CorrutinaMostrarYDesaparecer(mensajeError));
     }
 
     private IEnumerator CorrutinaMostrarYDesaparecer(string mensaje)
     {
-        // 1. Escribimos el texto del fallo y encendemos el pequeño panel emergente.
         textoAvisoFallo.text = mensaje;
         panelAvisoFallo.SetActive(true);
-
-        // 2. 'WaitForSeconds' detiene esta función durante la cantidad de segundos indicada en 'segundosDuracionAviso' (ej. 2.5s)
-        // mientras el resto del juego y el cronómetro siguen funcionando normalmente.
         yield return new WaitForSeconds(segundosDuracionAviso);
-
-        // 3. Pasados los 2.5 segundos, apagamos el panel automáticamente.
         panelAvisoFallo.SetActive(false);
     }
 
-    // =========================================================================
-    // CORRUTINA DE EXPLOSIÓN SUTIL DE CUADRITOS (PUNTO 3)
-    // =========================================================================
     private IEnumerator EfectoExplosionCuadritos(Transform iconoVida)
     {
         int cantidadCuadritos = 8;
@@ -297,7 +285,7 @@ public class GestorMecanicas : MonoBehaviour
     }
 
     // =========================================================================
-    // SECCIÓN 6: MÉTODOS DE VICTORIA, ESTADÍSTICAS Y DERROTA
+    // SECCIÓN 7: MÉTODOS DE VICTORIA, ESTADÍSTICAS Y DERROTA
     // =========================================================================
     public void VictoriaServicio()
     {
