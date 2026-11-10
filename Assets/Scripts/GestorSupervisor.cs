@@ -192,13 +192,13 @@ public class GestorSupervisor : MonoBehaviour
         string fechaActual = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
         string bloqueRegistro =
-            "========================================================\n" +
+            " ========================================================\n" +
             "EMPLEADO / ASPIRANTE: " + nombreEmpleado.ToUpper() + "\n" +
             "FECHA: " + fechaActual + " | MÓDULO: " + nombreModulo + "\n" +
             "PROMEDIO / PUNTAJE: " + promedio + "%\n" +
             "DIAGNÓSTICO:\n" + diagnostico + "\n\n" +
             "DESGLOSE DETALLADO:\n" + detalleCasos +
-            "========================================================\n\n";
+            " ========================================================\n\n";
 
         string historialAnteriorLegible = LeerYDescifrarArchivoLocal();
         string historialActualizado = historialAnteriorLegible + bloqueRegistro;
