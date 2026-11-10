@@ -141,9 +141,18 @@ public class GestorOpciones : MonoBehaviour
     {
         if (togglePantallaCompleta != null)
         {
-            // Si la casilla tiene el chulito (true), pasa a Pantalla Completa.
-            // Si se le quita el chulito (false), pasa a Modo Ventana.
-            Screen.fullScreen = togglePantallaCompleta.isOn;
+            if (togglePantallaCompleta.isOn)
+            {
+                // En Pantalla Completa: detectamos y aplicamos la resolución máxima nativa del monitor actual.
+                Resolution resolucionMonitor = Screen.currentResolution;
+                Screen.SetResolution(resolucionMonitor.width, resolucionMonitor.height, FullScreenMode.FullScreenWindow);
+            }
+            else
+            {
+                // En Modo Ventana: aplicamos una ventana estándar 16:9 (1280x720) que cabe cómodamente en cualquier PC.
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            }
+
             Debug.Log("Modo Pantalla Completa cambiado a: " + togglePantallaCompleta.isOn);
         }
     }
