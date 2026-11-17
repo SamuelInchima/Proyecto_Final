@@ -118,7 +118,7 @@ public class GestorSupervisor : MonoBehaviour
         }
         else
         {
-            MostrarConfirmacionTemporal("¡Contraseña actualizada localmente en este equipo!");
+            MostrarConfirmacionTemporal("Contraseña actualizada localmente");
         }
 
         inputNuevaClaveGlobal.text = "";
@@ -141,7 +141,7 @@ public class GestorSupervisor : MonoBehaviour
             {
                 if (scriptAudio != null) scriptAudio.ReproducirAcierto();
                 // Mostramos la confirmación final y se borrará sola tras 3 segundos.
-                MostrarConfirmacionTemporal("¡Contraseña global actualizada en todos los PC!");
+                MostrarConfirmacionTemporal("Contraseña actualizada globalmente");
             }
             else
             {
@@ -326,7 +326,7 @@ public class GestorSupervisor : MonoBehaviour
             if (scriptAudio != null) scriptAudio.ReproducirError();
             if (textoErrorClave != null)
             {
-                textoErrorClave.text = "Acceso denegado: Contraseña de supervisor incorrecta.";
+                textoErrorClave.text = "Acceso denegado: Contraseña incorrecta.";
             }
         }
     }

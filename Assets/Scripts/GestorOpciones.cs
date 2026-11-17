@@ -143,17 +143,18 @@ public class GestorOpciones : MonoBehaviour
         {
             if (togglePantallaCompleta.isOn)
             {
+                // En Modo Ventana: aplicamos una ventana estándar 16:9 (1280x720) que cabe cómodamente en cualquier PC.
+                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+
+            }
+            else
+            {
                 // En Pantalla Completa: detectamos y aplicamos la resolución máxima nativa del monitor actual.
                 Resolution resolucionMonitor = Screen.currentResolution;
                 Screen.SetResolution(resolucionMonitor.width, resolucionMonitor.height, FullScreenMode.FullScreenWindow);
             }
-            else
-            {
-                // En Modo Ventana: aplicamos una ventana estándar 16:9 (1280x720) que cabe cómodamente en cualquier PC.
-                Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
-            }
 
-            Debug.Log("Modo Pantalla Completa cambiado a: " + togglePantallaCompleta.isOn);
+            Debug.Log("Modo Pantalla cambiado a: " + togglePantallaCompleta.isOn);
         }
     }
 

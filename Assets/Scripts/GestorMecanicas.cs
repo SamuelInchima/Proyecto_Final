@@ -31,12 +31,18 @@ public class GestorMecanicas : MonoBehaviour
     public GameObject contenedorReloj;
 
     // NUEVO (PUNTO 9): Dos marcadores de posición (RectTransform) que tú acomodas manualmente en la escena.
-    [Header("Ubicación Manual del Reloj por Módulo")]
-    [Tooltip("Arrastra aquí el objeto vacío ubicado donde quieres que salga el reloj en Servicio al Cliente")]
+    [Header("Ubicación Manual del Reloj por Módulo y Feedback")]
+    [Tooltip("Arrastra aquí el objeto vacío ubicado donde quieres el reloj en Servicio al Cliente")]
     public RectTransform ubicacionRelojServicio;
 
     [Tooltip("Arrastra aquí el objeto vacío ubicado donde quieres que salga el reloj en Detector de Phishing")]
     public RectTransform ubicacionRelojPhishing;
+
+    [Tooltip("NUEVO: Arrastra aquí el objeto vacío ubicado donde quieres el reloj cuando salga el Panel Feedback")]
+    public RectTransform ubicacionRelojFeedback;
+
+    // Variable interna que recuerda si el reloj estaba en la posición de Servicio o de Phishing antes del Feedback.
+    private Vector3 posicionAntesDelFeedback;
 
     // =========================================================================
     // SECCIÓN 3: VENTANA EMERGENTE RÁPIDA AL FALLAR (PUNTO 4)
@@ -151,14 +157,28 @@ public class GestorMecanicas : MonoBehaviour
         if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
     }
 
+    // Se ejecuta automáticamente cuando aciertas y se abre el Panel de Feedback.
     public void PausarReloj()
     {
         relojActivo = false;
         if (panelAvisoFallo != null) panelAvisoFallo.SetActive(false);
+
+        // 1. Guardamos la posición actual del reloj (ya sea la de Servicio o la de Phishing).
+        posicionAntesDelFeedback = contenedorReloj.transform.position;
+
+        // 2. Movemos el reloj a la posición manual que elegiste para el Panel de Feedback.
+        if (ubicacionRelojFeedback != null)
+        {
+            contenedorReloj.transform.position = ubicacionRelojFeedback.position;
+        }
     }
 
+    // Se ejecuta automáticamente cuando cierras el Panel de Feedback para pasar al siguiente caso.
     public void ReanudarReloj()
     {
+        // Devolvemos el reloj exactamente a la posición del módulo en el que estábamos jugando.
+        contenedorReloj.transform.position = posicionAntesDelFeedback;
+
         relojActivo = true;
     }
 

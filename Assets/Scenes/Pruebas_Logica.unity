@@ -1535,7 +1535,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &201667875
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8443,22 +8443,22 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 828058797}
   - {fileID: 1015426625}
   - {fileID: 418396797}
   - {fileID: 1887836010}
-  - {fileID: 1753741608}
-  - {fileID: 1843150799}
-  - {fileID: 1776916934}
-  - {fileID: 263293535}
-  - {fileID: 66379450}
-  - {fileID: 586238072}
   - {fileID: 469260045}
   - {fileID: 658159891}
+  - {fileID: 1753741608}
   - {fileID: 1874519840}
-  - {fileID: 1348164544}
+  - {fileID: 1843150799}
+  - {fileID: 586238072}
+  - {fileID: 1776916934}
   - {fileID: 843134475}
+  - {fileID: 263293535}
+  - {fileID: 1348164544}
+  - {fileID: 66379450}
   - {fileID: 1096106878}
+  - {fileID: 828058797}
   - {fileID: 907705282}
   - {fileID: 374462007}
   - {fileID: 317895962}
@@ -10145,12 +10145,12 @@ GameObject:
   - component: {fileID: 1096106877}
   - component: {fileID: 1096106876}
   m_Layer: 5
-  m_Name: PanelDiagnostigoGeneralTestPsicologico
+  m_Name: PanelDiagnosticoGeneralTestPsicologico
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1096106876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16348,29 +16348,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<b>NEXOBANK - INSTRUCCIONES</b>\r\n\r\nBienvenido al simulador de cumplimiento
-    normativo, ciberseguridad y perfil laboral de NexoBank.\r\nTu objetivo es resolver
-    casos bancarios reales, bloquear ataques digitales y completar tu evaluaci\xF3n
-    de ingreso.\r\n\r\n<color=#00A8E8><b>C\xD3MO JUGAR</b></color>\r\n1. Pulsa Jugar
-    en el men\xFA principal, escribe tu nombre completo y selecciona uno de los 3
-    m\xF3dulos.\r\n2. Lee con atenci\xF3n el tutorial previo de cada m\xF3dulo antes
-    de iniciar la prueba.\r\n3. En Servicio al Cliente, analiza el caso normativo
-    y elige la \xFAnica respuesta que cumple las pol\xEDticas del banco.\r\n4. En
-    Detector de Phishing, revisa correos, chats, llamadas o c\xF3digos QR y decide
-    si son Seguros (Verde) o Peligrosos (Rojo).\r\n5. En el Test Psicol\xF3gico y
-    de Skills, responde las 15 preguntas laborales con total sinceridad y tranquilidad.\r\n\r\n<color=#00A8E8><b>VIDAS
-    Y TIEMPO</b></color>\r\n- Empiezas con 3 estrellas en Servicio al Cliente y 3
-    candados en Detector de Phishing.\r\n- Cada respuesta incorrecta muestra una
-    alerta y te resta una vida, pero puedes volver a intentar el caso.\r\n- Al acertar,
-    el reloj se pausa y aparece una ventana explicando la norma o pista de seguridad
-    aplicada.\r\n- El Test Psicol\xF3gico no tiene cron\xF3metro ni respuestas incorrectas
-    que resten vidas.\r\n\r\n<color=#00A8E8><b>CONSEJOS</b></color>\r\n- No cedas
-    ante presiones de urgencia o falsa empat\xEDa que violen el Habeas Data, el SARLAFT
-    o el C\xF3digo de \xC9tica.\r\n- Verifica siempre el remitente exacto, desconf\xEDa
-    de enlaces acortados y jam\xE1s entregues claves ni c\xF3digos Token.\r\n- Recuerda
-    que tus resultados y diagn\xF3sticos se guardan de forma protegida para el Supervisor
-    del banco.\r\n\r\nObjetivo: supera los 3 m\xF3dulos de evaluaci\xF3n para registrar
-    tu perfil completo en el sistema de NexoBank."
+  m_text: "<b>NEXOBANK - INSTRUCCIONES</b>\r\n\r\nBienvenido la herramienta de diagn\xF3stico
+    interactiva de cumplimiento normativo, ciberseguridad, conocimientos previos
+    y perfil laboral de NexoBank.\r\nTu objetivo es resolver casos bancarios basados
+    en situaciones reales, identificar y clasificar ataques digitales y completar
+    tu evaluaci\xF3n de ingreso.\r\nLos m\xF3dulos son las secciones de minijuegos,
+    hay 3. Los niveles son los casos que hay dentro de cada m\xF3dulo\n\r\n<color=#00A8E8><b>C\xD3MO
+    JUGAR</b></color>\r\n1. Selecciona el bot\xF3n NexoBank App en el men\xFA de
+    inicio, escribe tu nombre completo y elige uno de los 3 m\xF3dulos.\r\n2. Lee
+    con atenci\xF3n el tutorial previo de cada m\xF3dulo antes de iniciar la prueba.\r\n3.
+    En Servicio al Cliente, analiza el caso normativo y elige la \xFAnica respuesta
+    que cumple las pol\xEDticas del banco.\r\n4. En Detector de Phishing, revisa
+    correos, chats o c\xF3digos QR y decide si son Seguros o Peligrosos.\r\n5. En
+    el Test Psicol\xF3gico, responde las 15 preguntas laborales con total sinceridad
+    y tranquilidad.\n\r\n<color=#00A8E8><b>REGLAS</b></color>\r\n- Empiezas con 3
+    estrellas en Servicio al Cliente y 3 candados en Detector de Phishing (Vidas).\r\n-
+    Cada respuesta incorrecta te resta una vida. Si pierdes todas las vidas, debes
+    volver a completar el m\xF3dulo desde el inicio.\r\n- Al acertar un nivel, aparecer\xE1
+    una ventana explicando la normativa aplicada.\r\n- El Test Psicol\xF3gico no
+    tiene cron\xF3metro ni respuestas incorrectas.\n\r\n<color=#00A8E8><b>OBJETIVO</b></color>\r\n-
+    supera los 3 m\xF3dulos de evaluaci\xF3n para registrar tu perfil completo en
+    el sistema de NexoBank.\n<color=#ECECA4>\n<i>Recuerda que tus resultados y diagn\xF3sticos
+    se guardan de forma protegida para el Supervisor del banco."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
