@@ -109,8 +109,12 @@ public class GestorAudio : MonoBehaviour
     // Se llamará al encenderse el panel de Game Over
     public void ReproducirGameOver()
     {
-        if (sonidoGameOver != null)
+        if (sonidoGameOver != null && reproductorEfectos != null)
         {
+            // Detiene primero cualquier voz IA o alerta de error que esté sonando.
+            reproductorEfectos.Stop();
+
+            // Luego reproduce limpio el sonido de Game Over.
             reproductorEfectos.PlayOneShot(sonidoGameOver);
         }
     }

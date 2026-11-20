@@ -69,6 +69,32 @@ public class GestorSupervisor : MonoBehaviour
         {
             StartCoroutine(CorrutinaSincronizarClaveGlobal());
         }
+
+        if (inputNombreJugador != null)
+        {
+            // Limitamos el nombre a máximo 30 letras en total.
+            inputNombreJugador.characterLimit = 30;
+
+            // Conectamos nuestro filtro para que revise cada tecla antes de escribirla en pantalla.
+            inputNombreJugador.onValidateInput += ValidarSoloLetrasYEspacios;
+        }
+    }
+
+    private char ValidarSoloLetrasYEspacios(string textoActual, int indiceCaracter, char caracterPresionado)
+    {
+        // 'char.IsLetter' devuelve True para cualquier letra (incluyendo ñ y tildes).
+        // Permitimos también el espacio (' ') solo si no es el primer carácter ni hay dos espacios seguidos.
+        if (char.IsLetter(caracterPresionado))
+        {
+            return caracterPresionado; // Deja pasar la letra.
+        }
+        else if (caracterPresionado == ' ' && textoActual.Length > 0 && textoActual[textoActual.Length - 1] != ' ')
+        {
+            return caracterPresionado; // Permite un solo espacio para separar nombre y apellido.
+        }
+
+        // Si presionó un número (0-9) o un símbolo (@, ., -, etc.), devolvemos '\0' (vacío) para bloquearlo.
+        return '\0';
     }
 
     // =========================================================================
@@ -183,7 +209,7 @@ public class GestorSupervisor : MonoBehaviour
     // =========================================================================
     public void GuardarEvaluacionJugador(string nombreModulo, int promedio, string diagnostico, string detalleCasos)
     {
-        string nombreEmpleado = "Aspirante Sin Nombre";
+        string nombreEmpleado = "Persona Sin Nombre";
         if (inputNombreJugador != null && !string.IsNullOrEmpty(inputNombreJugador.text))
         {
             nombreEmpleado = inputNombreJugador.text;
@@ -193,7 +219,7 @@ public class GestorSupervisor : MonoBehaviour
 
         string bloqueRegistro =
             " ========================================================\n" +
-            "EMPLEADO / ASPIRANTE: " + nombreEmpleado.ToUpper() + "\n" +
+            "EMPLEADO: " + nombreEmpleado.ToUpper() + "\n" +
             "FECHA: " + fechaActual + " | MÓDULO: " + nombreModulo + "\n" +
             "PROMEDIO / PUNTAJE: " + promedio + "%\n" +
             "DIAGNÓSTICO:\n" + diagnostico + "\n\n" +
@@ -374,7 +400,7 @@ public class GestorSupervisor : MonoBehaviour
             "button { background: #0096D6; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 5px; cursor: pointer; }" +
             "@media print { button { display: none; } }</style></head><body><div class='contenedor'>" +
             "<button onclick='window.print()'>Descargar / Guardar como PDF</button>" +
-            "<h1>NEXOBANK - DEPARTAMENTO DE AUDITORÍA Y SELECCIÓN</h1>" +
+            "<h1>NEXOBANK - DEPARTAMENTO DE AUDITORÍA</h1>" +
             "<h3>Informe Consolidado Multi-Equipo (Servicio, Phishing y Psicotécnico)</h3>" +
             "<p>Fecha de generación del reporte: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm") + "</p>" +
             "<pre>" + contenidoHistorial + "</pre></div></body></html>";

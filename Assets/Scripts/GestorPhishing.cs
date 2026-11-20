@@ -1,37 +1,34 @@
-// Importamos las herramientas base de Unity.
 using UnityEngine;
-// Librería obligatoria para controlar componentes 'Image' del Canvas.
 using UnityEngine.UI;
-// Librería obligatoria para controlar los textos TextMeshPro de la ventana emergente.
 using TMPro;
+using System.Collections.Generic; // NUEVO: Necesario para List<int>
 
-// =========================================================================
-// PLANTILLA DE DATOS SERIALIZABLE: CasoPhishing
-// =========================================================================
 [System.Serializable]
 public class CasoPhishing
 {
     [Tooltip("Ejemplo: 'Caso 1: Smishing por WhatsApp' o 'Caso 3: Vishing Telefónico'")]
     public string nombreDelCaso;
 
-    [Tooltip("Arrastra aquí la imagen del correo, SMS, llamada o QR creada por el diseñador")]
+    [Tooltip("Arrastra aquí la imagen del correo, WhatsApp, llamada o QR")]
     public Sprite imagenDelMensaje;
+
+    [Tooltip("Opcional: Arrastra aquí el audio de la voz IA si este nivel es una llamada telefónica (Vishing)")]
+    public AudioClip audioLlamadaCaso;
 
     [Tooltip("Marca la casilla (True) si es Phishing/Peligroso. Déjala vacía (False) si es Seguro/Legítimo.")]
     public bool esPhishing;
 
     [TextArea(2, 4)]
-    [Tooltip("Explica qué pista delata el ataque de Phishing o por qué el mensaje es legítimo")]
     public string retroalimentacionPhishing;
 }
 
-// =========================================================================
-// CLASE PRINCIPAL DEL MÓDULO 2: GestorPhishing
-// =========================================================================
 public class GestorPhishing : MonoBehaviour
 {
     [Header("Elementos en Pantalla")]
     public Image contenedorImagenPantalla;
+
+    [Tooltip("Opcional: Botón de 'Repetir Audio' que solo aparecerá en los niveles que tengan voz IA")]
+    public GameObject botonRepetirLlamada;
 
     [Header("Ventana Emergente de Retroalimentación")]
     public GameObject panelPopUpFeedback;
@@ -41,18 +38,18 @@ public class GestorPhishing : MonoBehaviour
     [Header("Conexión con otros sistemas")]
     public GestorMecanicas scriptMecanicas;
     public GestorAudio scriptAudio;
-    public GestorSupervisor scriptSupervisor; // NUEVO (PUNTO 6): Conexión con el historial del Supervisor.
+    public GestorSupervisor scriptSupervisor;
 
-    [Header("Lista de los 5 Casos (Correos, SMS, QR, etc.)")]
+    [Header("Lista de Casos")]
     public CasoPhishing[] nivelesPhishing;
-    private int nivelActual = 0;
-    private bool popUpActivoEnPhishing = false;
 
-    // =========================================================================
-    // NUEVO (PUNTO 6): VARIABLES PARA EL PROMEDIO Y DIAGNÓSTICO DE PHISHING
-    // =========================================================================
-    private int erroresEnCasoActual = 0; // Cuenta si se equivocó en la imagen actual antes de acertar.
-    private int casosSinErrores = 0;     // Cuenta cuántos de los 5 casos detectó al primer intento.
+    // NUEVO (PUNTO 2): Control del orden aleatorio
+    private List<int> ordenAleatorio = new List<int>();
+    private int pasoActual = 0;
+
+    private bool popUpActivoEnPhishing = false;
+    private int erroresEnCasoActual = 0;
+    private int casosSinErrores = 0;
 
     [HideInInspector] public int ultimoPromedioPhishing = 0;
     [HideInInspector] public string ultimoDiagnosticoPhishing = "";
@@ -60,21 +57,43 @@ public class GestorPhishing : MonoBehaviour
 
     void Start()
     {
-        if (panelPopUpFeedback != null)
-        {
-            panelPopUpFeedback.SetActive(false);
-        }
-
-        CargarImagenNivel(0);
+        if (panelPopUpFeedback != null) panelPopUpFeedback.SetActive(false);
+        if (botonRepetirLlamada != null) botonRepetirLlamada.SetActive(false);
     }
 
-    public void CargarImagenNivel(int indice)
+    // =========================================================================
+    // NUEVO (PUNTO 2): ALGORITMO FISHER-YATES PARA BARAJAR CASOS DE PHISHING
+    // =========================================================================
+    private void BarajarCasosPhishing()
     {
-        nivelActual = indice;
+        ordenAleatorio.Clear();
 
-        // Si empieza desde el primer caso (índice 0), limpiamos las estadísticas de la partida anterior.
-        if (indice == 0)
+        for (int i = 0; i < nivelesPhishing.Length; i++)
         {
+            ordenAleatorio.Add(i);
+        }
+
+        for (int i = ordenAleatorio.Count - 1; i > 0; i--)
+        {
+            int posicionAzar = Random.Range(0, i + 1);
+            int temporal = ordenAleatorio[i];
+            ordenAleatorio[i] = ordenAleatorio[posicionAzar];
+            ordenAleatorio[posicionAzar] = temporal;
+        }
+
+        Debug.Log("[Detector de Phishing] Nuevo orden aleatorio generado: " + string.Join(", ", ordenAleatorio));
+    }
+
+    public void CargarImagenNivel(int indicePaso)
+    {
+        if (nivelesPhishing == null || nivelesPhishing.Length == 0) return;
+
+        pasoActual = indicePaso;
+
+        // Si empieza desde el primer turno (0), limpiamos estadísticas y barajamos las imágenes.
+        if (indicePaso == 0)
+        {
+            BarajarCasosPhishing();
             casosSinErrores = 0;
             ultimoPromedioPhishing = 0;
             ultimoDiagnosticoPhishing = "";
@@ -83,58 +102,80 @@ public class GestorPhishing : MonoBehaviour
 
         erroresEnCasoActual = 0;
 
-        if (panelPopUpFeedback != null)
-        {
-            panelPopUpFeedback.SetActive(false);
-        }
+        if (panelPopUpFeedback != null) panelPopUpFeedback.SetActive(false);
         popUpActivoEnPhishing = false;
 
-        contenedorImagenPantalla.sprite = nivelesPhishing[nivelActual].imagenDelMensaje;
+        // CLAVE DEL PUNTO 2: Leemos el caso real que tocó en este turno.
+        int indiceReal = ordenAleatorio[pasoActual];
+        CasoPhishing casoActual = nivelesPhishing[indiceReal];
+
+        contenedorImagenPantalla.sprite = casoActual.imagenDelMensaje;
+        contenedorImagenPantalla.preserveAspect = true;
+
+        if (scriptAudio != null && scriptAudio.reproductorEfectos != null)
+        {
+            scriptAudio.reproductorEfectos.Stop();
+        }
+
+        if (casoActual.audioLlamadaCaso != null)
+        {
+            if (botonRepetirLlamada != null) botonRepetirLlamada.SetActive(true);
+            ReproducirVozLlamadaActual();
+        }
+        else
+        {
+            if (botonRepetirLlamada != null) botonRepetirLlamada.SetActive(false);
+        }
     }
 
-    // =========================================================================
-    // MÉTODOS PARA LOS BOTONES DE DECISIÓN (VERDE Y ROJO)
-    // =========================================================================
+    public void ReproducirVozLlamadaActual()
+    {
+        if (ordenAleatorio.Count == 0) return;
 
-    // 1. Conectado al BOTÓN VERDE ("Seguro")
+        int indiceReal = ordenAleatorio[pasoActual];
+        AudioClip clipActual = nivelesPhishing[indiceReal].audioLlamadaCaso;
+
+        if (scriptAudio != null && scriptAudio.reproductorEfectos != null && clipActual != null)
+        {
+            scriptAudio.reproductorEfectos.Stop();
+            scriptAudio.reproductorEfectos.PlayOneShot(clipActual);
+        }
+    }
+
     public void BotonVerdeSeguro()
     {
-        if (nivelesPhishing[nivelActual].esPhishing == false)
-        {
-            // ¡ACERTÓ!
+        int indiceReal = ordenAleatorio[pasoActual];
+        if (nivelesPhishing[indiceReal].esPhishing == false)
             RegistrarAciertoCaso("¡ANÁLISIS CORRECTO!");
-        }
         else
-        {
-            // ¡SE EQUIVOCÓ! Aprobó una trampa de Phishing.
             RegistrarFalloCaso();
-        }
     }
 
-    // 2. Conectado al BOTÓN ROJO ("Peligroso / Reportar")
     public void BotonRojoPeligroso()
     {
-        if (nivelesPhishing[nivelActual].esPhishing == true)
-        {
-            // ¡ACERTÓ!
+        int indiceReal = ordenAleatorio[pasoActual];
+        if (nivelesPhishing[indiceReal].esPhishing == true)
             RegistrarAciertoCaso("¡AMENAZA BLOQUEADA!");
-        }
         else
-        {
-            // ¡SE EQUIVOCÓ! Reportó un mensaje oficial legítimo.
             RegistrarFalloCaso();
-        }
     }
 
-    // Método auxiliar cuando el jugador acierta (con botón verde o rojo).
     private void RegistrarAciertoCaso(string tituloPopUp)
     {
+        if (scriptAudio != null && scriptAudio.reproductorEfectos != null)
+        {
+            scriptAudio.reproductorEfectos.Stop();
+        }
+
         scriptMecanicas.PausarReloj();
         scriptAudio.ReproducirAcierto();
 
-        string nombreCaso = string.IsNullOrEmpty(nivelesPhishing[nivelActual].nombreDelCaso)
-            ? "Caso " + (nivelActual + 1)
-            : nivelesPhishing[nivelActual].nombreDelCaso;
+        int indiceReal = ordenAleatorio[pasoActual];
+        CasoPhishing casoActual = nivelesPhishing[indiceReal];
+
+        string nombreCaso = string.IsNullOrEmpty(casoActual.nombreDelCaso)
+            ? "Caso " + (indiceReal + 1)
+            : casoActual.nombreDelCaso;
 
         if (erroresEnCasoActual == 0)
         {
@@ -146,23 +187,24 @@ public class GestorPhishing : MonoBehaviour
             ultimoReportePhishing += "• " + nombreCaso + ": SUPERADO CON FALLO PREVIO\n";
         }
 
-        MostrarPopUp(tituloPopUp, nivelesPhishing[nivelActual].retroalimentacionPhishing);
+        MostrarPopUp(tituloPopUp, casoActual.retroalimentacionPhishing);
     }
 
-    // Método auxiliar cuando el jugador falla y pierde un candado.
     private void RegistrarFalloCaso()
     {
         erroresEnCasoActual++;
         scriptMecanicas.RestarCandado();
 
-        // Si al restar el candado perdió las 3 vidas (se encendió Game Over), guardamos el reporte de derrota.
         if (scriptMecanicas.panelGameOver.activeSelf == true)
         {
-            string nombreCaso = string.IsNullOrEmpty(nivelesPhishing[nivelActual].nombreDelCaso)
-                ? "Caso " + (nivelActual + 1)
-                : nivelesPhishing[nivelActual].nombreDelCaso;
+            int indiceReal = ordenAleatorio[pasoActual];
+            CasoPhishing casoActual = nivelesPhishing[indiceReal];
 
-            ultimoReportePhishing += "• " + nombreCaso + ": REPROBADO (Vulneración de Seguridad)\n";
+            string nombreCaso = string.IsNullOrEmpty(casoActual.nombreDelCaso)
+                ? "Caso " + (indiceReal + 1)
+                : casoActual.nombreDelCaso;
+
+            ultimoReportePhishing += "• " + nombreCaso + ": REQUIERE REFUERZO (Agotó candados)\n";
             CalcularYGuardarDiagnosticoPhishing(false);
         }
     }
@@ -177,10 +219,7 @@ public class GestorPhishing : MonoBehaviour
 
     public void BotonCerrarPopUpPhishing()
     {
-        if (popUpActivoEnPhishing == false)
-        {
-            return;
-        }
+        if (popUpActivoEnPhishing == false) return;
 
         panelPopUpFeedback.SetActive(false);
         popUpActivoEnPhishing = false;
@@ -191,45 +230,32 @@ public class GestorPhishing : MonoBehaviour
 
     private void AvanzarSiguienteCaso()
     {
-        nivelActual++;
+        pasoActual++;
 
-        if (nivelActual < nivelesPhishing.Length)
+        if (pasoActual < ordenAleatorio.Count)
         {
-            CargarImagenNivel(nivelActual);
+            CargarImagenNivel(pasoActual);
         }
         else
         {
-            // ¡Completó los 5 casos de Phishing! Calculamos y guardamos su diagnóstico en el Supervisor.
             CalcularYGuardarDiagnosticoPhishing(true);
             scriptMecanicas.VictoriaPhishing();
         }
     }
 
-    // =========================================================================
-    // NUEVO (PUNTO 6): CÁLCULO Y GUARDADO DEL DIAGNÓSTICO DE CIBERSEGURIDAD
-    // =========================================================================
     public void CalcularYGuardarDiagnosticoPhishing(bool superoTodosLosCasos)
     {
-        ultimoPromedioPhishing = (casosSinErrores * 100) / nivelesPhishing.Length;
+        ultimoPromedioPhishing = (casosSinErrores * 100) / ordenAleatorio.Count;
 
         if (superoTodosLosCasos == false)
-        {
-            ultimoDiagnosticoPhishing = "NO APTO EN CIBERSEGURIDAD - RIESGO CRÍTICO DE HACKEO (Módulo Reprobado)";
-        }
+            ultimoDiagnosticoPhishing = "BRECHA CRÍTICA DE CIBERSEGURIDAD (Requiere taller práctico de ingeniería social)";
         else if (ultimoPromedioPhishing == 100)
-        {
-            ultimoDiagnosticoPhishing = "APTO SOBRESALIENTE EN CIBERSEGURIDAD\nIdentifica sin errores ataques de Phishing, Smishing, Vishing y Quishing.";
-        }
+            ultimoDiagnosticoPhishing = "DOMINIO ALTO EN CIBERDEFENSA\nIdentifica sin errores ataques de Phishing, Smishing, Vishing y Quishing.";
         else if (ultimoPromedioPhishing >= 80)
-        {
-            ultimoDiagnosticoPhishing = "APTO CON OBSERVACIÓN EN CIBERSEGURIDAD\nBuen criterio general, pero presentó un descuido ante ingeniería social.";
-        }
+            ultimoDiagnosticoPhishing = "EN PROGRESO (Reforzar verificación de canales)\nBuen criterio general, con una alerta puntual por repasar.";
         else
-        {
-            ultimoDiagnosticoPhishing = "VULNERABILIDAD MODERADA - REQUIERE REFUERZO EN SEGURIDAD TI\nSuperó el módulo al límite; alto riesgo de caer en enlaces o llamadas fraudulentas.";
-        }
+            ultimoDiagnosticoPhishing = "VULNERABILIDAD MODERADA - REQUIERE REFUERZO EN SEGURIDAD TI\nSuperó la práctica al límite; reforzar señales de ingeniería social.";
 
-        // Enviamos el reporte al archivo del Supervisor identificándolo como el MÓDULO 2.
         if (scriptSupervisor != null)
         {
             scriptSupervisor.GuardarEvaluacionJugador("MÓDULO 2: DETECTOR DE PHISHING", ultimoPromedioPhishing, ultimoDiagnosticoPhishing, ultimoReportePhishing);

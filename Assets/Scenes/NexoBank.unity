@@ -695,11 +695,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2020113787}
-  m_Father: {fileID: 646036942}
+  m_Father: {fileID: 1721040538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 355}
+  m_AnchoredPosition: {x: 0, y: 342.5}
   m_SizeDelta: {x: 1870, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &45384773
@@ -1353,9 +1353,84 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 22}
+  m_AnchoredPosition: {x: 0, y: 22.000061}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &114515369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 114515370}
+  - component: {fileID: 114515372}
+  - component: {fileID: 114515371}
+  m_Layer: 5
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &114515370
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114515369}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1139988179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.25}
+  m_AnchorMax: {x: 1, y: 0.75}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &114515371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114515369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8039216, g: 0.8039216, b: 0.8039216, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &114515372
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114515369}
+  m_CullTransparentMesh: 1
 --- !u!1 &135311128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,7 +1982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.19995117, y: -0.2000122}
+  m_AnchoredPosition: {x: -0.19995117, y: -0.20007324}
   m_SizeDelta: {x: 66.7, y: 66.7}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &171542622
@@ -2016,6 +2091,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171542620}
   m_CullTransparentMesh: 1
+--- !u!1 &190952873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 190952874}
+  m_Layer: 5
+  m_Name: Fill Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &190952874
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190952873}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1926726819}
+  m_Father: {fileID: 1139988179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.25}
+  m_AnchorMax: {x: 1, y: 0.75}
+  m_AnchoredPosition: {x: -5.000061, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &194360361
 GameObject:
   m_ObjectHideFlags: 0
@@ -4758,11 +4869,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 325418757}
-  m_Father: {fileID: 646036942}
+  m_Father: {fileID: 1721040538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 95}
+  m_AnchoredPosition: {x: 0, y: 82.49998}
   m_SizeDelta: {x: 1870, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &459851635
@@ -6935,9 +7046,7 @@ RectTransform:
   - {fileID: 1721040538}
   - {fileID: 974214735}
   - {fileID: 1282969511}
-  - {fileID: 45384772}
-  - {fileID: 1973547237}
-  - {fileID: 459851634}
+  - {fileID: 1139988179}
   m_Father: {fileID: 284530975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8825,7 +8934,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &776081683
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9113,6 +9222,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 826511851}
   m_CullTransparentMesh: 1
+--- !u!1 &832479054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 832479055}
+  m_Layer: 5
+  m_Name: Handle Slide Area
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &832479055
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832479054}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2039383611}
+  m_Father: {fileID: 1139988179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &837199942
 GameObject:
   m_ObjectHideFlags: 0
@@ -12632,194 +12777,259 @@ MonoBehaviour:
   textoEnBoton1: {fileID: 2020113788}
   textoEnBoton2: {fileID: 1387674302}
   textoEnBoton3: {fileID: 325418758}
+  barraProgresoAnimada: {fileID: 1139988180}
+  textoEtapaMotivacional: {fileID: 0}
+  contenedorTarjetaPregunta: {fileID: 646036941}
   panelAgradecimientoFinal: {fileID: 1878815628}
   textoDiagnosticoJugador: {fileID: 1685227599}
   simboloCompletadoPsicologico: {fileID: 1613027663}
   scriptAudio: {fileID: 1109512282}
   scriptSupervisor: {fileID: 1109512283}
   preguntas:
-  - temaEvaluado: "Integridad, \xC9tica y Estabilidad"
-    enunciadoPregunta: "Al realizar el arqueo de tu caja al final del d\xEDa, descubres
-      que te sobran $20 USD que ning\xFAn cliente ha reclamado. \xBFQu\xE9 haces?"
-    textoBoton1: Reporto el sobrante de inmediato en el acta de arqueo y lo ingreso
-      a la cuenta contable de diferencias del banco.
-    textoBoton2: "Guardo los $20 USD en mi gaveta bajo llave por si el cliente regresa
-      ma\xF1ana a reclamarlos sin abrir acta hoy."
-    textoBoton3: Lo conservo como fondo personal para cubrir posibles faltantes futuros
-      en mi caja y evitar sanciones.
-    puntosBoton1: 2
-    puntosBoton2: 1
-    puntosBoton3: 0
-  - temaEvaluado: "Integridad, \xC9tica y Estabilidad"
-    enunciadoPregunta: "\xBFCu\xE1l es tu postura frente a las normas de cumplimiento
-      bancario cuando hacen m\xE1s lento un tr\xE1mite urgente?"
-    textoBoton1: Sigo las normas casi siempre, pero si veo que el cliente es de confianza
-      busco agilizar algunos pasos secundarios.
-    textoBoton2: "Las normas existen para mitigar riesgos legales; prefiero demorar
-      el tr\xE1mite antes que omitir una validaci\xF3n."
-    textoBoton3: "Creo que el servicio r\xE1pido es lo primero y las reglas deber\xEDan
-      poder saltarse seg\xFAn el criterio de cada asesor."
+  - temaEvaluado: P1 (Diferencia en Arqueo de Caja)
+    enunciadoPregunta: "Durante el cuadre de cierre, identificas un sobrante de $60.000
+      en tu efectivo f\xEDsico. Recuerdas que hace una hora atendiste a un pensionado
+      que hizo varios cambios de billetes, pero ya se retir\xF3 de la sucursal. \xBFQu\xE9
+      decisi\xF3n tomas?"
+    textoBoton1: "Dejo una nota formal en la bit\xE1cora del supervisor y custodio
+      el billete en la cajilla de seguridad de la oficina para entreg\xE1rselo directamente
+      al pensionado cuando regrese ma\xF1ana."
+    textoBoton2: "Contabilizo el sobrante hoy mismo en la cuenta puente de diferencias
+      de caja y levanto el acta oficial, para que si el cliente reclama se le reintegre
+      mediante nota cr\xE9dito auditada."
+    textoBoton3: "Reviso las c\xE1maras junto con el vigilante para confirmar si
+      fue del pensionado y llamo a su tel\xE9fono registrado para ofrecerle llevarle
+      o transferirle el dinero hoy mismo."
     puntosBoton1: 1
     puntosBoton2: 2
     puntosBoton3: 0
-  - temaEvaluado: "Integridad, \xC9tica y Estabilidad"
-    enunciadoPregunta: "Si cometes un error digitando una transferencia y nadie m\xE1s
-      en la oficina se ha dado cuenta todav\xEDa, \xBFc\xF3mo reaccionas?"
-    textoBoton1: "Informo de inmediato a mi supervisor para activar el protocolo
-      de reversi\xF3n antes de que cierre el ciclo contable."
-    textoBoton2: Intento contactar yo mismo al cliente receptor para pedirle que
-      devuelva el dinero antes de avisarle a mi jefe.
-    textoBoton3: "Espero a ver si el cliente afectado presenta un reclamo formal
-      en los pr\xF3ximos d\xEDas para no alarmar al \xE1rea."
+  - temaEvaluado: "P2 (Verificaci\xF3n Biom\xE9trica Fallida)"
+    enunciadoPregunta: "Un cliente reconocido de la oficina intenta cobrar un cheque,
+      pero el lector biom\xE9trico rechaza tres veces su huella dactilar por resequedad
+      en las manos y el sistema bloquea la validaci\xF3n autom\xE1tica. \xBFC\xF3mo
+      procedes?"
+    textoBoton1: "Solicito la intervenci\xF3n del subgerente operativo para aplicar
+      el protocolo de excepci\xF3n con doble firma, validaci\xF3n en centrales de
+      riesgo y toma de huella f\xEDsica en tinta."
+    textoBoton2: "Verifico su identidad cotejando su c\xE9dula original contra el
+      registro de firmas del sistema y proceso el pago bajo mi perfil para no retrasar
+      la fila."
+    textoBoton3: "Como conozco personalmente al cliente desde hace a\xF1os, le sugiero
+      endosar el cheque a nombre de su acompa\xF1ante para que pueda cobrarlo de
+      inmediato con la huella de \xE9l."
     puntosBoton1: 2
     puntosBoton2: 1
     puntosBoton3: 0
-  - temaEvaluado: "Integridad, \xC9tica y Estabilidad"
-    enunciadoPregunta: Un familiar cercano te pide revisar en el sistema del banco
-      si una empresa con la que va a hacer negocios tiene deudas o embargos.
-    textoBoton1: "Me niego explic\xE1ndole que toda consulta queda auditada en mi
-      usuario y violar\xEDa el secreto bancario."
-    textoBoton2: "No le imprimo nada, pero miro r\xE1pidamente la pantalla y solo
-      le doy un consejo general sin darle cifras."
-    textoBoton3: "Lo consulto r\xE1pido desde el computador de la oficina porque
-      es para proteger el patrimonio de mi familia."
-    puntosBoton1: 2
-    puntosBoton2: 1
-    puntosBoton3: 0
-  - temaEvaluado: "Integridad, \xC9tica y Estabilidad"
-    enunciadoPregunta: "Cuando recibes una cr\xEDtica directa de tu supervisor sobre
-      un indicador bajo en tu gesti\xF3n mensual, \xBFqu\xE9 sientes y haces?"
-    textoBoton1: "Me defiendo explicando que la culpa fue del sistema lento o de
-      la actitud dif\xEDcil de los clientes de ese mes."
-    textoBoton2: Acepto el comentario en silencio, aunque me frustra un poco que
-      no se valore el resto de mi esfuerzo.
-    textoBoton3: "Solicito ejemplos concretos de mis fallos y dise\xF1o un plan de
-      mejora diario para corregir la m\xE9trica."
+  - temaEvaluado: "P3 (Error de Digitaci\xF3n Detectado a Tiempo)"
+    enunciadoPregunta: "usto despu\xE9s de que un cliente se retira de tu ventanilla,
+      notas que abonaste su dep\xF3sito de $500 USD a una cuenta cuyo n\xFAmero termina
+      en 8 en lugar de 9. El dinero sigue dentro del mismo banco. \xBFQu\xE9 haces?"
+    textoBoton1: "Realizo de inmediato un d\xE9bito correctivo desde mi terminal
+      hacia la cuenta correcta y le env\xEDo por correo el nuevo comprobante al cliente
+      para solucionarlo sin contratiempos."
+    textoBoton2: "Me comunico telef\xF3nicamente con el titular de la cuenta terminada
+      en 8 para explicarle el error involuntario y solicitar su autorizaci\xF3n verbal
+      antes de reversar el saldo."
+    textoBoton3: "Congelo preventivamente el movimiento mediante alerta al supervisor
+      de operaciones y radico el formato de reversi\xF3n por error operativo adjuntando
+      el soporte f\xEDsico original."
     puntosBoton1: 0
     puntosBoton2: 1
     puntosBoton3: 2
-  - temaEvaluado: "Tolerancia a la Presi\xF3n y Adaptabilidad Social"
-    enunciadoPregunta: "Un cliente furioso golpea el mostrador y grita que el banco
-      le \"rob\xF3\" su dinero por un cobro de cuota de manejo. \xBFC\xF3mo act\xFAas?"
-    textoBoton1: "Llamo inmediatamente al vigilante o le paso el turno a otro compa\xF1ero
-      porque no tolero que me alcen la voz."
-    textoBoton2: Mantengo un tono de voz neutro y pausado, valido su molestia sin
-      tomarlo personal y le desgloso el extracto en pantalla.
-    textoBoton3: "Le pido seriamente que baje la voz primero, advirti\xE9ndole que
-      si sigue gritando no podr\xE9 revisar su cuenta."
-    puntosBoton1: 0
-    puntosBoton2: 2
-    puntosBoton3: 1
-  - temaEvaluado: "Tolerancia a la Presi\xF3n y Adaptabilidad Social"
-    enunciadoPregunta: "Faltan 10 minutos para tu hora de salida, tienes tres reportes
-      pendientes y llega un cliente con un tr\xE1mite complejo de 25 minutos."
-    textoBoton1: Atiendo al cliente siguiendo todos los pasos de seguridad y notifico
-      a mi jefe el tiempo extra para cerrar los reportes.
-    textoBoton2: "Le digo al cliente que el sistema ya est\xE1 cerrando y que debe
-      regresar ma\xF1ana a primera hora."
-    textoBoton3: "Atiendo al cliente lo m\xE1s r\xE1pido posible resumiendo las explicaciones
-      para alcanzar a terminar mis reportes a tiempo."
-    puntosBoton1: 2
-    puntosBoton2: 0
-    puntosBoton3: 1
-  - temaEvaluado: "Tolerancia a la Presi\xF3n y Adaptabilidad Social"
-    enunciadoPregunta: "Dos compa\xF1eros de tu sucursal discuten frente a ti por
-      un error operativo y el ambiente se vuelve tenso. \xBFCu\xE1l es tu rol?"
-    textoBoton1: "Les propongo enfocarnos en resolver la operaci\xF3n del cliente
-      primero y revisar la causa t\xE9cnica en privado al cierre."
-    textoBoton2: "Prefiero no intervenir en absoluto, ponerme mis aud\xEDfonos y
-      concentrarme \xFAnicamente en mi puesto de trabajo."
-    textoBoton3: "Le doy la raz\xF3n al compa\xF1ero con el que mejor me llevo para
-      que la discusi\xF3n termine r\xE1pido."
+  - temaEvaluado: "P4 (Conflicto de Inter\xE9s Familiar)"
+    enunciadoPregunta: "Te asignan el an\xE1lisis preliminar de una solicitud de
+      cr\xE9dito empresarial y al abrir el expediente descubres que uno de los socios
+      minoritarios de esa compa\xF1\xEDa es primo tuyo, aunque llevan a\xF1os sin
+      hablarse."
+    textoBoton1: "Suspendo la revisi\xF3n del expediente, declaro formalmente el
+      v\xEDnculo de consanguinidad ante mi jefe directo y solicito la reasignaci\xF3n
+      del caso a otro analista."
+    textoBoton2: "Contin\xFAo con el an\xE1lisis aplicando estrictamente las pol\xEDticas
+      matem\xE1ticas del banco, asegur\xE1ndome de no darle ning\xFAn trato preferencial
+      ni informar a mi familiar."
+    textoBoton3: "Le comento verbalmente a mi compa\xF1ero de puesto para que \xE9l
+      revise mi dictamen final al terminar y verifique que fui totalmente imparcial."
     puntosBoton1: 2
     puntosBoton2: 1
     puntosBoton3: 0
-  - temaEvaluado: "Tolerancia a la Presi\xF3n y Adaptabilidad Social"
-    enunciadoPregunta: "El banco cambia repentinamente el software de atenci\xF3n
-      al cliente por uno nuevo que al principio te resulta confuso. \xBFQu\xE9 haces?"
-    textoBoton1: "Uso solo las funciones b\xE1sicas que ya entiendo y le pido ayuda
-      al compa\xF1ero de al lado cuando sale algo complejo."
-    textoBoton2: "Me quejo con el equipo porque el programa anterior era mucho m\xE1s
-      r\xE1pido y el cambio retrasa nuestro trabajo."
-    textoBoton3: "Dedico tiempo a practicar en el entorno de pruebas y consulto el
-      manual t\xE9cnico hasta dominar los nuevos atajos."
-    puntosBoton1: 1
-    puntosBoton2: 0
-    puntosBoton3: 2
-  - temaEvaluado: "Tolerancia a la Presi\xF3n y Adaptabilidad Social"
-    enunciadoPregunta: "Durante una jornada con ca\xEDda parcial del sistema, los
-      clientes en la fila empiezan a impacientarse. \xBFQu\xE9 iniciativa tomas?"
-    textoBoton1: "Informo con transparencia el estado t\xE9cnico y adelanto la revisi\xF3n
-      de documentos f\xEDsicos para agilizar cuando vuelva la red."
-    textoBoton2: "Permanezco en mi puesto esperando en silencio a que el \xE1rea
-      de Sistemas restablezca la conexi\xF3n."
-    textoBoton3: "Apago el letrero de mi ventanilla y aprovecho para ir a cafeter\xEDa
-      mientras vuelve a funcionar el sistema."
-    puntosBoton1: 2
-    puntosBoton2: 1
-    puntosBoton3: 0
-  - temaEvaluado: "Skills Bancarias, Agilidad Num\xE9rica y Criterio Comercial"
-    enunciadoPregunta: "Un cliente solicita un certificado bancario, pero notas que
-      el n\xFAmero de c\xE9dula en el sistema tiene un d\xEDgito distinto al de su
-      documento f\xEDsico."
-    textoBoton1: "Le entrego el certificado tal como sale en el sistema y le recomiendo
-      que otro d\xEDa pase a corregir su c\xE9dula."
-    textoBoton2: "Detengo la emisi\xF3n del certificado y realizo primero el proceso
-      formal de actualizaci\xF3n y validaci\xF3n biom\xE9trica de datos."
-    textoBoton3: "Edito manualmente el PDF del certificado para ponerle el n\xFAmero
-      correcto y que el cliente se vaya satisfecho."
+  - temaEvaluado: P5 (Cumplimiento de Meta Comercial vs. Perfilamiento)
+    enunciadoPregunta: "Es el \xFAltimo d\xEDa del mes, te falta colocar una tarjeta
+      de cr\xE9dito para lograr el bono de tu sucursal y atiendes a un cliente con
+      excelente puntaje que viene \xFAnicamente a cancelar una cuenta inactiva."
+    textoBoton1: "Le informo que para procesar la cancelaci\xF3n de su cuenta sin
+      cobros administrativos es recomendable activar primero la tarjeta preaprobada
+      con exoneraci\xF3n de cuota por seis meses."
+    textoBoton2: "Proceso primero la cancelaci\xF3n que solicit\xF3 y luego indago
+      sus proyectos financieros actuales para presentarle la tarjeta solo si los
+      beneficios se ajustan a su flujo de caja."
+    textoBoton3: "Le propongo dejar su cuenta abierta con saldo m\xEDnimo y activarle
+      de inmediato el cupo de la tarjeta de cr\xE9dito asegur\xE1ndole que podr\xE1
+      cancelarla por tel\xE9fono cuando quiera."
     puntosBoton1: 1
     puntosBoton2: 2
     puntosBoton3: 0
-  - temaEvaluado: "Skills Bancarias, Agilidad Num\xE9rica y Criterio Comercial"
-    enunciadoPregunta: "C\xE1lculo financiero r\xE1pido: Si un cliente invierte $1,000
-      USD en un CDT que paga el 10% anual y retira todo al cumplir un a\xF1o, \xBFcu\xE1nto
-      recibe antes de impuestos?"
-    textoBoton1: "Recibe $100 USD en total al finalizar el a\xF1o."
-    textoBoton2: "Recibe $1,100 USD ($1,000 USD de su capital inicial m\xE1s $100
-      USD de rendimientos generados)."
-    textoBoton3: "Recibe $1,010 USD en total al finalizar el a\xF1o."
-    puntosBoton1: 0
-    puntosBoton2: 2
-    puntosBoton3: 1
-  - temaEvaluado: "Skills Bancarias, Agilidad Num\xE9rica y Criterio Comercial"
-    enunciadoPregunta: "Un joven universitario sin historial crediticio pide una
-      tarjeta de cr\xE9dito con cupo alto de $10,000 USD, la cual el sistema rechaza.
-      \xBFQu\xE9 le ofreces?"
-    textoBoton1: "Le sugiero que declare ingresos mensuales falsos m\xE1s altos en
-      el formulario para ver si el sistema lo aprueba."
-    textoBoton2: "Le explico c\xF3mo funciona la capacidad de endeudamiento y le
-      ofrezco una tarjeta amparada o de cupo inicial para construir vida crediticia."
-    textoBoton3: "Le digo simplemente que el sistema lo rechaz\xF3 por falta de puntaje
-      y que vuelva a intentarlo el pr\xF3ximo a\xF1o."
-    puntosBoton1: 0
-    puntosBoton2: 2
-    puntosBoton3: 1
-  - temaEvaluado: "Skills Bancarias, Agilidad Num\xE9rica y Criterio Comercial"
-    enunciadoPregunta: "Cu\xE1l de estos datos NUNCA debes pedirle a un cliente que
-      te dicte en voz alta durante una atenci\xF3n en oficina o por tel\xE9fono?"
-    textoBoton1: "El monto aproximado de la transacci\xF3n que desea realizar en
-      ventanilla."
-    textoBoton2: "Su n\xFAmero de documento de identidad y su correo electr\xF3nico
-      para actualizar el registro."
-    textoBoton3: "Su clave personal de cajero, la contrase\xF1a de la Sucursal Virtual
-      o el c\xF3digo de seguridad CVV de su tarjeta."
-    puntosBoton1: 0
-    puntosBoton2: 1
-    puntosBoton3: 2
-  - temaEvaluado: "Skills Bancarias, Agilidad Num\xE9rica y Criterio Comercial"
-    enunciadoPregunta: "Si al revisar los documentos de un cr\xE9dito hipotecario
-      notas que los certificados laborales parecen alterados con otro tipo de letra,
-      \xBFqu\xE9 haces?"
-    textoBoton1: "Recibo la carpeta sin confrontar agresivamente al solicitante y
-      escalo el caso de inmediato al \xE1rea de Prevenci\xF3n de Fraudes."
-    textoBoton2: "Paso la solicitud a estudio de cr\xE9dito normalmente, ya que verificar
-      si son reales no es mi responsabilidad directa."
-    textoBoton3: "Rechazo los papeles en el acto dici\xE9ndole al cliente en voz
-      alta que sus documentos son falsos."
-    puntosBoton1: 2
+  - temaEvaluado: P6 (Manejo de Objeciones y Cliente Alterado)
+    enunciadoPregunta: "Un cliente empresarial reclama en voz alta frente a otros
+      usuarios porque una transferencia internacional urgente fue retenida por el
+      \xE1rea de Monitoreo de Cumplimiento y amenaza con retirar todas sus cuentas
+      del banco."
+    textoBoton1: Lo invito a pasar a una oficina privada y me comprometo a llamar
+      personalmente a Monitoreo para exigir que liberen los fondos en menos de una
+      hora por tratarse de un cliente preferencial.
+    textoBoton2: "Le doy la raz\xF3n sobre la lentitud del \xE1rea de Monitoreo para
+      calmar su molestia y le ayudo a redactar una queja prioritaria dirigida a la
+      gerencia general."
+    textoBoton3: Mantengo una postura serena, le explico que los filtros internacionales
+      protegen la seguridad de su propio capital y gestiono el canal directo para
+      que adjunte el soporte aduanero requerido.
+    puntosBoton1: 1
     puntosBoton2: 0
+    puntosBoton3: 2
+  - temaEvaluado: "P7 (Priorizaci\xF3n bajo Presi\xF3n al Cierre): Son las 4:00 PM
+      (hora de cierre al p\xFAblico)."
+    enunciadoPregunta: "Son las 4:00 PM (hora de cierre al p\xFAblico). Tienes un
+      descuadre contable pendiente de revisar, tu jefe te pide un informe urgente
+      de gesti\xF3n y en la sala queda un adulto mayor confundido con su clave virtual."
+    textoBoton1: "Aseguro primero el cierre contable de mi efectivo para no alterar
+      el arqueo general de b\xF3veda, notifico a mi jefe el orden de prioridad y
+      coordino con el anfitri\xF3n digital la asistencia al adulto mayor."
+    textoBoton2: "Entrego primero el informe que pidi\xF3 mi jefe directo, luego
+      atiendo personalmente al adulto mayor y dejo el descuadre de caja para revisarlo
+      al final de la tarde."
+    textoBoton3: "Dejo mi terminal abierta unos minutos para acompa\xF1ar al adulto
+      mayor hasta dejarle su clave funcionando, pues el servicio humano al cliente
+      debe estar por encima de los cierres internos."
+    puntosBoton1: 2
+    puntosBoton2: 1
+    puntosBoton3: 0
+  - temaEvaluado: P8 (Discrepancia de Criterio en el Equipo)
+    enunciadoPregunta: "Trabajando en dupla con un asesor m\xE1s antiguo, notas que
+      \xE9l omite leerle las cl\xE1usulas de permanencia de un fondo de inversi\xF3n
+      a los clientes para cerrar las ventas en la mitad del tiempo."
+    textoBoton1: "Al terminar la jornada hablo con \xE9l en privado para sugerirle
+      que entregue al menos el folleto impreso, evitando mencionarlo a la jefatura
+      para mantener el buen clima laboral."
+    textoBoton2: "Le planteo en privado el riesgo legal de omisi\xF3n de informaci\xF3n
+      (Ley del Consumidor Financiero) y, si persiste en la pr\xE1ctica durante el
+      turno, escalo la alerta al l\xEDder de calidad comercial."
+    textoBoton3: "Respeto su m\xE9todo de trabajo ya que tiene m\xE1s a\xF1os de
+      experiencia en el banco y me enfoco en aplicar el protocolo completo \xFAnicamente
+      en mis propios clientes."
+    puntosBoton1: 1
+    puntosBoton2: 2
+    puntosBoton3: 0
+  - temaEvaluado: "P9 (Falla Tecnol\xF3gica en Hora Pico)"
+    enunciadoPregunta: "A mitad de quincena, el m\xF3dulo de impresi\xF3n de recibos
+      falla en toda la oficina, aunque las transacciones s\xED quedan aplicadas en
+      el sistema central. La fila crece r\xE1pidamente."
+    textoBoton1: "Contin\xFAo procesando todas las operaciones normalmente y les
+      pido a los clientes que tomen una fotograf\xEDa con su celular a mi monitor
+      como constancia del movimiento."
+    textoBoton2: "Activo el protocolo de contingencia informando previamente al usuario,
+      habilitando el env\xEDo autom\xE1tico del soporte al correo registrado o el
+      sello en volante manual contingente."
+    textoBoton3: "Suspendo temporalmente la recepci\xF3n de efectivo en mi ventanilla
+      hasta que soporte t\xE9cnico restablezca las impresoras, evitando cualquier
+      reclamo posterior por falta de recibo f\xEDsico."
+    puntosBoton1: 0
+    puntosBoton2: 2
     puntosBoton3: 1
+  - temaEvaluado: "P10 (Retroalimentaci\xF3n de Auditor\xEDa)"
+    enunciadoPregunta: "En una visita sorpresa de Auditor\xEDa Interna, el auditor
+      levanta un hallazgo menor en tu puesto porque ten\xEDas documentos de un cliente
+      anterior sobre el escritorio mientras atend\xEDas a otro."
+    textoBoton1: "Acepto el hallazgo en el acta, implemento de inmediato la pol\xEDtica
+      de \"Escritorio Limpio\" archivando cada expediente antes de llamar al siguiente
+      turno y socializo el aprendizaje con el equipo."
+    textoBoton2: "Firmo el acta pero dejo constancia escrita de que los documentos
+      estaban boca abajo y que el alto flujo de p\xFAblico en hora pico impide ir
+      al archivo entre cada cliente."
+    textoBoton3: "Le pido al auditor que no registre el hallazgo formalmente en el
+      informe de la sucursal comprometi\xE9ndome a organizar todo el archivo f\xEDsico
+      de la oficina esa misma tarde."
+    puntosBoton1: 2
+    puntosBoton2: 1
+    puntosBoton3: 0
+  - temaEvaluado: "P11 (Conocimiento T\xE9cnico - Cruce de Listas Restrictivas)"
+    enunciadoPregunta: "Al vincular a un nuevo cliente de ahorros, el sistema arroja
+      una coincidencia parcial de nombre en listas de control internacional (OFAC/ONU),
+      pero el n\xFAmero de identificaci\xF3n no coincide."
+    textoBoton1: "Como el n\xFAmero de c\xE9dula colombiana es \xFAnico y no coincide
+      con el documento extranjero de la lista, apruebo la apertura de la cuenta anexando
+      fotocopia ampliada de la c\xE9dula."
+    textoBoton2: "Mantengo la solicitud en estado pendiente de validaci\xF3n y escalo
+      el caso al Oficial de Cumplimiento para que certifique oficialmente el hom\xF3nimo
+      antes de activar el producto."
+    textoBoton3: Le informo al solicitante que su nombre aparece reportado en listas
+      internacionales de lavado de activos y que debe traer un certificado judicial
+      para poder abrirle la cuenta.
+    puntosBoton1: 1
+    puntosBoton2: 2
+    puntosBoton3: 0
+  - temaEvaluado: "P12 (Agilidad Financiera - Inter\xE9s Compuesto vs. Retenci\xF3n)"
+    enunciadoPregunta: "Un cliente invierte $34.281.200 USD en un CDT a 1 a\xF1o
+      con tasa del 10% E.A. Si la retenci\xF3n en la fuente sobre los rendimientos
+      financieros es del 4%, \xBFcu\xE1l es el valor neto exacto que recibir\xE1
+      al vencimiento?"
+    textoBoton1: "Recibir\xE1 $36.200.947, ya que se aplica el 4% de retenci\xF3n
+      sobre el total del capital m\xE1s los intereses."
+    textoBoton2: "Recibir\xE1 $37.709.320  netos, porque los certificados a t\xE9rmino
+      fijo de m\xE1s de un a\xF1o est\xE1n exentos de retenci\xF3n sobre rendimientos."
+    textoBoton3: "Recibir\xE1 $37.572.195 ($34.281.200 de capital + $3.428.120 de
+      intereses brutos menos $137.124 correspondientes al 4% de retenci\xF3n sobre
+      los intereses)."
+    puntosBoton1: 1
+    puntosBoton2: 0
+    puntosBoton3: 2
+  - temaEvaluado: "P13 (An\xE1lisis de Capacidad de Endeudamiento y Garant\xEDas)"
+    enunciadoPregunta: "Un comerciante independiente solicita un cr\xE9dito por $102.843.600.
+      Sus extractos muestran ingresos altos, pero declara en renta valores m\xEDnimos
+      y ofrece como garant\xEDa un lote rural sin aval\xFAo comercial oficial."
+    textoBoton1: "Solicito estados financieros certificados por contador p\xFAblico
+      y aval\xFAo por perito autorizado del banco, explic\xE1ndole que la capacidad
+      de pago debe sustentarse en ingresos formalmente declarados."
+    textoBoton2: "Estructuro la solicitud tomando el promedio de sus extractos bancarios
+      de los \xFAltimos tres meses y anexo fotos del lote rural para que el comit\xE9
+      de cr\xE9dito lo apruebe por excepci\xF3n."
+    textoBoton3: "Le sugiero solicitar tres cr\xE9ditos de libre inversi\xF3n de
+      $34.281.200 en d\xEDas distintos para que pasen por aprobaci\xF3n autom\xE1tica
+      sin requerir aval\xFAo ni declaraci\xF3n de renta."
+    puntosBoton1: 2
+    puntosBoton2: 1
+    puntosBoton3: 0
+  - temaEvaluado: P14 (Protocolo ante Billete Presuntamente Falso)
+    enunciadoPregunta: "Al contar un dep\xF3sito en efectivo en tu m\xE1quina contadora,
+      detectas un billete de alta denominaci\xF3n que carece de cinta de seguridad
+      magn\xE9tica y presenta textura irregular. El cliente asegura que lo acaba
+      de retirar de otro cajero."
+    textoBoton1: "Le devuelvo el billete al cliente indic\xE1ndole con discreci\xF3n
+      que no pasa el filtro de la m\xE1quina y le pido que lo cambie por otro para
+      completar su consignaci\xF3n."
+    textoBoton2: "Retengo el billete sin destruirlo, diligencio el acta oficial de
+      retenci\xF3n de especie monetaria presuntamente falsa con los datos del portador
+      y lo remito al Banco de la Rep\xFAblica para dictamen."
+    textoBoton3: "Perforo el billete frente al cliente con el sello de \"Falso\"
+      para sacarlo de circulaci\xF3n de inmediato y se lo entrego para que reclame
+      en el banco donde hizo el retiro."
+    puntosBoton1: 1
+    puntosBoton2: 2
+    puntosBoton3: 0
+  - temaEvaluado: "P15 (Seguridad Digital y Canales de Autogesti\xF3n)"
+    enunciadoPregunta: "Un cliente adulto solicita tu ayuda en el m\xF3dulo de asesores
+      porque olvid\xF3 su clave de la App NexoBank, te entrega su tel\xE9fono desbloqueado
+      en la mano y te dicta su nueva clave para que t\xFA se la configures."
+    textoBoton1: "omo el celular \xFAnicamente para abrir la pantalla de recuperaci\xF3n,
+      digito los datos frente a \xE9l y luego le pido que cambie la clave nuevamente
+      cuando llegue a su casa."
+    textoBoton2: "Realizo el cambio de clave desde mi propio computador de asesor
+      usando el m\xF3dulo administrativo para que el cliente no tenga que manipular
+      su tel\xE9fono."
+    textoBoton3: "Me abstengo de tocar su dispositivo o escuchar su clave; lo gu\xEDo
+      verbalmente paso a paso indicando d\xF3nde pulsar en su propia pantalla y cubriendo
+      mi vista cuando digite su contrase\xF1a."
+    puntosBoton1: 1
+    puntosBoton2: 0
+    puntosBoton3: 2
 --- !u!114 &1109512285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12833,6 +13043,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   contenedorImagenPantalla: {fileID: 361211089}
+  botonRepetirLlamada: {fileID: 0}
   panelPopUpFeedback: {fileID: 826511851}
   textoTituloFeedback: {fileID: 2060340764}
   textoExplicacionFeedback: {fileID: 2011560355}
@@ -12842,24 +13053,28 @@ MonoBehaviour:
   nivelesPhishing:
   - nombreDelCaso: Smishing por WhatsApp
     imagenDelMensaje: {fileID: 21300000, guid: d7468383d9c92ae418996c91e1b85740, type: 3}
+    audioLlamadaCaso: {fileID: 0}
     esPhishing: 1
     retroalimentacionPhishing: "\xA1Ataque de Smishing detectado! Ning\xFAn directivo
       de NexoBank solicita ingresar credenciales operativas por WhatsApp ni env\xEDa
       enlaces acortados (bit.ly) desde n\xFAmeros personales sin verificar."
   - nombreDelCaso: Comunicado Interno de Intranet
     imagenDelMensaje: {fileID: 21300000, guid: ec81a0204342d2e44811d4ef9eb0d9bf, type: 3}
+    audioLlamadaCaso: {fileID: 0}
     esPhishing: 0
     retroalimentacionPhishing: "\xA1An\xE1lisis correcto! Es un comunicado oficial
       leg\xEDtimo: proviene del dominio corporativo exacto (@nexobank.com), no incluye
       enlaces externos ni archivos ejecutables y no solicita datos confidenciales."
   - nombreDelCaso: "Vishing / Llamada de Soporte T\xE9cnico"
-    imagenDelMensaje: {fileID: 0}
+    imagenDelMensaje: {fileID: 21300000, guid: 8fa5cbd64bb37234980cde7bff679a5c, type: 3}
+    audioLlamadaCaso: {fileID: 8300000, guid: 904b31aadfdaf0e45987de69df978579, type: 3}
     esPhishing: 1
     retroalimentacionPhishing: "\xA1Ataque de Vishing bloqueado! El \xE1rea de Sistemas
       jam\xE1s solicita por tel\xE9fono contrase\xF1as ni los d\xEDgitos del Token
       de seguridad. El c\xF3digo Token es de uso exclusivo e intransferible del funcionario."
   - nombreDelCaso: "Quishing / Afiche con C\xF3digo QR"
     imagenDelMensaje: {fileID: 21300000, guid: 1abb10ab03dcf734d92481b78e0902df, type: 3}
+    audioLlamadaCaso: {fileID: 0}
     esPhishing: 1
     retroalimentacionPhishing: "\xA1Ataque de Quishing detectado! Los c\xF3digos
       QR pueden ocultar enlaces hacia p\xE1ginas clonadas. El dominio externo (.org)
@@ -12867,6 +13082,7 @@ MonoBehaviour:
       tu celular."
   - nombreDelCaso: "Notificaci\xF3n de Recursos Humanos en Portal Oficial"
     imagenDelMensaje: {fileID: 21300000, guid: b84ef13d3bd7888488f63fce240aa016, type: 3}
+    audioLlamadaCaso: {fileID: 0}
     esPhishing: 0
     retroalimentacionPhishing: "\xA1An\xE1lisis correcto! Es un aviso leg\xEDtimo
       dentro del portal oficial del banco: utiliza el protocolo seguro ([https://intranet.nexobank.com](https://intranet.nexobank.com))
@@ -12903,20 +13119,20 @@ MonoBehaviour:
   niveles:
   - nombrePolitica: "Caso 1: L\xEDnea \xC9tica y Cero Tolerancia"
     fotoCliente: {fileID: 21300000, guid: 875ea67d5fb32c14381815f9e8ebb7da, type: 3}
-    fotoClienteMolesto: {fileID: 0}
-    mensajeCliente: "Oye, menos mal sigues aqu\xED. Vi que me miraste cuando guard\xE9
-      la calculadora financiera y las resmas de papel en mi bolso. Mi hijo las necesita
-      hoy para la universidad y para el banco esto no vale nada... Por favor no digas
-      nada, ma\xF1ana temprano compro unas iguales y las repongo, \xBFs\xED?"
-    textoBoton1: "Andr\xE9s, devu\xE9lvelos al inventario ahora mismo. Si firmas
-      el acta de devoluci\xF3n de material hoy antes del cierre, no ser\xE1 necesario
-      escalar el reporte a Control Interno."
-    textoBoton2: "No puedo comprometerme a callar ni acordar la devoluci\xF3n contigo,
-      Andr\xE9s. Por normativa de cumplimiento debo registrar la novedad en la L\xEDnea
-      \xC9tica para que Auditor\xEDa eval\xFAe el caso."
-    textoBoton3: "Para que no te afecte la hoja de vida, registremos los implementos
-      como p\xE9rdida operativa menor y autoriza por escrito que te los descuenten
-      de n\xF3mina este mes."
+    fotoClienteMolesto: {fileID: 21300000, guid: aca1e706d78a8ee4c879dc2f79f3e6a9, type: 3}
+    mensajeCliente: "Oye, vi que notaste cuando guard\xE9 la calculadora financiera
+      y las resmas de papel en mi bolso. Mi hijo tiene examen hoy en la universidad
+      y cerraron las papeler\xEDas... Por favor ay\xFAdame a solucionarlo hoy sin
+      escalarlo a Auditor\xEDa, ma\xF1ana a primera hora traigo todo nuevo."
+    textoBoton1: "Andr\xE9s, deja los implementos en bodega y firmemos un vale de
+      pr\xE9stamo temporal de activos fijos autorizado entre ambos para que te los
+      lleves legalmente hasta ma\xF1ana."
+    textoBoton2: "Entiendo tu situaci\xF3n familiar, Andr\xE9s, pero el manual nos
+      proh\xEDbe autorizar pr\xE9stamos de inventario entre compa\xF1eros; debo registrar
+      el evento en la L\xEDnea \xC9tica para que Control Interno defina el procedimiento."
+    textoBoton3: "Para no afectar tu expediente disciplinario por algo de bajo valor,
+      deja los art\xEDculos en tu puesto y registremos una solicitud formal de descuento
+      por n\xF3mina como compra de material."
     respuestaCorrecta: 2
     retroalimentacionCaso: "Pol\xEDtica de Cero Tolerancia y L\xEDnea \xC9tica: En
       el sector bancario, negociar en privado la devoluci\xF3n de bienes sustra\xEDdos
@@ -12925,22 +13141,21 @@ MonoBehaviour:
       la cuant\xEDa."
   - nombrePolitica: 'Caso 2: Reserva Bancaria (Habeas Data)'
     fotoCliente: {fileID: 21300000, guid: 5126a9de5e70ff942b6440844f6e1561, type: 3}
-    fotoClienteMolesto: {fileID: 0}
-    mensajeCliente: "\xA1Por favor ay\xFAdeme! Mi esposo acaba de entrar a cirug\xEDa
-      de coraz\xF3n y su tarjeta de NexoBank se bloque\xF3 en la cl\xEDnica. Aqu\xED
-      traigo mi c\xE9dula, nuestra acta de matrimonio original y la orden m\xE9dica
-      urgente. \xA1Necesito que me diga qu\xE9 saldo tiene la cuenta o desbloquee
-      el pl\xE1stico para pagar la operaci\xF3n!"
-    textoBoton1: "Entiendo la urgencia, se\xF1ora Carmen. Por reserva bancaria no
-      puedo darle la clave ni el saldo a usted, pero con la orden m\xE9dica puedo
-      girar el pago directamente de la cuenta de su esposo al NIT de la cl\xEDnica."
-    textoBoton2: "Como usted presenta el acta de matrimonio original y el soporte
-      cl\xEDnico de urgencia vital, habilitar\xE9 el cupo de la tarjeta \xFAnicamente
-      para pagos hospitalarios sin mostrarle el saldo en pantalla."
-    textoBoton3: "Lamento mucho la situaci\xF3n de su esposo, pero el matrimonio
-      no otorga titularidad sobre cuentas individuales; no puedo revelar el saldo
-      ni tocar los fondos sin un poder legal, aunque puedo tramitarle un cr\xE9dito
-      inmediato a su propio nombre."
+    fotoClienteMolesto: {fileID: 21300000, guid: fe0d5ad5e55587e4a8bf42b978d8e9ed, type: 3}
+    mensajeCliente: "\xA1Se\xF1or, mi esposo est\xE1 en cirug\xEDa de urgencia y
+      su tarjeta se bloque\xF3 al pagar en la cl\xEDnica! Traigo mi c\xE9dula, nuestra
+      partida de matrimonio autenticada y la orden m\xE9dica. \xA1Necesito que desbloquee
+      el pl\xE1stico o transfiera de la cuenta de \xE9l a la cl\xEDnica ya mismo!"
+    textoBoton1: "Por reserva bancaria no puedo darle acceso a la cuenta, se\xF1ora
+      Carmen, pero validando su acta de matrimonio emitir\xE9 un cheque de gerencia
+      directo a nombre del hospital con cargo a los fondos de su esposo."
+    textoBoton2: "Dado que se trata de una urgencia vital comprobada, pedir\xE9 a
+      mi supervisor que llame a la cl\xEDnica para confirmar la cirug\xEDa y habilitaremos
+      el pl\xE1stico por una \xFAnica transacci\xF3n hospitalaria."
+    textoBoton3: "Comprendo la urgencia m\xE9dica, se\xF1ora Carmen, pero sin un
+      poder especial vigente la ley proh\xEDbe debitar o desbloquear cuentas individuales
+      del c\xF3nyuge; puedo gestionarle de inmediato un cr\xE9dito rotativo de urgencia
+      a su propio nombre."
     respuestaCorrecta: 3
     retroalimentacionCaso: "Ley de Habeas Data y Reserva Bancaria: El v\xEDnculo
       matrimonial no otorga titularidad ni autorizaci\xF3n legal sobre cuentas individuales.
@@ -12949,22 +13164,22 @@ MonoBehaviour:
       Financiera."
   - nombrePolitica: "Caso 3: Prevenci\xF3n Lavado (SARLAFT)"
     fotoCliente: {fileID: 21300000, guid: 0b6b3dc0318440c449b37f50410f865c, type: 3}
-    fotoClienteMolesto: {fileID: 0}
-    mensajeCliente: "Hola, qu\xE9 fila tan larga hoy. Mira, traigo $12,000 d\xF3lares
-      en efectivo de las ventas de mi ferreter\xEDa. Como debo pagarle a tres proveedores
-      distintos, hazme tres consignaciones separadas de $4,000 cada una; as\xED me
-      quedan los tres recibos listos y nos ahorramos llenar el formulario de declaraci\xF3n
-      de origen de fondos."
-    textoBoton1: "Claro don Roberto, como son pagos a tres proveedores diferentes,
-      puedo procesar las tres consignaciones de $4,000 sin el formulario de origen
-      de fondos, siempre que adjuntemos copia del RUT de su ferreter\xEDa."
-    textoBoton2: Don Roberto, aunque realicemos las tres consignaciones por separado
-      para sus proveedores, el sistema acumula el efectivo total entregado hoy en
-      ventanilla, por lo que es obligatorio diligenciar el formulario de origen de
-      fondos por los $12,000.
-    textoBoton3: "Para no demorarlo con el formulario por los $12,000, procesemos
-      ahora dos consignaciones de $4,000 y pase por la \xFAltima en la jornada de
-      la tarde para que el sistema no las acumule."
+    fotoClienteMolesto: {fileID: 21300000, guid: aa4650d7d8de6a548a777201bebd98db, type: 3}
+    mensajeCliente: "Buen d\xEDa. Traigo $41.137.440 en efectivo de la recaudaci\xF3n
+      del fin de semana. Como debo pagar a tres proveedores distintos en cuentas
+      de este mismo banco, proc\xE9same tres consignaciones individuales de $13.712.480
+      USD a nombre de cada proveedor para agilizar y no diligenciar el formato de
+      origen de fondos."
+    textoBoton1: "Claro don Roberto, como el dinero va dirigido a cuentas de tres
+      empresas proveedoras diferentes, puedo procesar los tres dep\xF3sitos de $13.712.480
+      anexando copia de las tres facturas comerciales en lugar del formulario SARLAFT."
+    textoBoton2: "Don Roberto, aunque abonemos el dinero a tres proveedores distintos,
+      la normativa SARLAFT eval\xFAa el monto total entregado en efectivo por usted
+      en el d\xEDa, por lo que debemos diligenciar la declaraci\xF3n de origen de
+      fondos por los $41.137.440."
+    textoBoton3: "Para ahorrarle el tr\xE1mite del formulario en ventanilla, recibo
+      hoy una consignaci\xF3n de $27.424.960 por caja y lo acompa\xF1o al cajero
+      multifuncional para que deposite los $13.712.480 restantes."
     respuestaCorrecta: 2
     retroalimentacionCaso: "Normativa SARLAFT contra Fraccionamiento (Pitufeo): Dividir
       una suma de efectivo en transacciones menores para evadir el formulario de
@@ -12972,45 +13187,42 @@ MonoBehaviour:
       El sistema consolida el monto diario por cliente y exige el soporte legal completo."
   - nombrePolitica: 'Caso 4: Control de Firmas y Token'
     fotoCliente: {fileID: 21300000, guid: dfc395ed2e9634f4a904bf13da1f45f8, type: 3}
-    fotoClienteMolesto: {fileID: 0}
-    mensajeCliente: "Necesito que liberes ya mismo el giro de n\xF3mina de 200 obreros
-      por $50,000 d\xF3lares. Al presidente de la constructora se le olvid\xF3 firmar
-      la carta original antes de viajar, pero me mand\xF3 por WhatsApp la foto de
-      su firma para que la imprimas y la adjuntes mientras \xE9l regresa el lunes
-      con el documento f\xEDsico."
-    textoBoton1: "Comprendo la urgencia con los obreros. Llamar\xE9 de inmediato
-      al celular registrado del presidente para grabar su autorizaci\xF3n de voz
-      y as\xED poder liberar el giro con la carta impresa."
-    textoBoton2: "Para que los obreros no se queden sin pago hoy, liberar\xE9 el
-      50% de la n\xF3mina bajo su firma como gerente financiero y el lunes, cuando
-      traigan la carta original del presidente, liberamos el resto."
-    textoBoton3: "No puedo procesar giros en ventanilla con firmas en fotocopia ni
-      bajo promesa de entrega posterior; para pagar hoy mismo sin carta f\xEDsica
-      original, el presidente debe autorizar la dispersi\xF3n desde su propio Token
-      en la Sucursal Virtual."
+    fotoClienteMolesto: {fileID: 21300000, guid: 19674926503e0534d95653997990f027, type: 3}
+    mensajeCliente: "Urge dispersar la n\xF3mina de 200 operarios por $171.406.000
+      antes del cierre. El representante legal est\xE1 en un vuelo internacional
+      y no alcanz\xF3 a firmar la carta f\xEDsica, pero nos envi\xF3 desde su correo
+      corporativo oficial el PDF escaneado con su firma y huella."
+    textoBoton1: "Dado que el correo proviene del dominio oficial de la empresa,
+      realizar\xE9 una videollamada grabada con usted como gerente financiero para
+      dejar constancia en auditor\xEDa y liberar la dispersi\xF3n de n\xF3mina."
+    textoBoton2: "Para no perjudicar a los trabajadores, procesaremos hoy la n\xF3mina
+      con la carta escaneada bloqueando preventivamente $171.406.000 del cupo de
+      sobregiro de la empresa hasta que traigan la carta original el lunes."
+    textoBoton3: "Las cartas de instrucciones financieras exigen firma aut\xF3grafa
+      original en f\xEDsico sin excepciones; la \xFAnica v\xEDa autorizada para liberar
+      hoy la n\xF3mina a distancia es que el representante legal la apruebe con su
+      Token desde la Sucursal Virtual Empresas."
     respuestaCorrecta: 3
     retroalimentacionCaso: "Protocolo de Seguridad Operativa y Firmas: Ninguna autorizaci\xF3n
       telef\xF3nica ni firma enviada en imagen por mensajer\xEDa reemplaza las firmas
       f\xEDsicas registradas o la aprobaci\xF3n mediante Token en la Sucursal Virtual.
       Liberar pagos parciales sin validaci\xF3n formal expone al banco a fraude corporativo."
   - nombrePolitica: "Caso 5: Pol\xEDtica Antisoborno y D\xE1divas"
-    fotoCliente: {fileID: 21300000, guid: b3792a949e7f4db479e4b758feecbcc6, type: 3}
-    fotoClienteMolesto: {fileID: 0}
-    mensajeCliente: "\xA1Mil gracias por ayudarme a recuperar el acceso a mi cuenta!
-      S\xE9 que por reglas de NexoBank no puedes recibir efectivo, as\xED que compr\xE9
-      este bono de supermercado de $100 d\xF3lares para que compartas un almuerzo
-      con todos tus compa\xF1eros de la oficina. Ya el tr\xE1mite est\xE1 cerrado,
-      as\xED que rec\xEDbelo para el equipo."
-    textoBoton1: "Muchas gracias, doctora Elena. Como su caso ya est\xE1 cerrado
-      y es para compartir con toda la oficina, lo entregar\xE9 al \xE1rea de Recursos
-      Humanos para que lo rediman en la reuni\xF3n mensual del equipo."
-    textoBoton2: "Agradezco mucho su gesto, doctora Elena, pero los bonos de compra
-      equivalen a dinero en efectivo y el c\xF3digo de \xE9tica nos proh\xEDbe recibirlos
-      incluso para el grupo; mi mejor reconocimiento es que califique mi servicio
-      en la encuesta oficial."
-    textoBoton3: "Es muy amable, doctora. Lo aceptar\xE9 para el equipo dejando constancia
-      escrita en el libro de control de la sucursal para certificar que usted lo
-      entreg\xF3 despu\xE9s de finalizado su tr\xE1mite."
+    fotoCliente: {fileID: 21300000, guid: 1335f3178f00e7f4db33d86ca3fe0c7c, type: 3}
+    fotoClienteMolesto: {fileID: 21300000, guid: 9372dfdd68badda4196512f353589f28, type: 3}
+    mensajeCliente: "Muchas gracias por recuperar los extractos hist\xF3ricos para
+      mi declaraci\xF3n tributaria. Como s\xE9 que por pol\xEDtica no recibes dinero,
+      traje esta tarjeta de regalo corporativa de $342.812 de una librer\xEDa para
+      que el \xE1rea de atenci\xF3n al cliente compre libros o material de consulta."
+    textoBoton1: "Le agradezco mucho, doctora. Para cumplir con la norma de transparencia,
+      recibir\xE9 la tarjeta registr\xE1ndola en el inventario de bienestar de la
+      oficina para uso exclusivo de estudio del personal."
+    textoBoton2: "Valoro enormemente su agradecimiento, doctora Elena, pero las tarjetas
+      o bonos redimibles se catalogan como equivalentes de efectivo y nuestra pol\xEDtica
+      de integridad nos impide aceptarlos incluso con fines educativos o grupales."
+    textoBoton3: "Muchas gracias por el detalle hacia el equipo; llamar\xE9 al gerente
+      de la sucursal para que firme un acta de recepci\xF3n de obsequio posventa
+      y quede debidamente transparentado."
     respuestaCorrecta: 2
     retroalimentacionCaso: "C\xF3digo de \xC9tica y Pol\xEDtica Anticorrupci\xF3n:
       Los bonos de compra o tarjetas regalo son considerados equivalentes de efectivo.
@@ -13122,6 +13334,96 @@ MonoBehaviour:
   toggleMusicaSiNo: {fileID: 1883183791}
   sliderVolumenMusica: {fileID: 978429617}
   sliderVolumenSonidos: {fileID: 837199944}
+--- !u!1 &1139988178
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1139988179}
+  - component: {fileID: 1139988180}
+  m_Layer: 5
+  m_Name: SliderDecorativo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1139988179
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139988178}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3.15, y: 3.15, z: 3.15}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 114515370}
+  - {fileID: 190952874}
+  - {fileID: 832479055}
+  m_Father: {fileID: 646036942}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -200, y: 475}
+  m_SizeDelta: {x: 160, y: 20}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1139988180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139988178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 0
+  m_TargetGraphic: {fileID: 2039383612}
+  m_FillRect: {fileID: 1926726819}
+  m_HandleRect: {fileID: 2039383611}
+  m_Direction: 0
+  m_MinValue: 0
+  m_MaxValue: 1
+  m_WholeNumbers: 0
+  m_Value: 0
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1148926448
 GameObject:
   m_ObjectHideFlags: 0
@@ -19249,7 +19551,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 45384772}
+  - {fileID: 1973547237}
+  - {fileID: 459851634}
   m_Father: {fileID: 646036942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -21978,6 +22283,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1920576577}
   m_CullTransparentMesh: 1
+--- !u!1 &1926726818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1926726819}
+  - component: {fileID: 1926726821}
+  - component: {fileID: 1926726820}
+  m_Layer: 5
+  m_Name: Fill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1926726819
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926726818}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 190952874}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1926726820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926726818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.61960787, g: 1, b: 0.67708427, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1926726821
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1926726818}
+  m_CullTransparentMesh: 1
 --- !u!1 &1937651625
 GameObject:
   m_ObjectHideFlags: 0
@@ -22431,11 +22811,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1387674301}
-  m_Father: {fileID: 646036942}
+  m_Father: {fileID: 1721040538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 225}
+  m_AnchoredPosition: {x: 0, y: 212.49998}
   m_SizeDelta: {x: 1870, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1973547238
@@ -23271,6 +23651,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020113786}
+  m_CullTransparentMesh: 1
+--- !u!1 &2039383610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2039383611}
+  - component: {fileID: 2039383613}
+  - component: {fileID: 2039383612}
+  m_Layer: 5
+  m_Name: Handle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &2039383611
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039383610}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 832479055}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 20, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2039383612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039383610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.08957814, g: 0.31132078, b: 0.09294755, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2039383613
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039383610}
   m_CullTransparentMesh: 1
 --- !u!1 &2041720362
 GameObject:
