@@ -48,6 +48,8 @@ public class GestorTestPsicologico : MonoBehaviour
     [Header("Lista de Preguntas")]
     public PreguntaPsicologica[] preguntas;
 
+    [HideInInspector] public int cantidadPreguntasPorPartida = 15;
+
     // NUEVO (PUNTO 2): Control del orden aleatorio
     private List<int> ordenAleatorio = new List<int>();
     private int pasoActual = 0;
@@ -82,6 +84,12 @@ public class GestorTestPsicologico : MonoBehaviour
             int temporal = ordenAleatorio[i];
             ordenAleatorio[i] = ordenAleatorio[posicionAzar];
             ordenAleatorio[posicionAzar] = temporal;
+        }
+
+        int limiteSeguro = Mathf.Clamp(cantidadPreguntasPorPartida, 1, ordenAleatorio.Count);
+        if (ordenAleatorio.Count > limiteSeguro)
+        {
+            ordenAleatorio.RemoveRange(limiteSeguro, ordenAleatorio.Count - limiteSeguro);
         }
 
         Debug.Log("[Test Perfil y Skills] Nuevo orden aleatorio generado: " + string.Join(", ", ordenAleatorio));
@@ -230,9 +238,17 @@ public class GestorTestPsicologico : MonoBehaviour
         int puntajeTotal = puntosIntegridadYEtica + puntosPresionYEmpatia + puntosSkillsBancarias;
         int promedioGeneral = (puntajeTotal * 100) / puntajeMaximoTotal;
 
-        int porcIntegridad = puntosIntegridadYEtica * 10;
-        int porcPresion = puntosPresionYEmpatia * 10;
-        int porcSkills = puntosSkillsBancarias * 10;
+        int cantInt = 0, cantPre = 0, cantSki = 0;
+        foreach (int idx in ordenAleatorio)
+        {
+            if (idx < 5) cantInt++;
+            else if (idx < 10) cantPre++;
+            else cantSki++;
+        }
+
+        int porcIntegridad = (cantInt > 0) ? (puntosIntegridadYEtica * 100) / (cantInt * 2) : 0;
+        int porcPresion = (cantPre > 0) ? (puntosPresionYEmpatia * 100) / (cantPre * 2) : 0;
+        int porcSkills = (cantSki > 0) ? (puntosSkillsBancarias * 100) / (cantSki * 2) : 0;
 
         string resumenParaElJugador = "";
         string diagnosticoConfidencialEmpresa = "";

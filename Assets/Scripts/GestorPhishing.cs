@@ -43,6 +43,8 @@ public class GestorPhishing : MonoBehaviour
     [Header("Lista de Casos")]
     public CasoPhishing[] nivelesPhishing;
 
+    [HideInInspector] public int cantidadPreguntasPorPartida = 5;
+
     // NUEVO (PUNTO 2): Control del orden aleatorio
     private List<int> ordenAleatorio = new List<int>();
     private int pasoActual = 0;
@@ -79,6 +81,12 @@ public class GestorPhishing : MonoBehaviour
             int temporal = ordenAleatorio[i];
             ordenAleatorio[i] = ordenAleatorio[posicionAzar];
             ordenAleatorio[posicionAzar] = temporal;
+        }
+
+        int limiteSeguro = Mathf.Clamp(cantidadPreguntasPorPartida, 1, ordenAleatorio.Count);
+        if (ordenAleatorio.Count > limiteSeguro)
+        {
+            ordenAleatorio.RemoveRange(limiteSeguro, ordenAleatorio.Count - limiteSeguro);
         }
 
         Debug.Log("[Detector de Phishing] Nuevo orden aleatorio generado: " + string.Join(", ", ordenAleatorio));

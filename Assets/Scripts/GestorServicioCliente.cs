@@ -57,6 +57,8 @@ public class GestorServicioCliente : MonoBehaviour
     [Header("Configuración de los Niveles")]
     public CasoCliente[] niveles;
 
+    [HideInInspector] public int cantidadPreguntasPorPartida = 5;
+
     // NUEVO (PUNTO 2): Control del orden aleatorio
     private List<int> ordenAleatorio = new List<int>(); // Guarda el orden revuelto de esta partida.
     private int pasoActual = 0;                         // Indica en qué turno vamos (0, 1, 2, 3, 4...).
@@ -113,6 +115,12 @@ public class GestorServicioCliente : MonoBehaviour
             int temporal = ordenAleatorio[i];
             ordenAleatorio[i] = ordenAleatorio[posicionAzar];
             ordenAleatorio[posicionAzar] = temporal;
+        }
+
+        int limiteSeguro = Mathf.Clamp(cantidadPreguntasPorPartida, 1, ordenAleatorio.Count);
+        if (ordenAleatorio.Count > limiteSeguro)
+        {
+            ordenAleatorio.RemoveRange(limiteSeguro, ordenAleatorio.Count - limiteSeguro);
         }
 
         // Mensaje en Consola para que puedas verificar que cada partida sale un orden distinto.
