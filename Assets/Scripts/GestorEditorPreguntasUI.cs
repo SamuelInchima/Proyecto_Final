@@ -22,7 +22,7 @@ public class GestorEditorPreguntasUI : MonoBehaviour
     public TMP_InputField inputEnunciado;
     public TMP_InputField inputRetroalimentacion;
 
-    [Header("Grupo 1: Opciones de Respuesta (Servicio y Test)")]
+    [Header("Grupo 1: Opciones de Respuesta (Servicio)")]
     public GameObject grupoOpcionesTexto;
     public TMP_InputField inputOpcion1;
     public TMP_InputField inputOpcion2;
@@ -41,13 +41,7 @@ public class GestorEditorPreguntasUI : MonoBehaviour
     public TMP_Dropdown dropdownAudioPhishing;
     public Image vistaPreviaPhishing;
 
-    [Header("Grupo 4: Controles Solo de Test Psicológico / Perfil")]
-    public GameObject grupoSoloPsicologico;
-    public TMP_Dropdown dropdownPuntos1;
-    public TMP_Dropdown dropdownPuntos2;
-    public TMP_Dropdown dropdownPuntos3;
-
-    // 0 = Servicio al Cliente | 1 = Detector de Phishing | 2 = Perfil y Skills
+    // 0 = Servicio al Cliente | 1 = Detector de Phishing
     private int moduloSeleccionado = 0;
     private int indiceActual = 0;
     private Coroutine corrutinaAviso;
@@ -75,17 +69,11 @@ public class GestorEditorPreguntasUI : MonoBehaviour
         panelEditorPreguntas.SetActive(false);
     }
 
-    // Llena automáticamente los menús desplegables con los nombres de tus Sprites, Audios y Puntajes.
+    // Llena automáticamente los menús desplegables con los nombres de tus Sprites y Audios.
     private void InicializarDropdowns()
     {
         // Respuesta correcta Servicio
         LlenarDropdown(dropdownRespuestaCorrecta, new List<string> { "Correcta: Opción 1", "Correcta: Opción 2", "Correcta: Opción 3" });
-
-        // Puntajes Test Psicológico
-        List<string> opcionesPuntos = new List<string> { "0 pts (Flexible)", "1 pt (Operativo)", "2 pts (Óptimo)" };
-        LlenarDropdown(dropdownPuntos1, opcionesPuntos);
-        LlenarDropdown(dropdownPuntos2, opcionesPuntos);
-        LlenarDropdown(dropdownPuntos3, opcionesPuntos);
 
         // Nombres de NPCs
         List<string> nombresNpc = new List<string>();
@@ -117,26 +105,24 @@ public class GestorEditorPreguntasUI : MonoBehaviour
     }
 
     // =========================================================================
-    // PESTAÑAS DE MÓDULO (CONECTAR EN ON CLICK ENVIANDO 0, 1 o 2)
+    // PESTAÑAS DE MÓDULO (CONECTAR EN ON CLICK ENVIANDO 0 o 1)
     // =========================================================================
     public void SeleccionarModulo(int numeroModulo)
     {
-        moduloSeleccionado = numeroModulo;
+        moduloSeleccionado = (numeroModulo == 1) ? 1 : 0;
         indiceActual = 0;
 
         // Encendemos solo los campos que pertenecen al módulo activo
-        if (inputEnunciado != null) inputEnunciado.gameObject.SetActive(moduloSeleccionado != 1);
-        if (inputRetroalimentacion != null) inputRetroalimentacion.gameObject.SetActive(moduloSeleccionado != 2);
-        if (grupoOpcionesTexto != null) grupoOpcionesTexto.SetActive(moduloSeleccionado != 1);
+        if (inputEnunciado != null) inputEnunciado.gameObject.SetActive(moduloSeleccionado == 0);
+        if (inputRetroalimentacion != null) inputRetroalimentacion.gameObject.SetActive(true);
+        if (grupoOpcionesTexto != null) grupoOpcionesTexto.SetActive(moduloSeleccionado == 0);
         if (grupoSoloServicio != null) grupoSoloServicio.SetActive(moduloSeleccionado == 0);
         if (grupoSoloPhishing != null) grupoSoloPhishing.SetActive(moduloSeleccionado == 1);
-        if (grupoSoloPsicologico != null) grupoSoloPsicologico.SetActive(moduloSeleccionado == 2);
 
         if (textoModuloActivo != null)
         {
             if (moduloSeleccionado == 0) textoModuloActivo.text = "EDITANDO: MÓDULO 1 - SERVICIO AL CLIENTE";
-            else if (moduloSeleccionado == 1) textoModuloActivo.text = "EDITANDO: MÓDULO 2 - DETECTOR DE PHISHING";
-            else textoModuloActivo.text = "EDITANDO: MÓDULO 3 - PERFIL LABORAL Y SKILLS";
+            else textoModuloActivo.text = "EDITANDO: MÓDULO 2 - DETECTOR DE PHISHING";
         }
 
         MostrarFichaActual();
@@ -153,8 +139,6 @@ public class GestorEditorPreguntasUI : MonoBehaviour
             scriptBanco.datosActuales.cantidadServicioPorPartida += delta;
         else if (moduloSeleccionado == 1)
             scriptBanco.datosActuales.cantidadPhishingPorPartida += delta;
-        else
-            scriptBanco.datosActuales.cantidadPsicologicoPorPartida += delta;
 
         // Aplica los límites seguros (1 hasta min(20, total disponible)) y guarda de inmediato
         scriptBanco.GuardarEnDisco();
@@ -166,9 +150,9 @@ public class GestorEditorPreguntasUI : MonoBehaviour
     {
         int totalDisponibles = ObtenerTotalModuloActual();
         int topePermitido = Mathf.Min(GestorBancoPreguntas.MAX_PREGUNTAS_PARTIDA, totalDisponibles);
-        int elegida = (moduloSeleccionado == 0) ? scriptBanco.datosActuales.cantidadServicioPorPartida
-                    : (moduloSeleccionado == 1) ? scriptBanco.datosActuales.cantidadPhishingPorPartida
-                    : scriptBanco.datosActuales.cantidadPsicologicoPorPartida;
+        int elegida = (moduloSeleccionado == 0)
+            ? scriptBanco.datosActuales.cantidadServicioPorPartida
+            : scriptBanco.datosActuales.cantidadPhishingPorPartida;
 
         if (textoCantidadPartida != null)
         {
@@ -234,22 +218,6 @@ public class GestorEditorPreguntasUI : MonoBehaviour
             scriptBanco.datosActuales.bancoPhishing.Add(nueva);
             indiceActual = scriptBanco.datosActuales.bancoPhishing.Count - 1;
         }
-        else
-        {
-            PreguntaPsicologica nueva = new PreguntaPsicologica
-            {
-                temaEvaluado = "Nuevo Tema SJT",
-                enunciadoPregunta = "Escribe aquí la situación laboral...",
-                textoBoton1 = "Opción A",
-                textoBoton2 = "Opción B",
-                textoBoton3 = "Opción C",
-                puntosBoton1 = 2,
-                puntosBoton2 = 1,
-                puntosBoton3 = 0
-            };
-            scriptBanco.datosActuales.bancoPsicologico.Add(nueva);
-            indiceActual = scriptBanco.datosActuales.bancoPsicologico.Count - 1;
-        }
 
         scriptBanco.GuardarEnDisco();
         MostrarFichaActual();
@@ -267,7 +235,6 @@ public class GestorEditorPreguntasUI : MonoBehaviour
 
         if (moduloSeleccionado == 0) scriptBanco.datosActuales.bancoServicio.RemoveAt(indiceActual);
         else if (moduloSeleccionado == 1) scriptBanco.datosActuales.bancoPhishing.RemoveAt(indiceActual);
-        else scriptBanco.datosActuales.bancoPsicologico.RemoveAt(indiceActual);
 
         indiceActual = Mathf.Clamp(indiceActual, 0, ObtenerTotalModuloActual() - 1);
         scriptBanco.GuardarEnDisco();
@@ -313,18 +280,6 @@ public class GestorEditorPreguntasUI : MonoBehaviour
             dropdownAudioPhishing.value = (p.indiceAudioCatalogo < 0) ? 0 : Mathf.Clamp(p.indiceAudioCatalogo + 1, 0, dropdownAudioPhishing.options.Count - 1);
             ActualizarVistaPreviaPhishing();
         }
-        else
-        {
-            PreguntaPsicologica t = scriptBanco.datosActuales.bancoPsicologico[indiceActual];
-            inputTitulo.text = t.temaEvaluado;
-            inputEnunciado.text = t.enunciadoPregunta;
-            inputOpcion1.text = t.textoBoton1;
-            inputOpcion2.text = t.textoBoton2;
-            inputOpcion3.text = t.textoBoton3;
-            dropdownPuntos1.value = Mathf.Clamp(t.puntosBoton1, 0, 2);
-            dropdownPuntos2.value = Mathf.Clamp(t.puntosBoton2, 0, 2);
-            dropdownPuntos3.value = Mathf.Clamp(t.puntosBoton3, 0, 2);
-        }
     }
 
     // Conectar al evento 'On Value Changed' de dropdownImagenPhishing para ver la miniatura al instante.
@@ -362,18 +317,6 @@ public class GestorEditorPreguntasUI : MonoBehaviour
             p.indiceImagenCatalogo = dropdownImagenPhishing.value;
             p.indiceAudioCatalogo = dropdownAudioPhishing.value - 1; // 0 en dropdown equivale a -1 (sin audio)
         }
-        else
-        {
-            PreguntaPsicologica t = scriptBanco.datosActuales.bancoPsicologico[indiceActual];
-            t.temaEvaluado = inputTitulo.text;
-            t.enunciadoPregunta = inputEnunciado.text;
-            t.textoBoton1 = inputOpcion1.text;
-            t.textoBoton2 = inputOpcion2.text;
-            t.textoBoton3 = inputOpcion3.text;
-            t.puntosBoton1 = dropdownPuntos1.value;
-            t.puntosBoton2 = dropdownPuntos2.value;
-            t.puntosBoton3 = dropdownPuntos3.value;
-        }
     }
 
     public void BotonGuardarTodoEnDisco()
@@ -395,8 +338,7 @@ public class GestorEditorPreguntasUI : MonoBehaviour
     private int ObtenerTotalModuloActual()
     {
         if (moduloSeleccionado == 0) return scriptBanco.datosActuales.bancoServicio.Count;
-        if (moduloSeleccionado == 1) return scriptBanco.datosActuales.bancoPhishing.Count;
-        return scriptBanco.datosActuales.bancoPsicologico.Count;
+        return scriptBanco.datosActuales.bancoPhishing.Count;
     }
 
     private void MostrarAviso(string mensaje)

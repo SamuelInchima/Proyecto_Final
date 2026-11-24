@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
+using UnityEngine;
 
 // =========================================================================
 // PLANTILLAS DE DATOS QUE SÍ PUEDEN GUARDARSE EN UN ARCHIVO JSON
@@ -35,12 +36,10 @@ public class DatosBancoCompleto
     // Cantidades que elige el administrador para cada partida
     public int cantidadServicioPorPartida = 5;
     public int cantidadPhishingPorPartida = 5;
-    public int cantidadPsicologicoPorPartida = 15;
 
-    // Listas editables de los 3 módulos
+    // Listas editables de los módulos
     public List<CasoClienteJSON> bancoServicio = new List<CasoClienteJSON>();
     public List<CasoPhishingJSON> bancoPhishing = new List<CasoPhishingJSON>();
-    public List<PreguntaPsicologica> bancoPsicologico = new List<PreguntaPsicologica>();
 }
 
 // =========================================================================
@@ -53,10 +52,9 @@ public class GestorBancoPreguntas : MonoBehaviour
     public const int MAX_PREGUNTAS_PARTIDA = 20;
     public const int MAX_PREGUNTAS_BANCO = 50;
 
-    [Header("Conexión con los 3 Módulos")]
+    [Header("Conexión con los Módulos")]
     public GestorServicioCliente scriptServicio;
     public GestorPhishing scriptPhishing;
-    public GestorTestPsicologico scriptPsicologico;
 
     [Header("Catálogos Extra (Opcional: agrega aquí más fotos o audios para el editor)")]
     public List<Sprite> catalogoSpritesNPC = new List<Sprite>();
@@ -89,7 +87,7 @@ public class GestorBancoPreguntas : MonoBehaviour
             GuardarEnDisco();
         }
 
-        // 3. Pasamos las preguntas y las cantidades activas a los 3 módulos del juego.
+        // 3. Pasamos las preguntas y las cantidades activas a los módulos del juego.
         AplicarBancoALosModulos();
     }
 
@@ -136,25 +134,6 @@ public class GestorBancoPreguntas : MonoBehaviour
             datos.cantidadPhishingPorPartida = Mathf.Clamp(datos.bancoPhishing.Count, MIN_PREGUNTAS, MAX_PREGUNTAS_PARTIDA);
         }
 
-        // --- MÓDULO 3: TEST PSICOLÓGICO ---
-        if (scriptPsicologico != null && scriptPsicologico.preguntas != null)
-        {
-            foreach (PreguntaPsicologica t in scriptPsicologico.preguntas)
-            {
-                PreguntaPsicologica copia = new PreguntaPsicologica();
-                copia.temaEvaluado = t.temaEvaluado;
-                copia.enunciadoPregunta = t.enunciadoPregunta;
-                copia.textoBoton1 = t.textoBoton1;
-                copia.textoBoton2 = t.textoBoton2;
-                copia.textoBoton3 = t.textoBoton3;
-                copia.puntosBoton1 = Mathf.Clamp(t.puntosBoton1, 0, 2);
-                copia.puntosBoton2 = Mathf.Clamp(t.puntosBoton2, 0, 2);
-                copia.puntosBoton3 = Mathf.Clamp(t.puntosBoton3, 0, 2);
-                datos.bancoPsicologico.Add(copia);
-            }
-            datos.cantidadPsicologicoPorPartida = Mathf.Clamp(datos.bancoPsicologico.Count, MIN_PREGUNTAS, MAX_PREGUNTAS_PARTIDA);
-        }
-
         return datos;
     }
 
@@ -190,11 +169,9 @@ public class GestorBancoPreguntas : MonoBehaviour
     {
         int maxS = Mathf.Min(MAX_PREGUNTAS_PARTIDA, Mathf.Max(MIN_PREGUNTAS, datosActuales.bancoServicio.Count));
         int maxP = Mathf.Min(MAX_PREGUNTAS_PARTIDA, Mathf.Max(MIN_PREGUNTAS, datosActuales.bancoPhishing.Count));
-        int maxT = Mathf.Min(MAX_PREGUNTAS_PARTIDA, Mathf.Max(MIN_PREGUNTAS, datosActuales.bancoPsicologico.Count));
 
         datosActuales.cantidadServicioPorPartida = Mathf.Clamp(datosActuales.cantidadServicioPorPartida, MIN_PREGUNTAS, maxS);
         datosActuales.cantidadPhishingPorPartida = Mathf.Clamp(datosActuales.cantidadPhishingPorPartida, MIN_PREGUNTAS, maxP);
-        datosActuales.cantidadPsicologicoPorPartida = Mathf.Clamp(datosActuales.cantidadPsicologicoPorPartida, MIN_PREGUNTAS, maxT);
     }
 
     public void GuardarEnDisco()
@@ -228,7 +205,7 @@ public class GestorBancoPreguntas : MonoBehaviour
     }
 
     // =========================================================================
-    // ENVÍA LOS DATOS EDITADOS A LOS 3 SCRIPTS DE JUEGO
+    // ENVÍA LOS DATOS EDITADOS A LOS SCRIPTS DE JUEGO
     // =========================================================================
     public void AplicarBancoALosModulos()
     {
@@ -274,13 +251,6 @@ public class GestorBancoPreguntas : MonoBehaviour
             }
             scriptPhishing.nivelesPhishing = nuevosPhishing;
             scriptPhishing.cantidadPreguntasPorPartida = datosActuales.cantidadPhishingPorPartida;
-        }
-
-        // 3. Actualizar Test Psicológico / Perfil y Skills
-        if (scriptPsicologico != null && datosActuales.bancoPsicologico.Count > 0)
-        {
-            scriptPsicologico.preguntas = datosActuales.bancoPsicologico.ToArray();
-            scriptPsicologico.cantidadPreguntasPorPartida = datosActuales.cantidadPsicologicoPorPartida;
         }
     }
 
