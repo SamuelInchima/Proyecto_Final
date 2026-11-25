@@ -50,6 +50,21 @@ public class GestorTurnoEscritorio : MonoBehaviour
     public AudioClip sonidoAcierto;
     public AudioClip sonidoError;
 
+    [Header("Conexión con Menú y Supervisor")]
+    public GestorMenuPrincipal scriptMenu;
+    public GestorSupervisor scriptSupervisor;
+
+    [Header("Cronómetro del Turno")]
+    public float tiempoTotalTurno = 180f;
+    public TextMeshProUGUI textoReloj;
+    public Color colorRelojNormal = Color.white;
+    public Color colorRelojAlerta = new Color(0.93f, 0.26f, 0.26f);
+
+    private float tiempoRestante;
+    private bool relojActivo = false;
+
+    private string reporteDetallado = "";
+
     private int indiceActual = 0;
     private int pistasEncontradas = 0;
     private int aciertos = 0;
@@ -59,6 +74,10 @@ public class GestorTurnoEscritorio : MonoBehaviour
 
     public void IniciarTurno()
     {
+        tiempoRestante = tiempoTotalTurno;
+        ActualizarTextoReloj();
+        reporteDetallado = "";
+
         indiceActual = 0;
         aciertos = 0;
         racha = 0;
@@ -74,6 +93,32 @@ public class GestorTurnoEscritorio : MonoBehaviour
         barraProgreso.value = 0;
         ActualizarTextoRacha();
         CargarCasoActual();
+    }
+    void Update()
+    {
+        if (!relojActivo) return;
+
+        tiempoRestante -= Time.deltaTime;
+        if (tiempoRestante <= 0f)
+        {
+            tiempoRestante = 0f;
+            relojActivo = false;
+            ActualizarTextoReloj();
+            MostrarResumenFinal();
+            return;
+        }
+
+        ActualizarTextoReloj();
+    }
+
+    void ActualizarTextoReloj()
+    {
+        if (textoReloj == null) return;
+
+        int minutos = Mathf.FloorToInt(tiempoRestante / 60f);
+        int segundos = Mathf.FloorToInt(tiempoRestante % 60f);
+        textoReloj.text = minutos.ToString("00") + ":" + segundos.ToString("00");
+        textoReloj.color = (tiempoRestante <= 15f) ? colorRelojAlerta : colorRelojNormal;
     }
 
     void CargarCasoActual()
@@ -109,6 +154,7 @@ public class GestorTurnoEscritorio : MonoBehaviour
                 reproductorVoz.Play();
             }
         }
+        relojActivo = true;
     }
 
     public void RegistrarPistaEncontrada()
@@ -143,6 +189,9 @@ public class GestorTurnoEscritorio : MonoBehaviour
         }
 
         bloqueado = true;
+
+        relojActivo = false;
+
         if (reproductorVoz != null) reproductorVoz.Stop();
 
         selloAprobadoVisual.SetActive(eligioAprobar);
@@ -160,6 +209,9 @@ public class GestorTurnoEscritorio : MonoBehaviour
 
         DatosCasoTurno actual = casos[indiceActual];
         bool acerto = (eligioAprobar == actual.debeAprobar);
+
+        string resultadoCaso = acerto ? "Acierto" : "Error";
+        reporteDetallado += "Caso " + (indiceActual + 1) + " (" + actual.tituloCaso + "): " + resultadoCaso + "\n";
 
         franjaFeedback.SetActive(true);
 
@@ -204,6 +256,8 @@ public class GestorTurnoEscritorio : MonoBehaviour
 
     void MostrarResumenFinal()
     {
+        relojActivo = false;
+
         franjaFeedback.SetActive(false);
         panelResumenFinal.SetActive(true);
 
@@ -216,6 +270,23 @@ public class GestorTurnoEscritorio : MonoBehaviour
                                  "Casos resueltos correctamente: " + aciertos + " / " + casos.Length + "\n" +
                                  "Efectividad: " + porcentaje + "%\n" +
                                  "Diagnóstico: " + estado;
+
+        if (scriptSupervisor != null)
+        {
+            scriptSupervisor.GuardarEvaluacionJugador("TURNO INTERACTIVO NEXOBANK", porcentaje, estado, reporteDetallado);
+        }
+    }
+    public void BotonReintentarTurno()
+    {
+        IniciarTurno();
+    }
+
+    public void BotonSalirAlMenu()
+    {
+        relojActivo = false;
+
+        if (reproductorVoz != null) reproductorVoz.Stop();
+        if (scriptMenu != null) scriptMenu.BotonVolverMenu();
     }
 
     public void BotonAlternarManual()

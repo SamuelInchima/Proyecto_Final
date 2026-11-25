@@ -15,7 +15,6 @@ public class GestorOpciones : MonoBehaviour
 
     [Header("Conexión con otros Scripts")]
     public GestorAudio scriptAudio;               // Conexión para controlar el volumen y silencio de los parlantes.
-    public GestorMenuPrincipal scriptMenu;        // Opcional: Para abrir el panel con la animación suave del Paso 1.
 
     // =========================================================================
     // SECCIÓN 2: CONTROLES VISUALES (BRILLO Y MODO DE PANTALLA)
@@ -92,16 +91,12 @@ public class GestorOpciones : MonoBehaviour
     // =========================================================================
 
     // Se conecta al botón "Opciones" en el Menú Principal.
+    // Se conecta al botón "Opciones" en el Menú Principal.
     public void BotonAbrirOpciones()
     {
         if (scriptAudio != null) scriptAudio.ReproducirClic();
 
-        // Si conectaste GestorMenuPrincipal, usa la animación suave; si no, lo enciende directamente.
-        if (scriptMenu != null)
-        {
-            scriptMenu.AbrirPanelAnimado(panelOpciones);
-        }
-        else
+        if (panelOpciones != null)
         {
             panelOpciones.SetActive(true);
         }

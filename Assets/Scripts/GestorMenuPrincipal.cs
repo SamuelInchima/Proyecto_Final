@@ -1,187 +1,69 @@
-// Importamos la librería principal de Unity para manejar objetos de la escena (GameObjects).
 using UnityEngine;
-// Importamos 'System.Collections' para usar Corrutinas (IEnumerator) en las animaciones suaves de paneles.
-using System.Collections;
 
 public class GestorMenuPrincipal : MonoBehaviour
 {
-    // =========================================================================
-    // SECCIÓN 1: VARIABLES DE LOS PANELES DE LA INTERFAZ
-    // =========================================================================
-    [Header("Paneles de la Interfaz")]
-    public GameObject panelMenuPrincipal;    // Panel del menú inicial de NexoBank.
-    public GameObject panelSelectorModulos;  // Panel donde se elige el módulo a evaluar.
-    public GameObject panelInstrucciones;    // Panel con las reglas generales del simulador.
+    [Header("Paneles Principales")]
+    public GameObject panelMenuPrincipal;
+    public GameObject panelIngresoTurno;
+    public GameObject panelEscritorioTurno;
+    public GameObject panelInstrucciones;
+    public GameObject panelOpciones;
 
-    [Header("Paneles de Tutoriales Previos")]
-    public GameObject panelTutorialServicio; // NUEVO: Panel educativo con las 5 normas bancarias (Habeas Data, SARLAFT, etc.).
-    public GameObject panelTutorialPhishing; // Panel educativo previo que explica qué es el Phishing.
+    [Header("Conexión con otros Scripts")]
+    public GestorTurnoEscritorio scriptTurno;
+    public GestorAudio scriptAudio;
 
-
-    [Header("Paneles de los Módulos de Juego")]
-    public GameObject panelNivelServicio;    // Panel del juego de Servicio al Cliente.
-    public GameObject panelNivelPhishing;    // Panel del juego de Detector de Phishing.
-
-
-    // =========================================================================
-    // SECCIÓN 2: CONFIGURACIÓN DE LA ANIMACIÓN
-    // =========================================================================
-    [Header("Ajustes de Animación")]
-    [Tooltip("Velocidad con la que aparecen los paneles (4 = un cuarto de segundo)")]
-    public float velocidadAnimacion = 4f;
-
-    // =========================================================================
-    // SECCIÓN 3: CONEXIÓN CON LOS OTROS SCRIPTS (PATRÓN MEDIADOR)
-    // =========================================================================
-    [Header("Conexión con los otros Scripts")]
-    public GestorMecanicas scriptMecanicas;         // Maneja vidas, reloj y pantallas de victoria/derrota.
-    public GestorServicioCliente scriptServicio;    // Carga los casos de Servicio al Cliente.
-    public GestorPhishing scriptPhishing;           // Carga las imágenes de Phishing.
-
-
-    [Header("Audio")]
-    public GestorAudio scriptAudio;                 // Cambia la música de fondo según la pantalla.
-
-    // =========================================================================
-    // MÉTODO START: CONFIGURACIÓN DEL PRIMER FOTOGRAMA
-    // =========================================================================
     void Start()
     {
-        // Apagamos todos los paneles secundarios al iniciar el juego.
-        panelSelectorModulos.SetActive(false);
+        panelMenuPrincipal.SetActive(true);
+        panelIngresoTurno.SetActive(false);
+        panelEscritorioTurno.SetActive(false);
         panelInstrucciones.SetActive(false);
-        panelNivelServicio.SetActive(false);
-        panelNivelPhishing.SetActive(false);
-
-        // Nos aseguramos de que ambos tutoriales inicien apagados.
-        if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
-        if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
-
-        // Mostramos el Menú Principal con animación suave.
-        AbrirPanelAnimado(panelMenuPrincipal);
+        panelOpciones.SetActive(false);
     }
-
-    // =========================================================================
-    // SECCIÓN 4: MÉTODOS PARA LOS BOTONES DEL MENÚ PRINCIPAL
-    // =========================================================================
 
     public void BotonJugar()
     {
+        if (scriptAudio != null) scriptAudio.ReproducirClic();
         panelMenuPrincipal.SetActive(false);
-        AbrirPanelAnimado(panelSelectorModulos);
+        panelIngresoTurno.SetActive(true);
+    }
+
+    public void BotonIniciarTurno()
+    {
+        if (scriptAudio != null) scriptAudio.ReproducirClic();
+        panelIngresoTurno.SetActive(false);
+        panelEscritorioTurno.SetActive(true);
+        scriptTurno.IniciarTurno();
     }
 
     public void BotonInstrucciones()
     {
+        if (scriptAudio != null) scriptAudio.ReproducirClic();
         panelMenuPrincipal.SetActive(false);
-        AbrirPanelAnimado(panelInstrucciones);
+        panelInstrucciones.SetActive(true);
     }
 
-    public void BotonVolver()
+    public void BotonOpciones()
     {
+        if (scriptAudio != null) scriptAudio.ReproducirClic();
+        panelMenuPrincipal.SetActive(false);
+        panelOpciones.SetActive(true);
+    }
+
+    public void BotonVolverMenu()
+    {
+        if (scriptAudio != null) scriptAudio.ReproducirClic();
+        panelIngresoTurno.SetActive(false);
+        panelEscritorioTurno.SetActive(false);
         panelInstrucciones.SetActive(false);
-        panelSelectorModulos.SetActive(false);
-        AbrirPanelAnimado(panelMenuPrincipal);
+        panelOpciones.SetActive(false);
+        panelMenuPrincipal.SetActive(true);
     }
 
     public void BotonSalir()
     {
-        Debug.Log("Saliendo del simulador de NexoBank");
+        Debug.Log("Saliendo de NexoBank...");
         Application.Quit();
-    }
-
-    // =========================================================================
-    // SECCIÓN 5: MÉTODOS DEL SELECTOR Y TUTORIALES DE LOS MÓDULOS
-    // =========================================================================
-
-    // 1. MODIFICADO: Al presionar "Servicio al Cliente" en el Selector, primero abrimos su Tutorial Normativo.
-    // El reloj todavía NO se activa para que el jugador estudie las normas con tranquilidad.
-    public void BotonModuloServicio()
-    {
-        panelSelectorModulos.SetActive(false);
-        AbrirPanelAnimado(panelTutorialServicio);
-        scriptAudio.CambiarMusica(scriptAudio.musicaServicio);
-    }
-
-    // 2. NUEVO: Se conecta al botón "Comenzar Turno" dentro de 'panelTutorialServicio'.
-    // Cierra el tutorial, abre el módulo de Servicio al Cliente y arranca el cronómetro.
-    public void BotonIniciarServicioDesdeTutorial()
-    {
-        panelTutorialServicio.SetActive(false);
-        AbrirPanelAnimado(panelNivelServicio);
-
-        scriptServicio.CargarNivel(0);
-        scriptMecanicas.PrepararModuloServicio();
-    }
-
-    // 3. Al presionar "Detector de Phishing" en el Selector, primero abrimos el Tutorial de Ciberseguridad.
-    public void BotonModuloPhishing()
-    {
-        panelSelectorModulos.SetActive(false);
-        AbrirPanelAnimado(panelTutorialPhishing);
-        scriptAudio.CambiarMusica(scriptAudio.musicaPhishing);
-    }
-
-    // 4. Se conecta al botón "Comenzar Evaluación" dentro de 'panelTutorialPhishing'.
-    public void BotonIniciarPhishingDesdeTutorial()
-    {
-        panelTutorialPhishing.SetActive(false);
-        AbrirPanelAnimado(panelNivelPhishing);
-
-        scriptPhishing.CargarImagenNivel(0);
-        scriptMecanicas.PrepararModuloPhishing();
-    }
-
-    // 5. Se ejecuta al presionar "Volver al Selector" desde cualquier módulo, tutorial o pantalla final.
-    public void BotonVolverASelector()
-    {
-        scriptMecanicas.DetenerReloj();
-
-        panelNivelServicio.SetActive(false);
-        panelNivelPhishing.SetActive(false);
-        if (panelTutorialServicio != null) panelTutorialServicio.SetActive(false);
-        if (panelTutorialPhishing != null) panelTutorialPhishing.SetActive(false);
-
-
-        scriptMecanicas.panelGameOver.SetActive(false);
-        scriptMecanicas.panelVictoria.SetActive(false);
-
-        AbrirPanelAnimado(panelSelectorModulos);
-        scriptAudio.CambiarMusica(scriptAudio.musicaMenu);
-    }
-
-    // =========================================================================
-    // SECCIÓN 6: SISTEMA DE ANIMACIÓN DE PANELES
-    // =========================================================================
-
-    public void AbrirPanelAnimado(GameObject panel)
-    {
-        StopAllCoroutines();
-        StartCoroutine(CorrutinaAparecerPanel(panel));
-    }
-
-    private IEnumerator CorrutinaAparecerPanel(GameObject panel)
-    {
-        panel.SetActive(true);
-
-        CanvasGroup grupo = panel.GetComponent<CanvasGroup>();
-        if (grupo == null)
-        {
-            grupo = panel.AddComponent<CanvasGroup>();
-        }
-
-        grupo.alpha = 0f;
-        panel.transform.localScale = new Vector3(0.95f, 0.95f, 1f);
-
-        while (grupo.alpha < 1f)
-        {
-            grupo.alpha += Time.deltaTime * velocidadAnimacion;
-            float escalaActual = Mathf.Lerp(0.95f, 1f, grupo.alpha);
-            panel.transform.localScale = new Vector3(escalaActual, escalaActual, 1f);
-            yield return null;
-        }
-
-        grupo.alpha = 1f;
-        panel.transform.localScale = Vector3.one;
     }
 }
